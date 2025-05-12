@@ -1,0 +1,8 @@
+albertoverissimo
+O5MNYKsPveNlJH04
+
+
+mongodb+srv://albertoverissimo:<db_password>@pontentai.y9gqfuo.mongodb.net/?retryWrites=true&w=majority&appName=PontentAI
+
+Databse Access
+PASSWORD: rEw5rvHx5WESZl8a
