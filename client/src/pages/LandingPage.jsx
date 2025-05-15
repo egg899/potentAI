@@ -29,7 +29,7 @@ const LandingPage = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
             <h1 className="text-5xl font-bold mb-6 leading-tight">
-              Contruye tu{" "}
+              Construye tu{" "}
               <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#7182ff_0%,_#3cff52_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
               Curriculum Vitae sin problema
               </span>

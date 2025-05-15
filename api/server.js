@@ -5,13 +5,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import connectDB from './config/db.js';
-// import crypto from 'crypto';
+import crypto from 'crypto';
 import authRoutes from './routes/authRoutes.js';
+import resumeRoutes from './routes/resumeRoutes.js';
 
 dotenv.config();
 const app = express();
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // Middleware to handle CORS
 app.use(
     cors({
@@ -31,13 +33,23 @@ app.use(express.json());
 
 //Routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/resume", resumeRoutes);
 //Ruta de prueba para la raíz
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!")
 })
 
-// const token = crypto.randomBytes(32).toString('hex');
+//Serve uploads folder
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"), {
+        setHeaders: (res, path) => {
+            res.set("Access-Control-Allow-Origin", "http://localhost:5173");
+        }
+    })
+);
+
+// const token = crypto.randomBytes(64).toString('hex');
 // console.log('El token: ', token);
 //Start Server
 const PORT = process.env.PORT || 3000;
@@ -45,8 +57,7 @@ app.listen(PORT, () => console.log(`Server running on port at http://localhost:$
 
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
 // dotenv.config();
 
 // const port = 3000;

@@ -7,7 +7,7 @@ export const protect = async (req, res, next) => {
     try {
         let token = req.headers.authorization;
 
-        if(token && token.startWith("Bearer")) {
+        if(token && token.startsWith("Bearer")) {
             token = token.split(" ")[1];//Extrae token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded.id).select("-password");
@@ -18,5 +18,6 @@ export const protect = async (req, res, next) => {
     } catch (error) {
         res.status(401).json({ message: "El Token ha fallado", error: error.message});
     }
-}//protect
+};//protect
 
+export default protect;
