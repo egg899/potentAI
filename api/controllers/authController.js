@@ -16,7 +16,7 @@ export const registerUser = async (req, res) => {
 
 
         //Chequea si el usuario ya existe
-        const userExist = await User.findOne({  email });
+        const userExist = await User.findOne({ email });
         if(userExist) {
             return res.status(400).json({ message: "El usuario ya existe "});
         }
@@ -43,15 +43,56 @@ export const registerUser = async (req, res) => {
         });
     }
     catch(error){
-        res.status(500).json({ message: "Error en el Servidor", error: error.massage });
+        res.status(500).json({ message: "Error en el Servidor", error: error.message });
     }
 
     
-}//register User
+}//register User End
 
 //Login User
-export const loginUser = async (req, res) => {}
+export const loginUser = async (req, res) => {
+    try {
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
+            if(!user) {
+                return res.status(500).json({ message: "Email o contraseña invalida"  });
+            }
+
+            //Compara los Passwords
+            const isMatch = await bcrypt.compare(password, user.password);
+            if(!isMatch) {
+                return res.status(500).json({  message: "Email o contraseña invalida"  });
+            }
+
+            //Devuelve la Data del Usuario with JWT
+            res.json ({
+                _id:user._id,
+                name: user.name,
+                email: user.email,
+                profileImageUrl : user.profileImageUrl,
+                token: generateToken(user._id),
+            });
+    } catch (error){
+        res.status(500).json({ message: "Error en el Servidor", error: error.message });
+
+    }
+
+
+
+}//Login User End
 
 //get User Profile
-export const getUserProfile = async (req, res) => {}
+export const getUserProfile = async (req, res) => {
+     try {
+        const user = await User.findById(req.user.id).select("-password");
+        if (!user) {
+          return res.status(404).json({ message: "Usuario no encontrado" });  
+        }
+        res.json(user);
+    } catch (error){
+        res.status(500).json({ message: "Error en el Servidor", error: error.message });
+
+    }
+
+}//Get User Profile end
 
