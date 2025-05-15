@@ -116,7 +116,24 @@ export const getResumeById = async (req, res) => {
 //Actualizar un Curriculum
 export const updateResume = async (req, res) => {
         try {
+          const resume = await Resume.findOne({
+            _id: req.params.id,
+            userId: req.user._id,
+          });  
+
+          if(!resume) {
+            return res.status(404).json({
+                message: "CV no encontrado o no autirizado" });
+          }
+
+          //Integrar actualizaciones de req.body dentro al existent
+          Object.assign(resume, req.body);
                     
+          // Guardar el CV actualizado
+          const savedResume  = await resume.save();
+
+          // Guardar CV actualizado
+          res.json(savedResume);
             } catch (error) {
                 res.status(500)
                 .json({ message: "Se falló al conseguir los CV´s", error: error.message});
