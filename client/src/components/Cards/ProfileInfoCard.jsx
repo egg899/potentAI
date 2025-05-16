@@ -7,7 +7,15 @@ const ProfileInfoCard = () => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
 
-    console.log("User from context: ", user);
+    //console.log("User from context: ", user);
+
+
+     const handleCTA = () => {
+      
+        navigate("/profile");
+      
+  };//handleCTA
+
     const handleLogout = () =>{
         localStorage.clear();
         clearUser();
@@ -19,7 +27,7 @@ const ProfileInfoCard = () => {
     <div className="flex items-center">
         <img
             src={user.profileImageUrl}
-            alt=""
+            alt="imagen de perfil"
             className="w-11 h-11 bg-gray-300 rounded-full mr-3"
         />
         <div>
@@ -28,9 +36,17 @@ const ProfileInfoCard = () => {
             </div>
             <button
                 className="text-purple-500 text-sm font-semibold cursor-pointer hover:underline"
+                onClick={handleCTA}
+            >
+                Perfil
+            </button> 
+            <span className="mx-2 text-gray-400">|</span>
+                
+                <button
+                className="text-purple-500 text-sm font-semibold cursor-pointer hover:underline"
                 onClick={handleLogout}
             >
-                Logout
+                 Logout
             </button>
         </div>
     </div>
