@@ -28,7 +28,7 @@ const LandingPage = () => {
           {user ? (<ProfileInfoCard />
           ): (<button className="bg-purple-100 text-sm font-semibold text-black px-7 py-2.5 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
             onClick={()=> setOpenAuthModal(true)}>
-              Login / Sign Up
+              Ingresar / Registrarse
             </button>
           )}
             

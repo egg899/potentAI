@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext'; 
-const Dashboard = () => {
+const ProfileInfo = () => {
   const navigate = useNavigate();
   const { user, loading } = useContext(UserContext);
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [allResumes, setAllResumes] = useState(null);
+//   const [allResumes, setAllResumes] = useState(null);
  // const [user, setUser] = useState("");
 
   //  const fetchUserInfo = async() => {
@@ -22,20 +22,6 @@ const Dashboard = () => {
   //  }//fetchUserinfo
 
 
-  const fetchAllResumes = async () => {
-    try{
-      const response = await axiosInstance.get(API_PATHS.RESUME.GET_ALL);
-      setAllResumes(response.data);
-    }
-    catch (error){
-      console.error("Error para conseguir los CV'S", error);
-    }
-  };//fetchAllResumes
-
-  useEffect(()=>{
-    // fetchUserInfo();
-    fetchAllResumes();
-  }, []);
 
   useEffect(()=>{
     if(!loading) {
@@ -44,8 +30,8 @@ const Dashboard = () => {
   }, [user, loading]);
 
   return (
-    <div>Dashboard</div>
+    <div>Perfil</div>
   )
 }
 
-export  {Dashboard};
+export {ProfileInfo};
