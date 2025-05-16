@@ -1,7 +1,11 @@
 import * as fs from 'fs';
 import path from 'path';
 import Resume from "../models/Resume.js";
+import { fileURLToPath } from 'url';
 
+// Estas 2 líneas reemplazan __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //Crear un curriculum
 export const createResume = async (req, res) => {
     try{
@@ -144,10 +148,44 @@ export const updateResume = async (req, res) => {
 //Borrar el Curriculum
 export const deleteResume = async (req, res) => {
     try {
-            
+      const resume = await Resume.findOne({
+        _id: req.params.id,
+        userId: req.user._id,
+      });       
+
+      if(!resume) {
+        return res.status(401).json({ message: "CV no encontrado o no autorizado" });
+
+        }
+        //Borrar imagenes de thumbnailLink y profilePreviewUrl de la carpeta uploads
+        const uploadsFolder = path.join(__dirname, '..', 'uploads');
+        const baseUrl = `${req.protocoll}://${req.get("host")}`;
+        
+        if(resume.thumbnailLink){
+            const oldThumbnail = path.join(uploadsFolder, path.basename(resume.thumbnailLink));
+            if(fs.existsSync(oldThumbnail)) fs.unlinkSync(oldThumbnail);
+        }
+
+        if(resume.profileInfo?.profilePreviewUrl){
+            const oldProfile = path.join(uploadsFolder, path.basename(resume.profileInfo.profilePreviewUrl));
+            if (fs.existsSync(oldProfile)) fs.unlinkSync(oldProfile);
+        }
+
+        const deleted = await Resume.findOneAndDelete({
+            _id: req.params.id,
+            userId: req.user._id,
+        });
+
+        if(!deleted){
+            return res.status(404).json({ message: "CV no encontrado o no autorizado" })
+        }
+
+      res.json({ message: "CV borrado exitosamente" });
+
+
     } catch (error) {
         res.status(500)
-        .json({ message: "Se falló al conseguir los CV´s", error: error.message});
+        .json({ message: "Se falló al conseguir el CV", error: error.message});
 
     }
 };//deleteResume

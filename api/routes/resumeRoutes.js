@@ -7,7 +7,7 @@ import {
     deleteResume,
  } from "../controllers/resumeController.js";
 import { protect } from "../middlewares/authMiddleware.js";
-//import { uploadResumeImages } from " ../controllers/uploadImages";
+import { uploadResumeImages } from "../controllers/uploadImages.js";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post("/", protect, createResume); //Crear CV
 router.get("/", protect, getUserResumes); //Conseguir el CV
 router.get("/:id", protect, getResumeById); //Conseguir el CV por ID
 router.put("/:id", protect, updateResume); //UpdateResume
-//router.put("/:id/upload-images", protect, uploadResumeImages);
+router.put("/:id/upload-images", protect, uploadResumeImages);
 
 router.delete("/:id", protect, deleteResume); //Delete Resume
 
