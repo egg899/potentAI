@@ -2,10 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { LandingPage, Login, SignUp, Dashboard, EditResume } from './pages'
+import UserProvider from './context/userContext.jsx'
 
 const App = () => {
   return (
-    <>
+    <UserProvider>
     <div>
       <Router>
         <Routes>
@@ -32,8 +33,8 @@ const App = () => {
 
 
     </div>
-    </>
-  )
-}
+    </UserProvider>
+  );
+};
 
 export default App
