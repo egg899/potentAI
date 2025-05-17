@@ -25,7 +25,7 @@ const ProfileInfo = () => {
 
   useEffect(()=>{
     if(!loading) {
-      console.log("Usuario en el dashboard: ", user);
+      console.log("Usuario en el perfil: ", user);
     }
   }, [user, loading]);
 
