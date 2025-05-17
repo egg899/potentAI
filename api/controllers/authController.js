@@ -1,13 +1,18 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
 
 
+dotenv.config();
 //Generate JWT Token
+
+console.log('del env en authcontroller: ',process.env.JWT_SECRET);
 const generateToken = (userId) =>{
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "2d"} );
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "4d"} );
 };
 
+console.log('generar el token',generateToken());
 
 //Register user
 export const registerUser = async (req, res) => {
