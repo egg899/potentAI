@@ -7,6 +7,8 @@ const ProfileInfoCard = () => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
 
+    console.log("User data in ProfileInfoCard:", user); // Debug log
+
     //console.log("User from context: ", user);
 
 
@@ -22,6 +24,10 @@ const ProfileInfoCard = () => {
         navigate('/');
     };
 
+    const getUserTypeText = (type) => {
+        return type === 'job_seeker' ? 'Buscando empleo' : 'Ofreciendo empleo';
+    };
+
   return (
     user && (
     <div className="flex items-center">
@@ -33,6 +39,9 @@ const ProfileInfoCard = () => {
         <div>
             <div className="text-[15px] font-bold leading-3">
                 {user.name || ""}
+            </div>
+            <div className="text-[12px] text-gray-600">
+                {getUserTypeText(user.userType)}
             </div>
             <button
                 className="text-purple-500 text-sm font-semibold cursor-pointer hover:underline"

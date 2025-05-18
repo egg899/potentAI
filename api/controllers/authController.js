@@ -16,9 +16,10 @@ console.log('generar el token',generateToken());
 
 //Register user
 export const registerUser = async (req, res) => {
-    try{
-        const { name, email, password, profileImageUrl } = req.body;
+    try {
+        const { name, email, password, profileImageUrl, userType } = req.body;
 
+        console.log("Voy a crear usuario con userType:", userType); // Debug log
 
         //Chequea si el usuario ya existe
         const userExist = await User.findOne({ email });
@@ -36,22 +37,23 @@ export const registerUser = async (req, res) => {
             email,
             password: hashedPassword,
             profileImageUrl,
+            userType: userType || 'job_seeker'
         });
 
-        //Retorna la data del Usuario con JWT
+        console.log("Usuario creado:", user); // Debug log
+
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
             profileImageUrl: user.profileImageUrl,
+            userType: user.userType,
             token: generateToken(user._id), 
         });
     }
     catch(error){
         res.status(500).json({ message: "Error en el Servidor", error: error.message });
     }
-
-    
 }//register User End
 
 //Login User
@@ -69,21 +71,21 @@ export const loginUser = async (req, res) => {
                 return res.status(500).json({  message: "Email o contraseña invalida"  });
             }
 
+            console.log("User type during login:", user.userType); // Debug log
+
             //Devuelve la Data del Usuario with JWT
             res.json ({
-                _id:user._id,
+                _id: user._id,
                 name: user.name,
                 email: user.email,
-                profileImageUrl : user.profileImageUrl,
+                profileImageUrl: user.profileImageUrl,
+                userType: user.userType,
                 token: generateToken(user._id),
             });
     } catch (error){
+        console.error("Login error:", error); // Debug log
         res.status(500).json({ message: "Error en el Servidor", error: error.message });
-
     }
-
-
-
 }//Login User End
 
 //get User Profile
