@@ -6,6 +6,12 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     profileImageUrl: { type: String, default: null },
+    userType: { 
+      type: String, 
+      required: true,
+      enum: ['job_seeker', 'employer'],
+      default: 'job_seeker'
+    }
   },
   { timestamps: true }
 );
