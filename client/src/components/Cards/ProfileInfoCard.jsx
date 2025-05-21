@@ -1,11 +1,13 @@
 import React from 'react'
 import { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ProfileInfoCard = () => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
+    const location = useLocation();
+    const isProfilePage = location.pathname === "/profile";
 
     console.log("User data in ProfileInfoCard:", user); // Debug log
 
@@ -43,16 +45,18 @@ const ProfileInfoCard = () => {
             <div className="text-[12px] text-gray-600">
                 {getUserTypeText(user.userType)}
             </div>
-            <button
-                className="text-purple-500 text-sm font-semibold cursor-pointer hover:underline"
-                onClick={handleCTA}
-            >
-                Perfil
-            </button> 
+            {!isProfilePage && (
+              <button
+                  className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                  onClick={handleCTA}
+              >
+                  Perfil
+              </button>
+            )}
             <span className="mx-2 text-gray-400">|</span>
                 
                 <button
-                className="text-purple-500 text-sm font-semibold cursor-pointer hover:underline"
+                className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
                 onClick={handleLogout}
             >
                  Logout

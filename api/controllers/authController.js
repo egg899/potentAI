@@ -103,3 +103,27 @@ export const getUserProfile = async (req, res) => {
 
 }//Get User Profile end
 
+// Actualizar perfil de usuario
+export const updateUserProfile = async (req, res) => {
+    try {
+        const { _id, name, profileImageUrl } = req.body;
+        if (!_id) {
+            return res.status(400).json({ message: 'Falta el ID del usuario' });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            _id,
+            { name, profileImageUrl },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.json(updatedUser);
+    } catch (err) {
+        res.status(500).json({ message: 'Error al actualizar el perfil', error: err.message });
+    }
+};
+
