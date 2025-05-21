@@ -1,86 +1,79 @@
-import React, { useState, useRef } from 'react';
-import {LuUser, LuUpload, LuTrash } from "react-icons/lu";
+import React, { useRef } from 'react';
+import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 
-const ProfilePhotoSelector = ({image, setImage, preview, setPreview}) => {
+const ProfilePhotoSelector = ({image, setImage, preview, setPreview, isEditing}) => {
     const inputRef = useRef(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
-  
 
     const handleImageChange = (event) => {
-        const file= event.target.files[0];
+        const file = event.target.files[0];
         if(file) {
             setImage(file);
-        
-            //Generate preview URL from the file
             const preview = URL.createObjectURL(file);
-            if(setPreview){
-                setPreview(preview)
+            if(setPreview) {
+                setPreview(preview);
             }
-            setPreviewUrl(preview)
         }
     };
 
-
     const handleRemoveImage = () => {
         setImage(null);
-        setPreviewUrl(null);
-
         if(setPreview) {
             setPreview(null);
         }
-
-    };//handleRemoveImage
+    };
 
     const onChooseFile = () => {
-        inputRef.current.click();
-    };//onChooseFile
+        if (isEditing) {
+            inputRef.current.click();
+        }
+    };
 
-  return (
-    <div className="flex justify-center mb-6">
-        <input
-            type="file"
-            accept="image/*"
-            ref={inputRef}
-            onChange={handleImageChange}
-            className="hidden"
-        />
+    return (
+        <div className="flex justify-center mb-6">
+            <input
+                type="file"
+                accept="image/*"
+                ref={inputRef}
+                onChange={handleImageChange}
+                className="hidden"
+            />
 
+            {!preview ? (
+                <div className={`w-20 h-20 flex items-center justify-center bg-[#3cff52]/10 
+                rounded-full relative ${isEditing ? 'cursor-pointer' : ''}`}>
+                    <LuUser className="text-4xl text-[#3cff52]"/>
+                    {isEditing && (
+                        <button
+                            type="button"
+                            className="w-8 h-8 flex items-center justify-center bg-[#3cff52]
+                            text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
+                            onClick={onChooseFile}
+                        >
+                            <LuUpload/>
+                        </button>
+                    )}
+                </div>
+            ) : (
+                <div className="relative">
+                    <img 
+                        src={preview}
+                        alt="Foto de Perfil"
+                        className="w-20 h-20 rounded-full object-cover"
+                    />
+                    {isEditing && (
+                        <button
+                            type="button"
+                            className="w-8 h-8 flex items-center justify-center bg-[#3cff52] text-white rounded-full
+                            absolute -bottom-1 -right-1 cursor-pointer"
+                            onClick={handleRemoveImage}
+                        >
+                            <LuTrash/>
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
 
-
-        {!image ? (
-            <div className="w-20 h-20 flex items-center justify-center bg-purple-50 
-            rounded-full relative cursor-pointer">
-                <LuUser className="text-4xl text-purple-500"/>
-
-                <button
-                    type="button"
-                    className="w-8 h-8 flex items-center justify-center bg-linear-to-r from-purple-500/85
-                    to-purple-700 text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
-                    onClick={onChooseFile}
-                >
-
-                    <LuUpload/>
-                </button>
-            </div>
-        ):(
-            <div className="relative">
-                <img 
-                    src={preview || previewUrl}
-                    alt="Foto de Perfil"
-                    className="w-20 h-20 rounded-full object-cover"
-                />
-                <button
-                    type="button"
-                    className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full
-                    absolute -bottom-1 -right-1 cursor-pointer"
-                    onClick={handleRemoveImage}
-                >
-                    <LuTrash/>
-                </button>
-            </div>
-        )}
-    </div>
-  
-)}
-
-export default ProfilePhotoSelector
+export default ProfilePhotoSelector;
