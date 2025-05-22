@@ -75,30 +75,29 @@ const LandingPage = () => {
 
         <section className="mt-5">
           <h2 className="text-2xl font-bold text-center mb-12">
-            Features That Make You Shine
+            Características que te hacen destacar
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-              <h3 className="text-lg font-semibold mb-3">Easy Editing</h3>
+              <h3 className="text-lg font-semibold mb-3">Edición fácil</h3>
               <p className="text-gray-600">
-                Update your resume section with live preview and instant
-                formatting.
+                Actualiza tu currículum con vista previa en vivo y formato instantáneo.
               </p>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
               <h3 className="text-lg font-semibold mb-3">
-                Beatiful Templates
+                Plantillas hermosas
               </h3>
               <p className="text-gray-600">
-                Choose from modern, professional templates that are easy to customize.
+                Elige entre plantillas modernas y profesionales que son fáciles de personalizar.
               </p>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-              <h3 className="text-lg font-semibold mb-3">One-click Export</h3>
+              <h3 className="text-lg font-semibold mb-3">Exportación con un clic</h3>
               <p className="text-gray-600">
-                Download your resume instantly as a high-quality PDF with one click.
+                Descarga tu currículum al instante como un PDF de alta calidad con un solo clic.
               </p>
             </div>
           </div>
