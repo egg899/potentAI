@@ -19,72 +19,160 @@ export const registerUser = async (req, res) => {
     try {
         const { name, email, password, profileImageUrl, userType } = req.body;
 
-        console.log("Voy a crear usuario con userType:", userType); // Debug log
+        console.log("Datos recibidos en registro:", { 
+            name, 
+            email, 
+            userType,
+            hasPassword: !!password,
+            hasProfileImage: !!profileImageUrl
+        });
+
+        // Validación de datos requeridos
+        if (!name || !email || !password) {
+            return res.status(400).json({ 
+                message: "Por favor, complete todos los campos requeridos" 
+            });
+        }
+
+        // Validación de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                message: "Por favor, ingrese un email válido" 
+            });
+        }
+
+        // Validación de contraseña
+        if (password.length < 8) {
+            return res.status(400).json({ 
+                message: "La contraseña debe tener al menos 8 caracteres" 
+            });
+        }
+
+        // Validación de tipo de usuario
+        if (userType && !['job_seeker', 'employer'].includes(userType)) {
+            return res.status(400).json({ 
+                message: "Tipo de usuario inválido" 
+            });
+        }
 
         //Chequea si el usuario ya existe
         const userExist = await User.findOne({ email });
         if(userExist) {
-            return res.status(400).json({ message: "El usuario ya existe "});
+            return res.status(400).json({ 
+                message: "El email ya está registrado" 
+            });
         }
 
         //El password Hasheado
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Crear a un nuevo Usuario
-        const user = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            profileImageUrl,
-            userType: userType || 'job_seeker'
+            // Crear a un nuevo Usuario
+            const user = await User.create({
+                name,
+                email,
+                password: hashedPassword,
+                profileImageUrl,
+                userType: userType || 'job_seeker'
+            });
+
+            console.log("Usuario creado exitosamente:", { 
+                id: user._id,
+                email: user.email,
+                userType: user.userType 
+            });
+
+            // Generar token
+            const token = generateToken(user._id);
+            if (!token) {
+                throw new Error("Error al generar el token");
+            }
+
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                profileImageUrl: user.profileImageUrl,
+                userType: user.userType,
+                token
+            });
+        } catch (hashError) {
+            console.error("Error al procesar la contraseña:", hashError);
+            return res.status(500).json({ 
+                message: "Error al procesar la contraseña" 
+            });
+        }
+    } catch(error) {
+        console.error("Error en registro:", error);
+        res.status(500).json({ 
+            message: "Error en el servidor", 
+            error: error.message 
         });
-
-        console.log("Usuario creado:", user); // Debug log
-
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            profileImageUrl: user.profileImageUrl,
-            userType: user.userType,
-            token: generateToken(user._id), 
-        });
-    }
-    catch(error){
-        res.status(500).json({ message: "Error en el Servidor", error: error.message });
     }
 }//register User End
 
 //Login User
 export const loginUser = async (req, res) => {
     try {
-            const { email, password } = req.body;
-            const user = await User.findOne({ email });
-            if(!user) {
-                return res.status(500).json({ message: "Email o contraseña invalida"  });
-            }
+        const { email, password } = req.body;
 
-            //Compara los Passwords
-            const isMatch = await bcrypt.compare(password, user.password);
-            if(!isMatch) {
-                return res.status(500).json({  message: "Email o contraseña invalida"  });
-            }
-
-            console.log("User type during login:", user.userType); // Debug log
-
-            //Devuelve la Data del Usuario with JWT
-            res.json ({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                profileImageUrl: user.profileImageUrl,
-                userType: user.userType,
-                token: generateToken(user._id),
+        // Validación de datos de entrada
+        if (!email || !password) {
+            return res.status(400).json({ 
+                message: "Por favor, proporcione email y contraseña" 
             });
-    } catch (error){
+        }
+
+        // Buscar usuario
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ 
+                message: "Email o contraseña inválida" 
+            });
+        }
+
+        // Comparar contraseñas
+        try {
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ 
+                    message: "Email o contraseña inválida" 
+                });
+            }
+        } catch (bcryptError) {
+            console.error("Error al comparar contraseñas:", bcryptError);
+            return res.status(500).json({ 
+                message: "Error al procesar la autenticación" 
+            });
+        }
+
+        console.log("User type during login:", user.userType); // Debug log
+
+        // Generar token
+        const token = generateToken(user._id);
+        if (!token) {
+            return res.status(500).json({ 
+                message: "Error al generar el token de autenticación" 
+            });
+        }
+
+        // Devolver datos del usuario
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            profileImageUrl: user.profileImageUrl,
+            userType: user.userType,
+            token
+        });
+    } catch (error) {
         console.error("Login error:", error); // Debug log
-        res.status(500).json({ message: "Error en el Servidor", error: error.message });
+        res.status(500).json({ 
+            message: "Error en el servidor", 
+            error: error.message 
+        });
     }
 }//Login User End
 

@@ -1,81 +1,106 @@
-import React, {useState, useContext} from 'react'
-import { useNavigate } from 'react-router-dom'
-import Input from "../../components/Inputs/Input";
-import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
-import {validateEmail} from "../../utils/helper";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
-import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext';
-import { uploadImage } from '../../utils/uploadImage';
+import { useContext } from 'react';
+import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
+import Input from "../../components/Inputs/Input";
 
-const SignUp = ({setCurrentPage}) => {
-  const [profilePic, setProfilePic] = useState(null);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("job_seeker");
-  const [error, setError] = useState(null);
-  
+const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
   const navigate = useNavigate();
   const { updateUser } = useContext(UserContext);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    userType: 'jobseeker',
+    profileImageUrl: ''
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
 
-  //Handle SignUp form Submit
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageChange = (file) => {
+    setProfileImage(file);
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setFormData(prev => ({
+        ...prev,
+        profileImageUrl: imageUrl
+      }));
+    }
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
+    setError('');
+    setIsLoading(true);
 
-    let profileImageUrl = "";
-    if(!fullName) {
-      setError("Por favor ingrese su nombre completo");
-      return;
-    }
-    if(!validateEmail(email)) {
-      setError("Por favor, ingrese un correo electronico valido.");
-      return;
-    }
-    if(!password){
-      setError("Por favor, ingrese la contraseña");
-      return;
-    }
-
-    console.log("Current userType before registration:", userType); // Debug log
-
-    setError("");
-
-    //SignUp API Call
-    try { 
-      //Subir imagen si este esta presente
-      if(profilePic) {
-        const imgUploadRes = await uploadImage(profilePic);
-        profileImageUrl = imgUploadRes.imageUrl || "";
+    try {
+      // Validaciones
+      if (!formData.name.trim()) {
+        setError('El nombre completo es requerido');
+        setIsLoading(false);
+        return;
       }
 
-      const userData = {
-        name: fullName,
-        email,
-        password,
-        profileImageUrl,
-        userType,
-      };
+      if (!formData.email.trim()) {
+        setError('El email es requerido');
+        setIsLoading(false);
+        return;
+      }
 
-      console.log("Sending registration data:", userData);
+      if (!formData.password) {
+        setError('La contraseña es requerida');
+        setIsLoading(false);
+        return;
+      }
 
-      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, userData);
-      console.log("Registration response:", response.data);
+      if (formData.password.length < 6) {
+        setError('La contraseña debe tener al menos 6 caracteres');
+        setIsLoading(false);
+        return;
+      }
 
-      const { token } = response.data;
+      console.log('Enviando datos de registro:', {
+        ...formData,
+        password: '***' // No loguear la contraseña
+      });
 
-      if(token) {
-        localStorage.setItem("token", token);
+      const response = await axiosInstance.post('/api/auth/register', formData);
+      console.log('Respuesta del servidor:', response.data);
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
         updateUser(response.data);
-        navigate("/dashboard");
-      }
-    } catch(error) {
-      console.error("Registration error:", error.response?.data || error);
-      if(error.response && error.response.data.message) {
-        setError(error.response.data.message);
+        setOpenAuthModal(false);
+        navigate('/');
       } else {
-        setError("Algo salió mal. Por favor, intente de nuevo");
+        setError('Error en el registro: No se recibió el token');
       }
+    } catch (error) {
+      console.error('Error completo:', error);
+      if (error.response) {
+        console.error('Datos de la respuesta:', error.response.data);
+        setError(error.response.data.message || 'Error en el registro');
+      } else if (error.request) {
+        console.error('No se recibió respuesta del servidor');
+        setError('No se pudo conectar con el servidor');
+      } else {
+        console.error('Error en la configuración de la petición:', error.message);
+        setError('Error en la configuración de la petición');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,31 +111,34 @@ const SignUp = ({setCurrentPage}) => {
         Únase hoy mismo ingresando sus datos a continuación
       </p>
 
-      <form onSubmit={handleSignUp}>
-        <ProfilePhotoSelector image={profilePic} setImage={setProfilePic}/>
+      <form onSubmit={handleSignUp} onClick={(e) => e.stopPropagation()}>
+        <ProfilePhotoSelector image={profileImage} setImage={handleImageChange} />
         
         <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
           <Input
-            value={fullName}
-            onChange={({target}) => setFullName(target.value)}
+            value={formData.name}
+            onChange={(e) => handleChange(e)}
+            name="name"
             label="Nombre Completo"
             placeholder="John"
             type="text"
           />
 
           <Input
-            value={email}
-            onChange={({target}) => setEmail(target.value)}
+            value={formData.email}
+            onChange={(e) => handleChange(e)}
+            name="email"
             label="Dirección Electrónica"
             placeholder="john@example.com"
-            type="text"  
+            type="email"
           />
 
           <Input
-            value={password}
-            onChange={({target}) => setPassword(target.value)}
+            value={formData.password}
+            onChange={(e) => handleChange(e)}
+            name="password"
             label="Contraseña"
-            placeholder="Minimo 8 caracteres, por favor"
+            placeholder="Mínimo 6 caracteres, por favor"
             type="password"
           />
 
@@ -118,12 +146,12 @@ const SignUp = ({setCurrentPage}) => {
             <label className="text-[13px] text-slate-800 mb-2 block">Tipo de Usuario</label>
             <select
               name="userType"
-              value={userType}
-              onChange={(e) => setUserType(e.target.value)}
+              value={formData.userType}
+              onChange={handleChange}
               className="form-input"
               required
             >
-              <option value="job_seeker">Busco empleo</option>
+              <option value="jobseeker">Busco empleo</option>
               <option value="employer">Quiero dar empleo</option>
             </select>
           </div>
@@ -131,24 +159,27 @@ const SignUp = ({setCurrentPage}) => {
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
-        <button type="submit" className="btn-primary">
-          REGISTRARSE
-        </button> 
+        <button
+          type="submit"
+          className="btn-primary"
+          disabled={isLoading}
+        >
+          {isLoading ? "REGISTRANDO..." : "REGISTRARSE"}
+        </button>
 
         <p className="text-[13px] text-slate-800 mt-3">
           ¿Ya tienes una cuenta?{" "}
-          <button 
+          <button
+            type="button"
             className="font-medium text-primary underline cursor-pointer"
-            onClick={()=> {
-              setCurrentPage("login");
-            }}
+            onClick={() => setCurrentPage('login')}
           >
             ENTRAR
           </button>
         </p>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export {SignUp}
+export { SignUp };
