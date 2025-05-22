@@ -13,7 +13,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
     name: '',
     email: '',
     password: '',
-    userType: 'jobseeker',
+    userType: 'job_seeker',
     profileImageUrl: ''
   });
   const [error, setError] = useState('');
@@ -151,7 +151,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
               className="form-input"
               required
             >
-              <option value="jobseeker">Busco empleo</option>
+              <option value="job_seeker">Busco empleo</option>
               <option value="employer">Quiero dar empleo</option>
             </select>
           </div>
