@@ -45,7 +45,7 @@ const LandingPage = () => {
             </button>
           )}
         </header>
-
+<div className="flex flex-col md:flex-row items-center">
         {/* Hero Content */}
         <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
           <h1 className="text-5xl font-bold mb-6 leading-tight">
@@ -72,7 +72,7 @@ const LandingPage = () => {
             className="w-full rounded-lg"
           />
         </div>
-
+</div>
         <section className="mt-5">
           <h2 className="text-2xl font-bold text-center mb-12">
             Características que te hacen destacar
