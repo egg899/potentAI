@@ -31,15 +31,23 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-        // Manejo global de errores comunes
+        console.error("Error en interceptor:", error);
+        
+        // Solo redirigir en errores 401 si no estamos en el proceso de registro o login
         if (error.response) {
-            if (error.response.status === 401) { // ← CAMBIO: era "error.esponse"
-                window.location.href = "/"; // Redirige al login
+            if (error.response.status === 401) {
+                const currentPath = window.location.pathname;
+                if (!currentPath.includes('/signUp') && !currentPath.includes('/login')) {
+                    console.log("Redirigiendo a login por error 401");
+                    window.location.href = "/";
+                }
             } else if (error.response.status === 500) {
-                console.error("Error del Servidor. Por favor, vuelva a intentar después.");
+                console.error("Error del Servidor (500):", error.response.data);
             }
         } else if (error.code === "ECONNABORTED") {
-            console.error("La solicitud se demoró demasiado. Por favor, intente nuevamente.");
+            console.error("Timeout de la solicitud:", error);
+        } else {
+            console.error("Error de red:", error);
         }
 
         return Promise.reject(error);

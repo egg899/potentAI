@@ -3,19 +3,20 @@ export const BASE_URL = "http://localhost:3000";
 //utils/apiPaths.js
 export const API_PATHS = {
     AUTH: {
-        REGISTER:"/api/auth/register",
-        LOGIN:"/api/auth/login",
-        GET_PROFILE:"/api/auth/profile",
-        UPDATE_PROFILE:"/api/auth/profile",
+        LOGIN: '/api/auth/login',
+        REGISTER: '/api/auth/register',
+        GET_PROFILE: '/api/auth/profile',
+        UPDATE_PROFILE: '/api/auth/profile'
     },
-
+    EMPLOYER: {
+        GET_STATS: '/api/employer/stats',
+        CREATE_JOB: '/api/employer/jobs'
+    },
     RESUME: {
-        CREATE:"/api/resume",
-        GET_ALL: "/api/resume",
-        GET_BY_ID:(id) => `/api/resume/${id}`,
-        UPDATE:(id)=>`/api/resume/${id}`,
-        DELETE:(id)=>`/api/resume/${id}`,
-        UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-images`,
+        GET_ALL: '/api/resumes',
+        CREATE: '/api/resumes',
+        UPDATE: '/api/resumes/:id',
+        DELETE: '/api/resumes/:id'
     },
 
     IMAGE: {

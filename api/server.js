@@ -8,6 +8,7 @@ import connectDB from './config/db.js';
 import crypto from 'crypto';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
+import employerRoutes from './routes/employerRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -34,6 +35,8 @@ app.use(express.json());
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
+app.use("/api/employer", employerRoutes);
+
 //Ruta de prueba para la raíz
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!")
