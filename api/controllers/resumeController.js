@@ -91,6 +91,7 @@ export const createResume = async (req, res) => {
 //Ver todos los curriculums al hacer Log In
 export const getUserResumes = async (req, res) => {
     try {
+        console.log("Usuario en getUserResumes:", req.user);
             const resumes = await Resume.find({ userId: req.user._id}).sort({
                 updatedAt:-1,
             });
