@@ -9,7 +9,7 @@ dotenv.config();
 
 console.log('del env en authcontroller: ',process.env.JWT_SECRET);
 const generateToken = (userId) =>{
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "4d"} );
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d"} );
 };
 
 console.log('generar el token',generateToken());
@@ -152,6 +152,7 @@ export const loginUser = async (req, res) => {
 
         // Generar token
         const token = generateToken(user._id);
+        console.log('token en el login:',token)
         if (!token) {
             return res.status(500).json({ 
                 message: "Error al generar el token de autenticación" 

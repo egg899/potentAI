@@ -13,8 +13,8 @@ export const API_PATHS = {
         CREATE_JOB: '/api/employer/jobs'
     },
     RESUME: {
-        GET_ALL: '/api/resumes',
-        CREATE: '/api/resumes',
+        GET_ALL: '/api/resume',
+        CREATE: '/api/resume',
         UPDATE: '/api/resumes/:id',
         DELETE: '/api/resumes/:id'
     },

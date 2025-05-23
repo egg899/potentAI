@@ -82,8 +82,8 @@ const ProfileInfo = () => {
 
   return (
     <div>
-    <div className="min-h-screen bg-gray-50 py-8">
-      {/* NAVBAR */}
+    <div className="bg-gray-50 ">
+     
       <div className="container mx-auto px-4 py-6">
         <header className="flex justify-between items-center mb-10">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}> 
@@ -92,10 +92,10 @@ const ProfileInfo = () => {
           <ProfileInfoCard />
         </header>
       </div>
-      {/* FIN NAVBAR */}
-      <div className="max-w-3xl mx-auto px-4">
+     
+      {/* <div className="max-w-3xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-md p-6">
-          {/* Header */}
+          
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-800">Perfil de Usuario</h1>
             {!isEditing && !isEditingImage ? (
@@ -132,7 +132,7 @@ const ProfileInfo = () => {
             )}
           </div>
 
-          {/* Error and Success Messages */}
+         
           {error && (
             <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
               {error}
@@ -144,9 +144,9 @@ const ProfileInfo = () => {
             </div>
           )}
 
-          {/* Profile Content */}
+         
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Left Column - Profile Photo */}
+           
             <div className="flex flex-col items-center">
               <ProfilePhotoSelector
                 image={profilePic}
@@ -160,7 +160,7 @@ const ProfileInfo = () => {
               </p>
             </div>
 
-            {/* Right Column - User Information */}
+          
             <div className="md:col-span-2">
               <div className="space-y-4">
                 <div>
@@ -207,9 +207,9 @@ const ProfileInfo = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Footer */}
-      <Footer />
+      {/* <Footer /> */}
    </div>
                   {/*Nuevo Perfil*/}
 
@@ -217,12 +217,19 @@ const ProfileInfo = () => {
 
 
 
-   <div class="bg-gray-100">
+   <div class=" min-h-screen bg-gray-100">
     <div class="container mx-auto py-8">
       <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+
+                  
+
+
+
+
         <div class="col-span-4 sm:col-span-3">
           <div class="bg-white shadow rounded-lg p-6">
             <div class="flex flex-col items-center">
+              
                {/* <img src="https://randomuser.me/api/portraits/men/94.jpg" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
 
                         </img> */}
@@ -235,6 +242,9 @@ const ProfileInfo = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                      Nombre Completo
                    </label>
+                   <p className="mt-2 text-sm text-gray-600">
+                {isEditingImage ? "Haz clic para cambiar tu foto de perfil" : ""}
+              </p>
                    {isEditing ? (
                     <input
                       type="text"
@@ -253,19 +263,75 @@ const ProfileInfo = () => {
             </div>
                   <hr className="my-6 border-t border-gray-300"></hr>
 
-                  <div class="flex flex-col">
+                  <div className="flex flex-col">
                         <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Habilidades</span>
                         <ul>
-                            <li class="mb-2">JavaScript</li>
-                            <li class="mb-2">React</li>
-                            <li class="mb-2">Node.js</li>
-                            <li class="mb-2">HTML/CSS</li>
-                            <li class="mb-2">Tailwind Css</li>
+                            <li classNam="mb-2">JavaScript</li>
+                            <li className="mb-2">React</li>
+                            <li className="mb-2">Node.js</li>
+                            <li className="mb-2">HTML/CSS</li>
+                            <li className="mb-2">Tailwind Css</li>
                         </ul>
                     </div>
                 </div>
               </div>
-                  <div class="col-span-4 sm:col-span-9">
+                  <div className="col-span-4 sm:col-span-9">
+
+                    <div className="max-3xl mx-auto mb-4">
+                       <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex justify-between items-center mb-6">
+                          <h1 className="text-2xl font-bold text-gray-800">Perfil de Usuario</h1>
+
+                          {!isEditing && !isEditingImage ? (
+                            <div className="flex gap-2">
+                               <button onClick={handleEdit} className="px-4 py-2 bg-[#3cff52]/10 text-[#3cff52] rounded-lg hover:bg-[#3cff52]/20 transition-colors cursor-pointer">
+                                Editar Perfil
+                                      </button>
+                                      <button onClick={handleEditImage}
+                                              className="px-4 py-2 bg-[#3cff52]/10 text-[#3cff52] rounded-lg hover:bg-[#3cff52]/20 transition-colors flex items-center gap-2 cursor-pointer">
+                                                <LuCamera size={18} />
+                                                Cambiar Foto
+                                              </button>
+
+                            </div>
+                          ):(<div className="flex gap-2">
+                             <button  onClick={handleSave}
+                  className="px-4 py-2 bg-[#3cff52] text-white rounded-lg hover:bg-[#3cff52]/90 transition-colors cursor-pointer"
+                >
+                  Guardar
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                          </div>)}
+
+
+
+                        </div>
+
+                            {/* Error and Success Messages */}
+                          {error && (
+                            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                              {error}
+                            </div>
+                          )}
+                          {success && (
+                            <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+                              {success}
+                            </div>
+                          )}
+
+
+
+                       </div>
+                    </div>
+
+
+
+
                     <div class="bg-white shadow rounded-lg p-6">
                                           <h2 class="text-xl font-bold mb-4">Sobre Mi </h2>
                                           <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est

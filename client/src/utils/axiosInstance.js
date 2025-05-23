@@ -5,15 +5,17 @@ const axiosInstance = axios.create({
     baseURL: BASE_URL,
     timeout: 10000,
     headers: { // ← CAMBIO: era "header"
-        "Content-Type": "application/json", // ← CAMBIO: era "applocation/json"
+        "Content-Type": "application/json", 
         Accept: "application/json",
     },
 });
-
+console.log(BASE_URL);
 // Interceptor de solicitud
 axiosInstance.interceptors.request.use(
     (config) => {
         const accessToken = localStorage.getItem("token");
+            // console.log("Enviando token en Authorization:", accessToken);
+
         //console.log('Token: ',accessToken);
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;

@@ -20,12 +20,14 @@ const Dashboard = () => {
   //       console.error("Error para conseguir la información del usuario:", error);
   //     }
   //  }//fetchUserinfo
+// console.log(API_PATHS);
 
-
+console.log("API_PATHS.RESUME.GET_ALL:", API_PATHS.RESUME.GET_ALL);
   const fetchAllResumes = async () => {
     try{
       const response = await axiosInstance.get(API_PATHS.RESUME.GET_ALL);
       setAllResumes(response.data);
+    console.log('lOS resumes: ', response);
     }
     catch (error){
       console.error("Error para conseguir los CV'S", error);
@@ -39,7 +41,7 @@ const Dashboard = () => {
 
   useEffect(()=>{
     if(!loading) {
-      console.log("Usuario en el dashboard: ", user);
+      // console.log("Usuario en el dashboard: ", user);
     }
   }, [user, loading]);
 
