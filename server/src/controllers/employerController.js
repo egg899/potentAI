@@ -119,3 +119,33 @@ export const createJobPost = async (req, res) => {
         res.status(500).json({ message: 'Error al crear la publicación de trabajo' });
     }
 };
+
+export const getJobs = async (req, res) => {
+    try {
+        const employerId = req.user._id;
+        const jobs = await Job.find({ employer: employerId });
+        res.json(jobs);
+    } catch (error) {
+        console.error('Error al obtener trabajos:', error);
+        res.status(500).json({ message: 'Error al obtener los trabajos' });
+    }
+};
+
+export const deleteJob = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const employerId = req.user._id;
+
+        const job = await Job.findOne({ _id: jobId, employer: employerId });
+        
+        if (!job) {
+            return res.status(404).json({ message: 'Trabajo no encontrado o no tienes permiso para eliminarlo' });
+        }
+
+        await Job.findByIdAndDelete(jobId);
+        res.status(200).json({ message: 'Trabajo eliminado exitosamente' });
+    } catch (error) {
+        console.error('Error al eliminar trabajo:', error);
+        res.status(500).json({ message: 'Error al eliminar el trabajo' });
+    }
+};

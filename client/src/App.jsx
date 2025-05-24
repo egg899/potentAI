@@ -6,6 +6,10 @@ import UserProvider from './context/userContext.jsx'
 import Footer from './components/Footer';
 import ProtectedEmployerRoute from './components/ProtectedEmployerRoute';
 import EmployerDashboard from './pages/EmployerDashboard';
+import JobListings from './pages/JobListings';
+import Jobs from './pages/Jobs';
+import JobSearch from './pages/JobSearch';
+import JobDetails from './pages/JobDetails';
 
 const App = () => {
   return (
@@ -22,13 +26,23 @@ const App = () => {
               <Route path="/signUp" element={<SignUp/>}/>
               <Route path="/dashboard" element={<Dashboard/>}/>
               <Route path="/resume/:resumeId" element={<EditResume/>}/>
+              <Route path="/jobs" element={<JobSearch />} />
+              <Route path="/job/:id" element={<JobDetails />} />
               
-              {/* Ruta protegida para empleadores */}
+              {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 
                 element={
                   <ProtectedEmployerRoute>
                     <EmployerDashboard />
+                  </ProtectedEmployerRoute>
+                }
+              />
+              <Route 
+                path="/employer/jobs" 
+                element={
+                  <ProtectedEmployerRoute>
+                    <JobListings />
                   </ProtectedEmployerRoute>
                 }
               />

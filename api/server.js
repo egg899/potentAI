@@ -9,6 +9,7 @@ import crypto from 'crypto';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
+import jobRoutes from './routes/jobRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -27,15 +28,14 @@ app.use(
 //Connect to DataBase
 connectDB();
 
-
 //Middleware
 app.use(express.json());
-
 
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/employer", employerRoutes);
+app.use("/api/jobs", jobRoutes);
 
 //Ruta de prueba para la raíz
 app.get('/', (req, res) => {

@@ -10,6 +10,23 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    requirements: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    salary: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        enum: ['full-time', 'part-time', 'contract'],
+        default: 'full-time'
+    },
     employer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -17,27 +34,12 @@ const jobSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'closed', 'draft'],
+        enum: ['active', 'closed'],
         default: 'active'
     },
     views: {
         type: Number,
         default: 0
-    },
-    requirements: [{
-        type: String
-    }],
-    location: {
-        type: String,
-        required: true
-    },
-    salary: {
-        min: Number,
-        max: Number,
-        currency: {
-            type: String,
-            default: 'USD'
-        }
     },
     createdAt: {
         type: Date,
