@@ -32,7 +32,7 @@ const LandingPage = () => {
       <div className="container mx-auto px-4 py-6">
         <header className="flex justify-between items-center mb-16">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}> 
-            <Logo size={60} className="mr-2" />
+            <Logo size={160} className="mr-2" />
           </div>
           {user ? (
             <ProfileInfoCard />
