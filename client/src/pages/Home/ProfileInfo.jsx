@@ -87,7 +87,7 @@ const ProfileInfo = () => {
       <div className="container mx-auto px-4 py-6">
         <header className="flex justify-between items-center mb-10">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}> 
-            <Logo size={60} className="mr-2" />
+            <Logo size={160} className="mr-2" />
           </div>
           <ProfileInfoCard />
         </header>
