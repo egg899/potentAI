@@ -33,19 +33,45 @@ const EmployerDashboard = () => {
         setError(null);
         setSuccess(null);
 
+        // Validación básica
+        if (!jobPost.title || !jobPost.description || !jobPost.requirements || !jobPost.location || !jobPost.salary) {
+            setError('Por favor, completa todos los campos requeridos');
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            await axiosInstance.post(API_PATHS.EMPLOYER.CREATE_JOB, jobPost);
-            setSuccess('Publicación creada exitosamente');
-            setJobPost({
-                title: '',
-                description: '',
-                requirements: '',
-                location: '',
-                salary: '',
-                type: 'full-time'
-            });
+            const response = await axiosInstance.post(API_PATHS.EMPLOYER.CREATE_JOB, jobPost);
+            
+            if (response.data) {
+                setSuccess('Publicación creada exitosamente');
+                setJobPost({
+                    title: '',
+                    description: '',
+                    requirements: '',
+                    location: '',
+                    salary: '',
+                    type: 'full-time'
+                });
+                // Redirigir a la lista de publicaciones después de 1 segundo
+                setTimeout(() => {
+                    navigate('/employer/jobs');
+                }, 1000);
+            } else {
+                throw new Error('No se recibió respuesta del servidor');
+            }
         } catch (error) {
-            setError(error.response?.data?.message || 'Error al crear la publicación');
+            console.error('Error completo:', error);
+            if (error.response) {
+                // El servidor respondió con un código de error
+                setError(error.response.data?.message || 'Error al crear la publicación');
+            } else if (error.request) {
+                // La petición fue hecha pero no se recibió respuesta
+                setError('No se pudo conectar con el servidor. Por favor, intenta de nuevo.');
+            } else {
+                // Algo sucedió al configurar la petición
+                setError('Error al procesar la solicitud. Por favor, intenta de nuevo.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -59,7 +85,15 @@ const EmployerDashboard = () => {
                     <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}> 
                         <Logo size={60} className="mr-2" />
                     </div>
-                    <ProfileInfoCard />
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate('/employer/jobs')}
+                            className="bg-white text-[#3cff52] border border-[#3cff52] px-6 py-2 rounded-lg hover:bg-[#3cff52]/10 transition-colors"
+                        >
+                            Ver Publicaciones
+                        </button>
+                        <ProfileInfoCard />
+                    </div>
                 </header>
             </div>
 

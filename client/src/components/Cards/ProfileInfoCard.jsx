@@ -9,6 +9,7 @@ const ProfileInfoCard = () => {
     const location = useLocation();
     const isProfilePage = location.pathname === "/profile";
     const isDashboardPage = location.pathname === "/employer/dashboard";
+    const isJobsPage = location.pathname === "/jobs";
 
     const handleCTA = () => {
         navigate("/profile");
@@ -16,6 +17,10 @@ const ProfileInfoCard = () => {
 
     const handleDashboard = () => {
         navigate("/employer/dashboard");
+    };
+
+    const handleJobs = () => {
+        navigate("/jobs");
     };
 
     const handleLogout = () =>{
@@ -51,6 +56,17 @@ const ProfileInfoCard = () => {
                             >
                                 Perfil
                             </button>
+                        )}
+                        {user.userType === 'job_seeker' && !isJobsPage && (
+                            <>
+                                <span className="text-gray-400">|</span>
+                                <button
+                                    className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                                    onClick={handleJobs}
+                                >
+                                    Buscar Trabajos
+                                </button>
+                            </>
                         )}
                         {user.userType === 'employer' && !isDashboardPage && (
                             <>
