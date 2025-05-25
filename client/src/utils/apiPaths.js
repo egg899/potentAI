@@ -21,8 +21,9 @@ export const API_PATHS = {
     RESUME: {
         GET_ALL: '/api/resume',
         CREATE: '/api/resume',
-        UPDATE: '/api/resume/:id',
-        DELETE: '/api/resume/:id'
+        GET_BY_ID:(id)=>`/api/resume/${id}`,
+        UPDATE:(id)=>`/api/resume/${id}`,
+        DELETE: (id)=>`/api/resume/${id}`,
     },
 
     IMAGE: {
