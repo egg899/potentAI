@@ -17,7 +17,7 @@ import { API_PATHS } from '../../utils/apiPaths.js';
 import axiosInstance from '../../utils/axiosInstance.js';
 import StepProgress from '../../components/StepProgress.jsx';
 import ProfileInfoForm from './Forms/ProfileInfoForm.jsx';
-
+import ContactInfoForm from './Forms/ContactInfoForm.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const EditResume = () => {
   const [baseWidth, setBaseWidth] = useState(800);
   const [openThemeSelector, setOpenThemeSelector] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState("profile-info");
+  const [currentPage, setCurrentPage] = useState("contact-info");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title:"",
@@ -112,13 +112,23 @@ interests: [""],
       case "profile-info":
         return (
           <ProfileInfoForm
-            profileData={resumeData?.profileInfo}
-            updateSection={(key, value) =>{
+            profileData={resumeData?.profileInfo || {}}
+            updateSection={(key, value) => {
               updateSection("profileInfo", key, value)
             }}
             onNext={validateAndNext}
           />
         );
+
+        case "contact-info":
+          return(
+            <ContactInfoForm
+              contactInfo ={resumeData?.contactInfo}
+              updateSection={(key, value) =>{
+                updateSection("contactInfo", key, value);
+              }}
+            />
+          )
 
         default:
           return null;
@@ -127,7 +137,7 @@ interests: [""],
 
   //Actualizar objetos anidados como profileInfo, contactInfo, etc.
   const updateSection = (section, key, value) => {
-    setResumeData((prev) => [{
+    setResumeData((prev) => ({
         ...prev,
         [section]: {
           ...prev[section],
@@ -135,7 +145,7 @@ interests: [""],
           
         },
         
-    }]);
+    }));
   };
 
   //Actualizar items de array como workExperience, skills, etc.
