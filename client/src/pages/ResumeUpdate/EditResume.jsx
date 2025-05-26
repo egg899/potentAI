@@ -15,6 +15,8 @@ import TitleInput from '../../components/Inputs/TitleInput.jsx';
 import { useReactToPrint } from 'react-to-print';
 import { API_PATHS } from '../../utils/apiPaths.js';
 import axiosInstance from '../../utils/axiosInstance.js';
+import StepProgress from '../../components/StepProgress.jsx';
+import ProfileInfoForm from './Forms/ProfileInfoForm.jsx';
 
 const EditResume = () => {
   const { resumeId } = useParams();
@@ -23,11 +25,11 @@ const EditResume = () => {
   const resumeRef = useRef(null);
   const resumeDownloadRef = useRef(null);
 
-  const {baseWidth, setBaaseWidth} = useState(800);
-  const {openThemeSelector, setOpenThemeSelector} = useState(false);
-  const {openPreviewModal, setOpenPreviewModal} = useState(false);
-  const {currentPage, setCurrentPage} = useState("profile-info");
-  const [progess, setProgress] = useState(0);
+  const [baseWidth, setBaseWidth] = useState(800);
+  const [openThemeSelector, setOpenThemeSelector] = useState(false);
+  const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState("profile-info");
+  const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title:"",
     thumbnailLink:"",
@@ -104,10 +106,37 @@ interests: [""],
   //Funcion para navegar a la pagina anterior
   const goBack = () => {};
 
-  const renderForm = () => {};
+  const renderForm = () => {
+    
+    switch (currentPage) {
+      case "profile-info":
+        return (
+          <ProfileInfoForm
+            profileData={resumeData?.profileInfo}
+            updateSection={(key, value) =>{
+              updateSection("profileInfo", key, value)
+            }}
+            onNext={validateAndNext}
+          />
+        );
+
+        default:
+          return null;
+    }
+  };
 
   //Actualizar objetos anidados como profileInfo, contactInfo, etc.
-  const updateSection = (section, key, value) => {};
+  const updateSection = (section, key, value) => {
+    setResumeData((prev) => [{
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [key]:value,
+          
+        },
+        
+    }]);
+  };
 
   //Actualizar items de array como workExperience, skills, etc.
   const updateArrayItem = (section, index, key, value) => {};
@@ -143,6 +172,7 @@ interests: [""],
               resumeInfo?.certifications || prevState?.certifications,
             languages: resumeInfo?.languages || prevState?.languages,
             interests: resumeInfo?.interests || prevState?.interests, 
+
           }));
 
         }
@@ -186,7 +216,7 @@ interests: [""],
 
   return (
     <DashboardLayout>
-      <div className="conotainer mx-auto">
+      <div className="container mx-auto">
         <div className="flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4">
          <TitleInput
             title={resumeData.title}
@@ -197,11 +227,108 @@ interests: [""],
               }))
               }
             />
-        </div>
-      </div>
 
+              <div className="flex items-center gap-4">
+                <button 
+                className="btn-small-light"
+                onClick={() => setOpenThemeSelector(true)}>
+                  <LuPalette className="text-[16px]" />
+                  <span className="hidden md:block">Cambiar Tema</span>
+              </button>
+
+
+
+
+                <button className="btn-small-light" onClick={handleDeleteResume}>
+                    <LuTrash2 className="text-[16px]" />
+                    <span className="hidden md:block">Borrar</span>
+                 
+                </button>
+
+
+                  <button 
+                    className="btn-small-light"
+                    onClick={() => setOpenPreviewModal(true)}>
+
+                  <LuDownload className="text-[16px]" />
+                  <span className="hidden md:block">Vista Previa y Descarga</span> 
+                  </button>
+              </div> {/* Botones de  Descarga, borrado y vista previa*/}
+
+              
+           </div>
+
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
+
+
+                <StepProgress progress={progress} />
+
+
+                {renderForm()}
+
+
+          <div className="mx-5">
+                          {errorMsg && (
+                            <div className="flex items-center gap-2 text-[11px] font-medium text-amber-600 bg-amber-100 px-2 py-0.5 my-1 rounded">
+                              <LuCircleAlert className="text-md" /> {errorMsg}
+                            </div>
+                          )}
+
+
+                          <div className="flex items-end justify-end gap-3 mt-3 mb-5">
+                            <button 
+                              className="btn-small-light"
+                              onClick={goBack}
+                              disabled={isLoading}>
+
+                              <LuArrowLeft className="text-[16px]" />
+                              Volver
+                            </button>
+                            
+                            <button
+                              className="btn-small-light"
+                              onClick={uploadResumeImages}
+                              disabled={isLoading}
+                              >
+                                <LuSave className="text-[16px]"/>
+                                {isLoading ? "Actualizando": "Guardar y Salir"}
+                            </button>
+
+                            <button 
+                            className="btn-small"
+                            onClick={validateAndNext}
+                            disabled={isLoading}
+                            >
+                              {currentPage === "additionalInfo" && (
+                                <LuDownload className="text-[16px]"/>
+                              )}
+
+                              {currentPage === "additionalInfo"
+                              ? "Vista previa y Descarga": "Siguiente"}
+                              {currentPage !== "additionalInfo" && (
+                                <LuArrowLeft className="text-[16px] rotate-180" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                    </div>
+                 
+
+
+
+
+              
+
+
+            <div ref={resumeRef} className="h-[100vh]">
+                    {/* Resume Template */}
+            </div>
+          </div>
+        </div> 
     </DashboardLayout>
-  )
-}
+  );
+};
 
 export {EditResume}
