@@ -14,7 +14,7 @@
 // routes/employerRoutes.js
 
 import express from 'express';
-import { getEmployerStats, createJobPost, getJobs, deleteJob } from '../controllers/employerController.js';
+import { getEmployerStats, createJobPost, getJobs, deleteJob, updateJob } from '../controllers/employerController.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -22,9 +22,10 @@ const router = express.Router();
 // Ruta protegida para obtener estadísticas del empleador
 router.get('/stats', authenticateToken, getEmployerStats);
 
-// Rutas protegidas para gestionar trabajos
+// Rutas para gestionar publicaciones de trabajo
 router.post('/jobs', authenticateToken, createJobPost);
 router.get('/jobs', authenticateToken, getJobs);
 router.delete('/jobs/:jobId', authenticateToken, deleteJob);
+router.put('/jobs/:jobId', authenticateToken, updateJob);
 
 export default router;
