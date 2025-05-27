@@ -19,7 +19,8 @@ import StepProgress from '../../components/StepProgress.jsx';
 import ProfileInfoForm from './Forms/ProfileInfoForm.jsx';
 import ContactInfoForm from './Forms/ContactInfoForm.jsx';
 import WorkExperienceForm from './Forms/WorkExperienceForm.jsx';
-
+import EducationDetailsForm from './Forms/EducationDetailsForm.jsx';
+import SkillsInfoForm from './Forms/SkillsInfoForm.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const EditResume = () => {
   const [baseWidth, setBaseWidth] = useState(800);
   const [openThemeSelector, setOpenThemeSelector] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState("work-experience");
+  const [currentPage, setCurrentPage] = useState("skills");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title:"",
@@ -140,13 +141,37 @@ interests: [""],
                   updateArrayItem={(index, key, value) =>{
                     updateArrayItem("workExperience", index, key, value);
                 }}
-                addArrayItem={(newItem)=> addArrayitem("workExperience", newItem)}
+                addArrayItem={(newItem) => addArrayItem("workExperience", newItem)}
                 removeArrayItem={(index) =>
                   removeArrayItem("workExperience", index)
                    }
               />
 
             );
+
+          case "education-info":
+            return (
+              <EducationDetailsForm
+                educationInfo={resumeData?.education}
+                updateArrayItem={(index, key, value) => {
+                  updateArrayItem('education', index, key, value);
+                }}
+                addArrayItem={(newItem) => addArrayItem('education', newItem)}
+                removeArrayItem={(index) => removeArrayItem("education", index)}
+              />
+            );
+            
+          case "skills":
+            return (
+              <SkillsInfoForm 
+                skillsInfo={resumeData?.skills}
+                updateArrayItem={(index, key, value) =>{
+                  updateArrayItem("skills", index, key, value);
+                }}
+                addArrayItem={(newItem) => addArrayItem("skills", newItem)}
+                removeArrayItem={(index) => removeArrayItem("skills", index)}
+                />
+            ); 
 
         default:
           return null;
@@ -188,7 +213,7 @@ interests: [""],
   };
 
   //Adherir item al array
-  const addArrayitem = (section, newItem) => {
+  const addArrayItem = (section, newItem) => {
     setResumeData((prev) => (
       {
       ...prev,

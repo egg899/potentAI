@@ -4,11 +4,11 @@ import { LuPlus, LuTrash2 } from "react-icons/lu";
 const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  removeArrayItem}) => {
   return (
     <div className="px-5 pt-5">
-        <h2 className="text-lg font-semibold text-gray-900">Work Experience</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Experiencia Laboral</h2>
 
         <div className="mt-4 flex flex-col gap-4 mb-3">
             {workExperience.map((experience, index) => (
-                <div key={index} className="border border-gray-200/80 p-4 rounded-lg relativve">
+                <div key={index} className="border border-gray-200/80 p-4 rounded-lg relative">
                     <div className="grid grid-cols-1 md:grid-cols-2 gp-4">
                         <Input
                            label="Company"
@@ -33,7 +33,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
 
 
                         <Input
-                           label="Start Date"
+                           label="Fecha de Inicio"
                            type="month"
                            value={experience.startDate || ""}
                            onChange= {({ target }) => 
@@ -43,7 +43,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
 
 
                           <Input
-                           label="End Date"
+                           label="Fecha de Finalización"
                            type="month"
                            value={experience.endDate || ""}
                            onChange= {({ target }) => 
@@ -69,7 +69,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
 
                     </div>    
 
-                            {workExperience.length >1 && (
+                            {workExperience.length > 1 && (
                                 <button 
                                 type="button"
                                 className="absolute top-3 right-3 text-sm text-red-600 hover:underline cursor-pointer"
@@ -94,7 +94,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
                 })
             }
             >
-                <LuPlus /> Adhiere Experiencia de Trabajo
+                <LuPlus /> Adherir Experiencia de Trabajo
             </button>
 
 
