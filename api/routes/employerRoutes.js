@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEmployerStats, createJobPost, getJobs, deleteJob } from '../controllers/employerController.js';
+import { getEmployerStats, createJobPost, getJobs, deleteJob, updateJob } from '../controllers/employerController.js';
 import protect from '../middlewares/authMiddleware.js';
 import { isEmployer } from '../middlewares/roleCheck.js';
 
@@ -12,5 +12,6 @@ router.get('/stats', protect, isEmployer, getEmployerStats);
 router.post('/jobs', protect, isEmployer, createJobPost);
 router.get('/jobs', protect, isEmployer, getJobs);
 router.delete('/jobs/:jobId', protect, isEmployer, deleteJob);
+router.put('/jobs/:jobId', protect, isEmployer, updateJob);
 
 export default router; 

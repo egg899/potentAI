@@ -108,7 +108,16 @@ const JobListings = () => {
         type: 'all',
         location: ''
     });
-    const [refreshKey, setRefreshKey] = useState(0); // Para forzar la actualización
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [editingJob, setEditingJob] = useState(null);
+    const [editForm, setEditForm] = useState({
+        title: '',
+        description: '',
+        requirements: '',
+        location: '',
+        salary: '',
+        type: 'full-time'
+    });
 
     const fetchJobs = async () => {
         try {
@@ -154,7 +163,7 @@ const JobListings = () => {
     const handleDelete = async (jobId) => {
         if (window.confirm('¿Estás seguro de que deseas eliminar esta publicación?')) {
             try {
-                const response = await axiosInstance.delete(`${API_PATHS.EMPLOYER.DELETE_JOB}/${jobId}`);
+                const response = await axiosInstance.delete(API_PATHS.EMPLOYER.DELETE_JOB(jobId));
                 
                 if (response.status === 200 || response.status === 204) {
                     setJobs(jobs.filter(job => job._id !== jobId));
@@ -178,6 +187,54 @@ const JobListings = () => {
     // Función para recargar la lista
     const handleRefresh = () => {
         setRefreshKey(prev => prev + 1);
+    };
+
+    const handleEdit = (job) => {
+        setEditingJob(job);
+        setEditForm({
+            title: job.title,
+            description: job.description,
+            requirements: job.requirements,
+            location: job.location,
+            salary: job.salary,
+            type: job.type
+        });
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axiosInstance.put(API_PATHS.EMPLOYER.UPDATE_JOB(editingJob._id), editForm);
+            
+            if (response.data) {
+                setJobs(jobs.map(job => 
+                    job._id === editingJob._id ? response.data : job
+                ));
+                setEditingJob(null);
+                alert('Publicación actualizada exitosamente');
+            }
+        } catch (error) {
+            console.error('Error al actualizar:', error);
+            if (error.response) {
+                alert('Error al actualizar la publicación: ' + (error.response.data?.message || 'Error del servidor'));
+            } else if (error.request) {
+                alert('No se pudo conectar con el servidor. Por favor, intenta de nuevo.');
+            } else {
+                alert('Error al procesar la solicitud. Por favor, intenta de nuevo.');
+            }
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingJob(null);
+        setEditForm({
+            title: '',
+            description: '',
+            requirements: '',
+            location: '',
+            salary: '',
+            type: 'full-time'
+        });
     };
 
     if (isLoading) return (
@@ -222,6 +279,96 @@ const JobListings = () => {
                     setFilters={setFilters}
                 />
 
+                {editingJob && (
+                    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-lg">
+                            <h2 className="text-2xl font-bold mb-4">Editar Publicación</h2>
+                            <form onSubmit={handleEditSubmit}>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Título</label>
+                                        <input
+                                            type="text"
+                                            value={editForm.title}
+                                            onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                                        <textarea
+                                            value={editForm.description}
+                                            onChange={(e) => setEditForm({...editForm, description: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            rows="4"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Requisitos</label>
+                                        <textarea
+                                            value={editForm.requirements}
+                                            onChange={(e) => setEditForm({...editForm, requirements: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            rows="3"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Ubicación</label>
+                                        <input
+                                            type="text"
+                                            value={editForm.location}
+                                            onChange={(e) => setEditForm({...editForm, location: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Salario</label>
+                                        <input
+                                            type="text"
+                                            value={editForm.salary}
+                                            onChange={(e) => setEditForm({...editForm, salary: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Tipo de Trabajo</label>
+                                        <select
+                                            value={editForm.type}
+                                            onChange={(e) => setEditForm({...editForm, type: e.target.value})}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
+                                            required
+                                        >
+                                            <option value="full-time">Tiempo Completo</option>
+                                            <option value="part-time">Medio Tiempo</option>
+                                            <option value="contract">Contrato</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="mt-6 flex justify-end gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={handleCancelEdit}
+                                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 bg-[#3cff52] text-white rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                                    >
+                                        Guardar Cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 gap-6">
                     {filteredJobs.length === 0 ? (
                         <div className="text-center py-8 text-gray-500">
@@ -229,12 +376,15 @@ const JobListings = () => {
                         </div>
                     ) : (
                         filteredJobs.map((job) => (
-                            <JobCard
-                                key={job._id}
-                                job={job}
-                                onEdit={(id) => navigate(`/edit-job/${id}`)}
-                                onDelete={handleDelete}
-                            />
+                            <div key={job._id} className="bg-white p-6 rounded-lg shadow-sm">
+                                <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
+                                <JobTags type={job.type} salary={job.salary} />
+                                <p className="text-gray-600 mb-4">{job.description}</p>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">{job.location}</span>
+                                    <JobActions onEdit={() => handleEdit(job)} onDelete={() => handleDelete(job._id)} />
+                                </div>
+                            </div>
                         ))
                     )}
                 </div>
