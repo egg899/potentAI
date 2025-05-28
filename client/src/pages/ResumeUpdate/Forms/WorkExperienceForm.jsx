@@ -57,7 +57,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
                         <label className="text-xs font-medium text-slate-600">
                             Descripción    
                         </label>    
-                        <textArea
+                        <textarea
                             placeholder="¿Qué hiciste en este Rol?"
                             className="form-input w-full mt-1"
                             rows={3}

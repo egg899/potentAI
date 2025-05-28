@@ -13,7 +13,7 @@ const SkillsInfoForm = ({skillsInfo, updateArrayItem, addArrayItem, removeArrayI
                     key={index}
                     className="border border-gray-200/80 p-4 rounded-lg relative"
                 >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gp-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input
                           label="Nombre de la Habilidad"
                           placeholder="Javascript"
