@@ -21,6 +21,9 @@ import ContactInfoForm from './Forms/ContactInfoForm.jsx';
 import WorkExperienceForm from './Forms/WorkExperienceForm.jsx';
 import EducationDetailsForm from './Forms/EducationDetailsForm.jsx';
 import SkillsInfoForm from './Forms/SkillsInfoForm.jsx';
+import ProjectsDetailForm from './Forms/ProjectsDetailForm.jsx';
+import CertificationInfoForm from './Forms/CertificationInfoForm.jsx';
+import AdditionalInfoForm from './Forms/AdditionalInfoForm.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ const EditResume = () => {
   const [baseWidth, setBaseWidth] = useState(800);
   const [openThemeSelector, setOpenThemeSelector] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState("skills");
+  const [currentPage, setCurrentPage] = useState("profile-info");
   const [progress, setProgress] = useState(0);
   const [resumeData, setResumeData] = useState({
     title:"",
@@ -101,13 +104,65 @@ interests: [""],
   const [isLoading, setIsLoading] = useState(false);
 
   //Validar Inputs
-  const validateAndNext = (e) => {};
+  const validateAndNext = (e) => {
+     goToNextStep();
+  };
 
   //Funcion par navegar a la siguiente Pagina
-  const goToNextStep = () => {};
+  const goToNextStep = () => {
+    const pages = [
+      "profile-info",
+      "contact-info",
+      "work-experience",
+      "education-info",
+      "skills",
+      "projects",
+      "certifications",
+      "additionalInfo"
+    ];
+
+    if(currentPage === "additionalInfo") setOpenPreviewModal(true);
+
+    const currentIndex = pages.indexOf(currentPage);
+    if(currentIndex !== -1 && currentIndex < pages.length - 1) {
+        const nextIndex = currentIndex + 1;
+        setCurrentPage(pages[nextIndex]);
+
+        // Establecer el Progreso como porcentaje
+        const percent = Math.round((nextIndex / (pages.length -1)) * 100);
+        setProgress(percent);
+        window.scrollTo({ top: 0, behaviour: "smooth" });
+    }
+
+  };
 
   //Funcion para navegar a la pagina anterior
-  const goBack = () => {};
+  const goBack = () => {
+    const pages = [
+      "profile-info",
+      "contact-info",
+      "work-experience",
+      "education-info",
+      "skills",
+      "projects",
+      "certifications",
+      "additionalInfo"
+    ];
+
+    if(currentPage === "profile-info") {navigate("/dashboard");}
+
+    const currentIndex = pages.indexOf(currentPage);
+    if (currentIndex > 0) {
+      const prevIndex = currentIndex - 1;
+      setCurrentPage(pages[prevIndex]);
+
+      // Actualiza el progreso
+      const percent = Math.round((prevIndex / (pages.length -1 )) * 100);
+      setProgress(percent);
+      window.scrollTo({ top: 0, behaviour: "smooth" });
+    };
+
+  };
 
   const renderForm = () => {
     
@@ -172,6 +227,46 @@ interests: [""],
                 removeArrayItem={(index) => removeArrayItem("skills", index)}
                 />
             ); 
+
+          case "projects":
+            return (
+              <ProjectsDetailForm 
+                projectInfo={resumeData?.projects}
+                updateArrayItem={(index, key, value) => {
+                  updateArrayItem("projects", index, key, value);
+                }}
+                addArrayItem = { (newItem) => addArrayItem("projects", newItem)}
+                removeArrayItem = {(index) => removeArrayItem("projects", index)}
+              />
+            );  
+
+
+            case "certifications":
+            return (
+              <CertificationInfoForm 
+                certifications={resumeData?.certifications}
+                updateArrayItem={(index, key, value) => {
+                  updateArrayItem("projects", index, key, value);
+                }}
+                addArrayItem = { (newItem) => addArrayItem("certifications", newItem)}
+                removeArrayItem = {(index) => removeArrayItem("certifications", index)}
+              />
+            );  
+
+
+          case "additionalInfo":
+            return (
+              <AdditionalInfoForm
+                languages={resumeData?.languages}
+                interests={resumeData?.interests}
+                updateArrayItem={(section, index, key, value) => {
+                  updateArrayItem(section, index, key, value);
+                }}
+                addArrayItem = { (section, newItem) => addArrayItem(section, newItem)}
+                removeArrayItem = {(section, index) => 
+                  removeArrayItem(section, index)}
+              />
+            );   
 
         default:
           return null;
