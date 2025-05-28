@@ -105,7 +105,121 @@ interests: [""],
 
   //Validar Inputs
   const validateAndNext = (e) => {
-     goToNextStep();
+    const errors = [];
+
+    switch (currentPage) {
+      case "profile-info":
+        const { fullName, designation, summary } = resumeData.profileInfo;
+        if (!fullName.trim()) { errors.push("El nombre completo es requerido.")}
+        if (!designation.trim()) { errors.push("La designación es requerida.")}
+        if (!summary.trim()) { errors.push("El Resumen es requerido.")}
+        break;
+
+        case "contact-info":
+          const { email, phone } = resumeData.contactInfo;
+          if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ) { errors.push("Email valido es requerido.")}
+          if (!phone.trim()) { errors.push("Telefono de 10 digitos es requerido.")}
+          break;
+
+        case "work-experience":
+          resumeData.workExperience.forEach(
+            ({ company, role, startDate, endDate }, index) => {
+              if(!company.trim()){
+                errors.push(`La companía es requerida ${index + 1}`);
+              }
+               if(!role.trim()){
+                errors.push(`El Rol es requerido ${index + 1}`);
+              }
+               if(!startDate || !endDate){
+                errors.push(`La fecha de comienzo y la finalización es requerida ${index + 1}`);
+              }
+            }
+          );
+          break;
+
+          case "education-info":
+            resumeData.education.forEach(
+            ({ degree, institution, startDate, endDate }, index) => {
+              if(!degree.trim()){
+                errors.push(`El título es requerido en educación ${index + 1}`);
+              }
+               if(!institution.trim()){
+                errors.push(`La institución es requerida en educación ${index + 1}`);
+              }
+               if(!startDate || !endDate){
+                errors.push(`La fecha de comienzo y la finalizaciónen educación es requerida ${index + 1}`);
+              }
+            });
+          break;
+
+          case "skills":
+            resumeData.skills.forEach(({ name, progress }, index) =>{
+              if(!name.trim()){
+                errors.push(`El nombre es requerido en habilidades ${index + 1}`);
+              }
+              
+              if(progress < 1 || progress > 100){
+                errors.push(`el progreso en habilidades deben de ser entre 1 y 100 ${index + 1}`);
+              }
+
+
+            }); 
+            break;
+
+             case "projects":
+            resumeData.projects.forEach(({ title, description }, index) =>{
+              if(!title.trim()){
+                errors.push(`El titulo es requerido en proyectos ${index + 1}`);
+              }
+              
+              if(!description){
+                errors.push(`La descripción en proyectos es requerida ${index + 1}`);
+              }
+
+
+            }); 
+            break;
+
+            case "certifications":
+            resumeData.certifications.forEach(({ title, issuer }, index) =>{
+              if(!title.trim()){
+                errors.push(`El titulo es requerido en certificados ${index + 1}`);
+              }
+              
+              if(!issuer){
+                errors.push(`El emitidor es requerido en certificados ${index + 1}`);
+              }
+
+
+            }); 
+            break;
+
+            case "additionalInfo":
+              if(resumeData.languages.length === 0 || 
+                !resumeData.languages[0].name?.trim()
+              ) {
+                errors.push("Al menos un lenguaje es requerido");
+              }
+
+              if(resumeData.interests.length === 0 || 
+                !resumeData.interests[0]?.trim()
+              ) {
+                errors.push("Al menos un interes es requerido");
+              }
+              break;
+
+              deafult:
+              break;
+      }
+    
+      if(errors.length > 0) {
+        setErrorMsg(errors.join(", "));
+        return;
+      }
+
+      //Moverse al siguiente paso
+      setErrorMsg("");
+      goToNextStep();
   };
 
   //Funcion par navegar a la siguiente Pagina
@@ -246,7 +360,7 @@ interests: [""],
               <CertificationInfoForm 
                 certifications={resumeData?.certifications}
                 updateArrayItem={(index, key, value) => {
-                  updateArrayItem("projects", index, key, value);
+                  updateArrayItem("certifications", index, key, value);
                 }}
                 addArrayItem = { (newItem) => addArrayItem("certifications", newItem)}
                 removeArrayItem = {(index) => removeArrayItem("certifications", index)}
