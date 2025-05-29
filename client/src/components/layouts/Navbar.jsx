@@ -18,7 +18,7 @@ const Navbar = () => {
                 <div className="cursor-pointer" onClick={() => navigate('/')}> 
                     <Logo size={60} className="mr-2" />
                 </div>
-                <h2 className="text-lg md:text-xl font-medium text-black leading-5">Constructor de Curriculums Vitae</h2>
+                <h2 className="text-lg md:text-xl font-medium text-black leading-5"><Link to={"/dashboard"}>Constructor de Curriculums Vitae</Link></h2>
             </div>
 
             <div className="flex items-center space-x-8">

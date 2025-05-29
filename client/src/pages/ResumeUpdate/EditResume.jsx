@@ -24,6 +24,7 @@ import SkillsInfoForm from './Forms/SkillsInfoForm.jsx';
 import ProjectsDetailForm from './Forms/ProjectsDetailForm.jsx';
 import CertificationInfoForm from './Forms/CertificationInfoForm.jsx';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm.jsx';
+import RenderResume from '../../components/ResumeTemplates/RenderResume.jsx'; 
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -456,8 +457,8 @@ interests: [""],
             ...prevState,
             title: resumeInfo?.title || "Undefined",
             template: resumeInfo?.template || prevState?.template,
-            profieInfo: resumeInfo?.profileInfo || prevState?.profileInfo,
-            contactInfo: resumeInfo?.contactingInfo || prevState?.contactInfo,
+            profileInfo: resumeInfo?.profileInfo || prevState?.profileInfo,
+            contactInfo: resumeInfo?.contactInfo || prevState?.contactInfo,
             workExperience:
               resumeInfo?.workExperience || prevState?.workExperience,
             education: resumeInfo?.education || prevState?.education,
@@ -491,7 +492,11 @@ interests: [""],
   const reactToPrintln = useReactToPrint({ contentRef: resumeDownloadRef});
 
   //Funcion para actualizar el ancho de la base  basado en el tamaño del contenedor
-  const updateBaseWidth = () => {};
+  const updateBaseWidth = () => {
+    if(resumeRef.current) {
+      setBaseWidth(resumeRef.current.offsetWidth);
+    }
+  };
 
   useEffect(() =>{
     updateBaseWidth();
@@ -508,6 +513,11 @@ interests: [""],
 
   }, []);//useEffect
 
+// useEffect(() => {
+//   if (resumeId) {
+//     fetchResumeDetailsById();
+//   }
+// }, [resumeId]);
 
   return (
     <DashboardLayout>
@@ -555,7 +565,7 @@ interests: [""],
 
 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
+            {/* <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
 
 
                 <StepProgress progress={progress} />
@@ -608,9 +618,19 @@ interests: [""],
                             </button>
                           </div>
                         </div>
-                    </div>
-                 
+                    </div> */}
+                              {/* {console.log('RESUME-DATA: ',resumeData.profileInfo)} */}
+                  {resumeData?.template && (
+                    <RenderResume 
+                      templateId={resumeData.template.theme}
+                      resumeData={resumeData}
+                      colorPalette={resumeData.template.colorPalette || []}
+                      containerWidth={baseWidth}
+                    />
+                  )}
 
+                 
+   
 
 
 
