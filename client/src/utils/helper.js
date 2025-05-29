@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
@@ -66,4 +68,8 @@ export const getLightColorFromImage = (imageUrl) => {
             reject(new Error('La imagen no pudo ser cargada o fue bloqueada por el CORS'));
         };
     });
+};
+
+export function formatYearMonth(yearMonth){
+    return yearMonth ? moment(yearMonth, "YYYY-MM").format("MMM YYYY") : ""; 
 }
