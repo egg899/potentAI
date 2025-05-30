@@ -6,18 +6,18 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
-    if (!image) {
+    // Solo mostramos preview si image es File, si no, preview es null
+    if (image && image instanceof File) {
+      const objectUrl = URL.createObjectURL(image);
+      setPreview(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
       setPreview(null);
-      return;
     }
-    const objectUrl = URL.createObjectURL(image);
-    setPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
   }, [image]);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
       setImage(file);
     }
@@ -25,6 +25,9 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
 
   const handleRemoveImage = () => {
     setImage(null);
+    if (inputRef.current) {
+      inputRef.current.value = null;
+    }
   };
 
   const onChooseFile = () => {
@@ -41,7 +44,7 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
         className="hidden"
       />
 
-      {image ? (
+      {preview ? (
         <div className="relative">
           <img
             src={preview}
