@@ -55,35 +55,25 @@ const TemplateOne = ({
         setScale(containerWidth / baseWidth);
     }, [containerWidth]);
 
-   
-useEffect(() => {
-  const img = resumeData.profileInfo?.profileImg;
-
-  if (!img) {
-    setImageUrl(null);
-    return;
-  }
-
-  if (typeof img === "string") {
-    // Es una URL válida (por ejemplo, de Mongo o Cloudinary)
-    setImageUrl(img);
-  } else if (img instanceof File) {
-    // Es un archivo cargado manualmente
-    const url = URL.createObjectURL(img);
-    setImageUrl(url);
-
-    // Limpieza cuando el componente se desmonta o la imagen cambia
-    return () => URL.revokeObjectURL(url);
-  } else if (img?.data && Array.isArray(img.data)) {
-    // Caso Mongo con buffer (img = { data: [Uint8Array], contentType: 'image/jpeg' })
-    const blob = new Blob([new Uint8Array(img.data)], { type: img.contentType });
-    const url = URL.createObjectURL(blob);
-    setImageUrl(url);
-
-    return () => URL.revokeObjectURL(url);
-  }
-}, [resumeData.profileInfo]);
-
+    useEffect(() => {
+        if (resumeData.profileInfo.profileImg) {
+            if (typeof resumeData.profileInfo.profileImg === 'string') {
+                if (resumeData.profileInfo.profileImg.startsWith('data:')) {
+                    setImageUrl(resumeData.profileInfo.profileImg);
+                } else if (resumeData.profileInfo.profileImg.startsWith('blob:')) {
+                    setImageUrl(resumeData.profileInfo.profileImg);
+                } else {
+                    setImageUrl(resumeData.profileInfo.profileImg);
+                }
+            } else if (resumeData.profileInfo.profileImg instanceof File) {
+                const objectUrl = URL.createObjectURL(resumeData.profileInfo.profileImg);
+                setImageUrl(objectUrl);
+                return () => URL.revokeObjectURL(objectUrl);
+            }
+        } else if (resumeData.profileInfo.profilePreviewUrl) {
+            setImageUrl(resumeData.profileInfo.profilePreviewUrl);
+        }
+    }, [resumeData.profileInfo.profileImg, resumeData.profileInfo.profilePreviewUrl]);
 
   return (
     

@@ -256,10 +256,10 @@ const ProfileInfo = () => {
                   ) : (
                     <h1 className="text-xl font-bold" >{user?.name}</h1>
                   )}
-                  <p className="text-gray-700">Software Developer</p>
+                  <p className="text-gray-700">Desarrollador de Software</p>
                   <div className="mt-g flex flex-wrpa gap-4 justify-center">
-                            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                            <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
+                            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contactar</a>
+                            <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Currículum</a>
                   </div>
             </div>
                   <hr className="my-6 border-t border-gray-300"></hr>
@@ -271,7 +271,7 @@ const ProfileInfo = () => {
                             <li className="mb-2">React</li>
                             <li className="mb-2">Node.js</li>
                             <li className="mb-2">HTML/CSS</li>
-                            <li className="mb-2">Tailwind Css</li>
+                            <li className="mb-2">Tailwind CSS</li>
                         </ul>
                     </div>
                 </div>
@@ -334,7 +334,7 @@ const ProfileInfo = () => {
 
 
                     <div className="bg-white shadow rounded-lg p-6">
-                                          <h2 className="text-xl font-bold mb-4">Sobre Mi </h2>
+                                          <h2 className="text-xl font-bold mb-4">Sobre Mí</h2>
                                           <p className="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est
                         vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas
                         suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus
@@ -343,7 +343,7 @@ const ProfileInfo = () => {
                     </p>
 
                     <h3 className="font-semibold text-center mt-3 -mb-2">
-                        Encuentrame en
+                        Encuéntrame en
                     </h3>
 
 

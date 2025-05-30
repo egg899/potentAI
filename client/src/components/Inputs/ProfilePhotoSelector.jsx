@@ -1,18 +1,23 @@
 import React, { useRef, useEffect, useState } from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 
-const ProfilePhotoSelector = ({ image, setImage }) => {
+const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
   const inputRef = useRef(null);
-  const [preview, setPreview] = useState(null);
+  const [localPreview, setLocalPreview] = useState(preview);
 
   useEffect(() => {
-    // Solo mostramos preview si image es File, si no, preview es null
+    // Actualizar el preview local cuando cambie el preview prop
+    if (preview) {
+      setLocalPreview(preview);
+    }
+  }, [preview]);
+
+  useEffect(() => {
+    // Manejar la imagen cuando es un archivo
     if (image && image instanceof File) {
       const objectUrl = URL.createObjectURL(image);
-      setPreview(objectUrl);
+      setLocalPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setPreview(null);
     }
   }, [image]);
 
@@ -20,11 +25,19 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
+      if (setPreview) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreview(objectUrl);
+      }
     }
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    setLocalPreview(null);
+    if (setPreview) {
+      setPreview(null);
+    }
     if (inputRef.current) {
       inputRef.current.value = null;
     }
@@ -44,10 +57,10 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
         className="hidden"
       />
 
-      {preview ? (
+      {localPreview ? (
         <div className="relative">
           <img
-            src={preview}
+            src={localPreview}
             alt="Foto de Perfil"
             className="w-20 h-20 rounded-full object-cover"
           />

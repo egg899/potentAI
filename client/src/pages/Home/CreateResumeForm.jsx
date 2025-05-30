@@ -14,7 +14,7 @@ const CreateResumeForm = () => {
     e.preventDefault();
 
     if(!title){
-      setError("Por favor, agregue  el titulo");
+      setError("Por favor, agregue el título");
       return;
     }
 
@@ -43,7 +43,7 @@ const CreateResumeForm = () => {
     <div className="w-[90vw] md:w-[70vh] p-7 flex flex-col justify-center">
       <h3 className="text-lg font-semibold text-black">Crear nuevo CV</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-3">
-        Dale a tu CV un titulo para empezar. Tu puedes editar todos los detalles despues.
+        Dale a tu CV un título para empezar. Puedes editar todos los detalles después.
       </p>
 
 
@@ -51,14 +51,14 @@ const CreateResumeForm = () => {
       <Input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        label="Titulo del CV"
+        label="Título del CV"
         placeholder="Ej: El CV de Mike"
         type="text"
       />
 
       {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
       <button type="submit" className="btn-primary">
-        Crear el Curriculum Vitae
+        Crear el Currículum Vitae
       </button>
     </form>
   </div>
