@@ -22,6 +22,7 @@ const ProfileInfo = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // {console.log(user)}
     if (user) {
       setEditedName(user.name);
       setPreview(user.profileImageUrl);

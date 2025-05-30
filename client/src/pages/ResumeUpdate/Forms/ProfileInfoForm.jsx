@@ -16,6 +16,11 @@ const ProfileInfoForm = ({profileData, updateSection}) => {
           preview={profileData?.profilePreviewUrl}
           setPreview={(value) => updateSection("profilePreviewUrl", value)}
           />
+          {/* <ProfilePhotoSelector
+          image={profileData?.profileImg || profileData?.profilePreviewUrl}
+          setImage={(value) => updateSection("profileImg", value)} // acá la clave es "profileImg"
+          setPreview={(value) => updateSection("profilePreviewUrl", value)} // y acá "profilePreviewUrl"
+        /> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input

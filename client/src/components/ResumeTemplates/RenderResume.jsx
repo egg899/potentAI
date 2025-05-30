@@ -6,7 +6,8 @@ const RenderResume = ({
         resumeData,
         colorPalette,
         containerWidth,
-}) => {{console.log('RESUME-DATA de Render: ', resumeData.contactInfo)}
+}) => {
+    // {console.log('RESUME-DATA de Render: ', resumeData.contactInfo)}
    switch (templateId) {
         case "01":
             return (

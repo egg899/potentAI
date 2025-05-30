@@ -283,7 +283,9 @@ interests: [""],
     
     switch (currentPage) {
       case "profile-info":
-        return (
+      // {console.log('ProfileInfo: ',resumeData)}  
+      return (
+          
           <ProfileInfoForm
             profileData={resumeData?.profileInfo || {}}
             updateSection={(key, value) => {
@@ -565,7 +567,7 @@ interests: [""],
 
 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
+            <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
 
 
                 <StepProgress progress={progress} />
@@ -618,7 +620,7 @@ interests: [""],
                             </button>
                           </div>
                         </div>
-                    </div> */}
+                    </div>
                               {/* {console.log('RESUME-DATA: ',resumeData.profileInfo)} */}
                   {resumeData?.template && (
                     <RenderResume 
