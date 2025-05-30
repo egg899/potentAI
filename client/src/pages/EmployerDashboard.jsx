@@ -67,10 +67,10 @@ const EmployerDashboard = () => {
                 setError(error.response.data?.message || 'Error al crear la publicación');
             } else if (error.request) {
                 // La petición fue hecha pero no se recibió respuesta
-                setError('No se pudo conectar con el servidor. Por favor, intenta de nuevo.');
+                setError('No se pudo conectar con el servidor. Por favor, intente de nuevo.');
             } else {
                 // Algo sucedió al configurar la petición
-                setError('Error al procesar la solicitud. Por favor, intenta de nuevo.');
+                setError('Error al procesar la solicitud. Por favor, intente de nuevo.');
             }
         } finally {
             setIsLoading(false);
