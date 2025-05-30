@@ -209,7 +209,7 @@ interests: [""],
               }
               break;
 
-              deafult:
+              deafault:
               break;
       }
     
