@@ -1,4 +1,7 @@
 import moment from "moment";
+import "moment/locale/es";
+
+
 
 export const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,7 +72,11 @@ export const getLightColorFromImage = (imageUrl) => {
         };
     });
 };
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 
+dayjs.locale('es');
 export function formatYearMonth(yearMonth){
-    return yearMonth ? moment(yearMonth, "YYYY-MM").format("MMM YYYY") : ""; 
+    return yearMonth ? dayjs(yearMonth, "YYYY-MM").format("MMMM YYYY") : ""; 
 }
+
