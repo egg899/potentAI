@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import { FiSearch, FiFilter } from 'react-icons/fi';
 import moment from 'moment';
@@ -99,6 +99,7 @@ const JobCard = ({ job, onEdit, onDelete }) => (
 
 // Componente principal de la página
 const JobListings = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -109,8 +110,9 @@ const JobListings = () => {
         location: ''
     });
     const [refreshKey, setRefreshKey] = useState(0);
-    const [editingJob, setEditingJob] = useState(null);
-    const [editForm, setEditForm] = useState({
+    const [isEditing, setIsEditing] = useState(!!id);
+    const [job, setJob] = useState(null);
+    const [formData, setFormData] = useState({
         title: '',
         description: '',
         requirements: '',
@@ -147,8 +149,57 @@ const JobListings = () => {
     };
 
     useEffect(() => {
-        fetchJobs();
-    }, [refreshKey]); // Se ejecuta cuando cambia refreshKey
+        if (id) {
+            fetchJobDetails();
+        } else {
+            setIsLoading(false);
+        }
+    }, [id]);
+
+    const fetchJobDetails = async () => {
+        try {
+            setIsLoading(true);
+            const response = await axiosInstance.get(`${API_PATHS.JOBS.GET_ONE}/${id}`);
+            setJob(response.data);
+            setFormData({
+                title: response.data.title,
+                description: response.data.description,
+                requirements: response.data.requirements,
+                location: response.data.location,
+                salary: response.data.salary,
+                type: response.data.type
+            });
+        } catch (error) {
+            console.error('Error al cargar los detalles del trabajo:', error);
+            setError('No se pudieron cargar los detalles del trabajo');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (isEditing) {
+                await axiosInstance.put(`${API_PATHS.EMPLOYER.UPDATE_JOB}/${id}`, formData);
+                navigate('/profile');
+            } else {
+                await axiosInstance.post(API_PATHS.EMPLOYER.CREATE_JOB, formData);
+                navigate('/profile');
+            }
+        } catch (error) {
+            console.error('Error al guardar el trabajo:', error);
+            setError('Error al guardar el trabajo');
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     const filteredJobs = jobs.filter(job => {
         if (!job) return false;
@@ -189,58 +240,10 @@ const JobListings = () => {
         setRefreshKey(prev => prev + 1);
     };
 
-    const handleEdit = (job) => {
-        setEditingJob(job);
-        setEditForm({
-            title: job.title,
-            description: job.description,
-            requirements: job.requirements,
-            location: job.location,
-            salary: job.salary,
-            type: job.type
-        });
-    };
-
-    const handleEditSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axiosInstance.put(API_PATHS.EMPLOYER.UPDATE_JOB(editingJob._id), editForm);
-            
-            if (response.data) {
-                setJobs(jobs.map(job => 
-                    job._id === editingJob._id ? response.data : job
-                ));
-                setEditingJob(null);
-                alert('Publicación actualizada exitosamente');
-            }
-        } catch (error) {
-            console.error('Error al actualizar:', error);
-            if (error.response) {
-                alert('Error al actualizar la publicación: ' + (error.response.data?.message || 'Error del servidor'));
-            } else if (error.request) {
-                alert('No se pudo conectar con el servidor. Por favor, intenta de nuevo.');
-            } else {
-                alert('Error al procesar la solicitud. Por favor, intenta de nuevo.');
-            }
-        }
-    };
-
-    const handleCancelEdit = () => {
-        setEditingJob(null);
-        setEditForm({
-            title: '',
-            description: '',
-            requirements: '',
-            location: '',
-            salary: '',
-            type: 'full-time'
-        });
-    };
-
     if (isLoading) return (
         <DashboardLayout>
             <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3cff52]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
             </div>
         </DashboardLayout>
     );
@@ -279,114 +282,121 @@ const JobListings = () => {
                     setFilters={setFilters}
                 />
 
-                {editingJob && (
-                    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center p-4">
-                        <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-lg">
-                            <h2 className="text-2xl font-bold mb-4">Editar Publicación</h2>
-                            <form onSubmit={handleEditSubmit}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Título</label>
-                                        <input
-                                            type="text"
-                                            value={editForm.title}
-                                            onChange={(e) => setEditForm({...editForm, title: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Descripción</label>
-                                        <textarea
-                                            value={editForm.description}
-                                            onChange={(e) => setEditForm({...editForm, description: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            rows="4"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Requisitos</label>
-                                        <textarea
-                                            value={editForm.requirements}
-                                            onChange={(e) => setEditForm({...editForm, requirements: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            rows="3"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Ubicación</label>
-                                        <input
-                                            type="text"
-                                            value={editForm.location}
-                                            onChange={(e) => setEditForm({...editForm, location: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Salario</label>
-                                        <input
-                                            type="text"
-                                            value={editForm.salary}
-                                            onChange={(e) => setEditForm({...editForm, salary: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Tipo de Trabajo</label>
-                                        <select
-                                            value={editForm.type}
-                                            onChange={(e) => setEditForm({...editForm, type: e.target.value})}
-                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3cff52] focus:border-[#3cff52]"
-                                            required
-                                        >
-                                            <option value="full-time">Tiempo Completo</option>
-                                            <option value="part-time">Medio Tiempo</option>
-                                            <option value="contract">Contrato</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="mt-6 flex justify-end gap-4">
-                                    <button
-                                        type="button"
-                                        onClick={handleCancelEdit}
-                                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="px-4 py-2 bg-[#3cff52] text-white rounded-lg hover:bg-[#3cff52]/90 transition-colors"
-                                    >
-                                        Guardar Cambios
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
+                <div className="max-w-2xl mx-auto">
+                    <h1 className="text-2xl font-bold mb-6">
+                        {isEditing ? 'Editar Publicación' : 'Nueva Publicación'}
+                    </h1>
 
-                <div className="grid grid-cols-1 gap-6">
-                    {filteredJobs.length === 0 ? (
-                        <div className="text-center py-8 text-gray-500">
-                            No se encontraron publicaciones
+                    {error && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                            {error}
                         </div>
-                    ) : (
-                        filteredJobs.map((job) => (
-                            <div key={job._id} className="bg-white p-6 rounded-lg shadow-sm">
-                                <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
-                                <JobTags type={job.type} salary={job.salary} />
-                                <p className="text-gray-600 mb-4">{job.description}</p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-500">{job.location}</span>
-                                    <JobActions onEdit={() => handleEdit(job)} onDelete={() => handleDelete(job._id)} />
-                                </div>
-                            </div>
-                        ))
                     )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Título
+                            </label>
+                            <input
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Descripción
+                            </label>
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                rows="4"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Requisitos
+                            </label>
+                            <textarea
+                                name="requirements"
+                                value={formData.requirements}
+                                onChange={handleChange}
+                                rows="4"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Ubicación
+                            </label>
+                            <input
+                                type="text"
+                                name="location"
+                                value={formData.location}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Salario
+                            </label>
+                            <input
+                                type="text"
+                                name="salary"
+                                value={formData.salary}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Tipo de Trabajo
+                            </label>
+                            <select
+                                name="type"
+                                value={formData.type}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required
+                            >
+                                <option value="full-time">Tiempo Completo</option>
+                                <option value="part-time">Medio Tiempo</option>
+                                <option value="contract">Contrato</option>
+                            </select>
+                        </div>
+
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/profile')}
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                            >
+                                {isEditing ? 'Guardar Cambios' : 'Crear Publicación'}
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </DashboardLayout>
