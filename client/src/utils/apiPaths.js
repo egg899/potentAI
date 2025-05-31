@@ -17,10 +17,12 @@ export const API_PATHS = {
     },
     JOBS: {
         GET_ALL: '/api/jobs',
-        GET_ONE: '/api/jobs'
+        GET_ONE: '/api/jobs',
+        GET_EMPLOYER_JOBS: '/api/employer/jobs'
     },
     RESUME: {
         GET_ALL: '/api/resume',
+        GET_USER_RESUMES: '/api/resume',
         CREATE: '/api/resume',
         GET_BY_ID:(id)=>`/api/resume/${id}`,
         UPDATE:(id)=>`/api/resume/${id}`,

@@ -27,7 +27,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard/>}/>
               <Route path="/resume/:resumeId" element={<EditResume/>}/>
               <Route path="/jobs" element={<JobSearch />} />
-              <Route path="/job/:id" element={<JobDetails />} />
+              <Route path="/job-details/:id" element={<JobDetails />} />
+              <Route path="/job-listings/edit/:id" element={<JobListings />} />
               
               {/* Rutas protegidas para empleadores */}
               <Route 
