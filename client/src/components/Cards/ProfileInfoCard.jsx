@@ -51,7 +51,7 @@ const ProfileInfoCard = () => {
                     <div className="flex items-center gap-2">
                         {!isProfilePage && (
                             <button
-                                className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                                className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
                                 onClick={handleCTA}
                             >
                                 Perfil
@@ -61,7 +61,7 @@ const ProfileInfoCard = () => {
                             <>
                                 <span className="text-gray-400">|</span>
                                 <button
-                                    className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                                    className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
                                     onClick={handleJobs}
                                 >
                                     Buscar Trabajos
@@ -72,7 +72,7 @@ const ProfileInfoCard = () => {
                             <>
                                 <span className="text-gray-400">|</span>
                                 <button
-                                    className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                                    className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
                                     onClick={handleDashboard}
                                 >
                                     Dashboard
@@ -81,7 +81,7 @@ const ProfileInfoCard = () => {
                         )}
                         <span className="text-gray-400">|</span>
                         <button
-                            className="text-[#3cff52] text-sm font-semibold cursor-pointer hover:underline"
+                            className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
                             onClick={handleLogout}
                         >
                             Logout
