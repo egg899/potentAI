@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
-import { FiSearch, FiFilter } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 import moment from 'moment';
 
 // Componente para la barra de búsqueda y filtros
@@ -99,7 +99,6 @@ const JobCard = ({ job, onEdit, onDelete }) => (
 
 // Componente principal de la página
 const JobListings = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -108,17 +107,6 @@ const JobListings = () => {
     const [filters, setFilters] = useState({
         type: 'all',
         location: ''
-    });
-    const [refreshKey, setRefreshKey] = useState(0);
-    const [isEditing, setIsEditing] = useState(!!id);
-    const [job, setJob] = useState(null);
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        requirements: '',
-        location: '',
-        salary: '',
-        type: 'full-time'
     });
 
     const fetchJobs = async () => {
@@ -149,67 +137,12 @@ const JobListings = () => {
     };
 
     useEffect(() => {
-        if (id) {
-            fetchJobDetails();
-        } else {
-            setIsLoading(false);
-        }
-    }, [id]);
+        fetchJobs();
+    }, []);
 
-    const fetchJobDetails = async () => {
-        try {
-            setIsLoading(true);
-            const response = await axiosInstance.get(`${API_PATHS.JOBS.GET_ONE}/${id}`);
-            setJob(response.data);
-            setFormData({
-                title: response.data.title,
-                description: response.data.description,
-                requirements: response.data.requirements,
-                location: response.data.location,
-                salary: response.data.salary,
-                type: response.data.type
-            });
-        } catch (error) {
-            console.error('Error al cargar los detalles del trabajo:', error);
-            setError('No se pudieron cargar los detalles del trabajo');
-        } finally {
-            setIsLoading(false);
-        }
+    const handleEdit = (jobId) => {
+        navigate(`/employer/dashboard?edit=${jobId}`);
     };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (isEditing) {
-                await axiosInstance.put(`${API_PATHS.EMPLOYER.UPDATE_JOB}/${id}`, formData);
-                navigate('/profile');
-            } else {
-                await axiosInstance.post(API_PATHS.EMPLOYER.CREATE_JOB, formData);
-                navigate('/profile');
-            }
-        } catch (error) {
-            console.error('Error al guardar el trabajo:', error);
-            setError('Error al guardar el trabajo');
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const filteredJobs = jobs.filter(job => {
-        if (!job) return false;
-        const matchesSearch = job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            job.description?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesType = filters.type === 'all' || job.type === filters.type;
-        const matchesLocation = !filters.location || job.location?.toLowerCase().includes(filters.location.toLowerCase());
-        
-        return matchesSearch && matchesType && matchesLocation;
-    });
 
     const handleDelete = async (jobId) => {
         if (window.confirm('¿Estás seguro de que deseas eliminar esta publicación?')) {
@@ -235,10 +168,15 @@ const JobListings = () => {
         }
     };
 
-    // Función para recargar la lista
-    const handleRefresh = () => {
-        setRefreshKey(prev => prev + 1);
-    };
+    const filteredJobs = jobs.filter(job => {
+        if (!job) return false;
+        const matchesSearch = job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            job.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesType = filters.type === 'all' || job.type === filters.type;
+        const matchesLocation = !filters.location || job.location?.toLowerCase().includes(filters.location.toLowerCase());
+        
+        return matchesSearch && matchesType && matchesLocation;
+    });
 
     if (isLoading) return (
         <DashboardLayout>
@@ -259,20 +197,12 @@ const JobListings = () => {
             <div className="container mx-auto px-4 py-8">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Publicaciones de Trabajo</h1>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={handleRefresh}
-                            className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-                        >
-                            Actualizar
-                        </button>
-                        <button
-                            onClick={() => navigate('/employer/dashboard')}
-                            className="bg-[#3cff52] text-white px-6 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
-                        >
-                            Nueva Publicación
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => navigate('/employer/dashboard')}
+                        className="bg-[#3cff52] text-white px-6 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                    >
+                        Nueva Publicación
+                    </button>
                 </div>
 
                 <SearchAndFilters 
@@ -282,121 +212,21 @@ const JobListings = () => {
                     setFilters={setFilters}
                 />
 
-                <div className="max-w-2xl mx-auto">
-                    <h1 className="text-2xl font-bold mb-6">
-                        {isEditing ? 'Editar Publicación' : 'Nueva Publicación'}
-                    </h1>
-
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                            {error}
+                <div className="grid gap-6">
+                    {filteredJobs.length === 0 ? (
+                        <div className="text-center py-8 text-gray-500">
+                            No se encontraron publicaciones
                         </div>
+                    ) : (
+                        filteredJobs.map((job) => (
+                            <JobCard
+                                key={job._id}
+                                job={job}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                            />
+                        ))
                     )}
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Título
-                            </label>
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Descripción
-                            </label>
-                            <textarea
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                rows="4"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Requisitos
-                            </label>
-                            <textarea
-                                name="requirements"
-                                value={formData.requirements}
-                                onChange={handleChange}
-                                rows="4"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Ubicación
-                            </label>
-                            <input
-                                type="text"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Salario
-                            </label>
-                            <input
-                                type="text"
-                                name="salary"
-                                value={formData.salary}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Tipo de Trabajo
-                            </label>
-                            <select
-                                name="type"
-                                value={formData.type}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                required
-                            >
-                                <option value="full-time">Tiempo Completo</option>
-                                <option value="part-time">Medio Tiempo</option>
-                                <option value="contract">Contrato</option>
-                            </select>
-                        </div>
-
-                        <div className="flex justify-end space-x-4">
-                            <button
-                                type="button"
-                                onClick={() => navigate('/profile')}
-                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                type="submit"
-                                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-                            >
-                                {isEditing ? 'Guardar Cambios' : 'Crear Publicación'}
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </DashboardLayout>
