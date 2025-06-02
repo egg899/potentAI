@@ -51,11 +51,11 @@ const LandingPage = () => {
           <h1 className="text-5xl font-bold mb-6 leading-tight">
             Construye tu{" "}
             <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#7182ff_0%,_#3cff52_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
-              Curriculum Vitae sin problema
+              Curriculum Vitae sin problemas
             </span>
           </h1>
           <p className="text-lg text-gray-700 mb-8">
-            Haz un Curriculum en minutos con nuestro inteligente e intuitivo constrctor de Curriculums.
+            Haz un Curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
           </p>
           <button 
             className="bg-black text-sm font-semibold text-white px-8 py-3 mb-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
