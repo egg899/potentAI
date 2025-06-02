@@ -25,6 +25,9 @@ import ProjectsDetailForm from './Forms/ProjectsDetailForm.jsx';
 import CertificationInfoForm from './Forms/CertificationInfoForm.jsx';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm.jsx';
 import RenderResume from '../../components/ResumeTemplates/RenderResume.jsx'; 
+import { fixTailWindColors } from '../../utils/helper.js';
+import { captureElementAsImage } from '../../utils/helper.js';
+import { dataUrltoFile} from '../../utils/helper.js';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -475,53 +478,97 @@ interests: [""],
   };
 
   //Sube Thumbnail e imagen de perfil de los thumbnails
+  // const uploadResumeImages = async() => {
+  //   try {
+  //     setIsLoading(true);
+      
+  //     // Crear un FormData para enviar las imágenes
+  //     const formData = new FormData();
+      
+  //     // Agregar la imagen de perfil si existe
+  //     if (resumeData.profileInfo.profileImg instanceof File) {
+  //       formData.append('profileImg', resumeData.profileInfo.profileImg);
+  //     }
+
+  //     // Enviar las imágenes al servidor
+  //     const response = await axiosInstance.post(
+  //       API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
+  //       formData,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       }
+  //     );
+
+  //     // Actualizar el currículum con las URLs de las imágenes
+  //     await updateResumeDetails(
+  //       response.data.thumbnailLink,
+  //       response.data.profilePreviewUrl
+  //     );
+
+  //     toast.success("Currículum guardado exitosamente");
+  //     navigate("/dashboard");
+  //   } catch (error) {
+  //     console.error("Error al guardar el currículum:", error);
+  //     toast.error("Error al guardar el currículum");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const uploadResumeImages = async() => {
-    try {
+    try{
       setIsLoading(true);
-      
-      // Crear un FormData para enviar las imágenes
+
+      fixTailWindColors(resumeRef.current);
+      const imageDataUrl = await captureElementAsImage(resumeRef.current);
+
+      //convert base64 to file
+      const thumbnailFile = dataUrltoFile (
+        imageDataUrl,
+        `resume-${resumeId}.png`
+      );
+
+      const profileImageFile = resumeData?.profileInfo?.profileImg || null;
+
       const formData = new FormData();
-      
-      // Agregar la imagen de perfil si existe
-      if (resumeData.profileInfo.profileImg instanceof File) {
-        formData.append('profileImg', resumeData.profileInfo.profileImg);
-      }
+      if(profileImageFile) formData.append("profileImage", profileImageFile);
+      if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
-      // Enviar las imágenes al servidor
-      const response = await axiosInstance.post(
+      const uploadResponse = await axiosInstance.put(
         API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
+        formData, 
+        
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
+      
+      const { thumbnaLink, profilePreviewUrl } = uploadResponse.data;
 
-      // Actualizar el currículum con las URLs de las imágenes
-      await updateResumeDetails(
-        response.data.thumbnailLink,
-        response.data.profilePreviewUrl
-      );
+      console.log("RESUME_DATA___", resumeData);
 
-      toast.success("Currículum guardado exitosamente");
+      // Llama al segundo API para actualizar la data del Resume
+      await updateResumeDetails(thumbnaLink, profilePreviewUrl);
+      toast.success("CV actualizado con éxito!!! ");
       navigate("/dashboard");
-    } catch (error) {
-      console.error("Error al guardar el currículum:", error);
-      toast.error("Error al guardar el currículum");
+    }
+    catch(error){
+      console.error("Error al subir imágenes:", error);
+      toast.error("Se ha fallado al subir la imágen");
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {
     try {
+      setIsLoading(true);
       const updatedData = {
         ...resumeData,
         thumbnailLink: thumbnailLink || resumeData.thumbnailLink,
         profileInfo: {
           ...resumeData.profileInfo,
-          profilePreviewUrl: profilePreviewUrl || resumeData.profileInfo.profilePreviewUrl
+          profilePreviewUrl: profilePreviewUrl || resumeData.profileInfo.profilePreviewUrl || "",
         }
       };
 
@@ -532,6 +579,8 @@ interests: [""],
     } catch (error) {
       console.error("Error al actualizar los detalles del currículum:", error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -640,7 +689,16 @@ interests: [""],
                               <LuArrowLeft className="text-[16px]" />
                               Volver
                             </button>
-                            
+                            <button 
+                              className="btn-small-light"
+                              onClick={uploadResumeImages}
+                              disabled={isLoading}
+                              
+                            >
+                              <LuSave className="text-[16px]"/>
+                              {isLoading ? "Actualizando..." : "Guardar & Salir"}
+                            </button>
+
                             <button 
                             className="btn-small"
                             onClick={validateAndNext}
