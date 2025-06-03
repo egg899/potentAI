@@ -128,7 +128,7 @@ export const updateResume = async (req, res) => {
 
           if(!resume) {
             return res.status(404).json({
-                message: "CV no encontrado o no autirizado" });
+                message: "CV no encontrado o no autorizado" });
           }
 
           //Integrar actualizaciones de req.body dentro al existent
