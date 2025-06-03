@@ -25,9 +25,11 @@ import ProjectsDetailForm from './Forms/ProjectsDetailForm.jsx';
 import CertificationInfoForm from './Forms/CertificationInfoForm.jsx';
 import AdditionalInfoForm from './Forms/AdditionalInfoForm.jsx';
 import RenderResume from '../../components/ResumeTemplates/RenderResume.jsx'; 
-import { fixTailWindColors } from '../../utils/helper.js';
-import { captureElementAsImage } from '../../utils/helper.js';
-import { dataUrltoFile} from '../../utils/helper.js';
+import { fixTailWindColors, captureElementAsImage, dataUrltoFile } from '../../utils/helper.js';
+// import { captureElementAsImage } from '../../utils/helper.js';
+// import { dataUrltoFile} from '../../utils/helper.js';
+import Modal from '../../components/Modal.jsx';
+import ThemeSelector from './ThemeSelector.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const EditResume = () => {
     title:"",
     thumbnailLink:"",
     profileInfo: {
-      profileImg:null,
+      profileImg:"",
       profilePreviewUrl: "",
       fullName: "",
       designation: "",
@@ -531,7 +533,7 @@ interests: [""],
       );
 
       const profileImageFile = resumeData?.profileInfo?.profileImg || null;
-
+      console.log('Edit Resume profieImageFile, linea 536:', profileImageFile);
       const formData = new FormData();
       if(profileImageFile) formData.append("profileImage", profileImageFile);
       if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
@@ -740,6 +742,29 @@ interests: [""],
             </div>
           </div>
         </div> 
+        
+        <Modal 
+          isOpen={openThemeSelector}
+          onClose={() => setOpenThemeSelector(false)}
+          title="Cambia el Tema">
+            <div className="w-[90vw] h-[80vh]">
+              <ThemeSelector
+                selectedTheme={resumeData?.template}
+                setSelectedTheme={(value) =>{
+                  setResumeData((prevState) =>({
+                    ...prevState,
+                    template: value || prevState.template,
+                  }));
+                }}
+                resumeData={null}
+                onClose={() => setOpenThemeSelector(false)}
+              />
+            </div>
+          
+
+
+        </Modal>
+
     </DashboardLayout>
   );
 };

@@ -78,7 +78,7 @@ const TemplateOne = ({
 
 useEffect(() => {
   const img = resumeData.profileInfo?.profileImg;
-console.log('img',resumeData.profileInfo);
+console.log('img and profileInfo',resumeData.profileInfo);
   if (!img) {
     setImageUrl(null);
     return;

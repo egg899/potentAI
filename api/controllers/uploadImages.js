@@ -6,7 +6,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// console.log(__dirname);
+console.log('El dirname de uploadImages',__dirname);
 export const uploadResumeImages = async (req, res) => {
     try {
         
@@ -51,8 +51,9 @@ export const uploadResumeImages = async (req, res) => {
             res.status(200).json({
                 message: "Imagen subida con éxito",
                 thumbnailLink: resume.thumbnailLink,
-                profilePreviewLink: resume.profileInfo.profilePreviewUrl,
+                profilePreviewLink: resume.profileInfo.profileImg,
             });
+           
         });
 
 

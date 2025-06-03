@@ -23,6 +23,7 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log('file from ProfilePhotoSelector', file);
     if (file) {
       setImage(file);
       if (setPreview) {
