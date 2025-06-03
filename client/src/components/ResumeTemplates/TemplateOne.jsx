@@ -49,62 +49,42 @@ const TemplateOne = ({
 
     useEffect(() => {
         //Calcular la escala el facto basada en el ancho del contenedor
-        
         const actualBaseWidth = resumeRef.current.offsetWidth;
         setBaseWidth(actualBaseWidth);
         setScale(containerWidth / baseWidth);
     }, [containerWidth]);
 
-
     useEffect(() => {
-        if (resumeData.profileInfo.profileImg) {
-            if (typeof resumeData.profileInfo.profileImg === 'string') {
-                if (resumeData.profileInfo.profileImg.startsWith('data:')) {
-                    setImageUrl(resumeData.profileInfo.profileImg);
-                } else if (resumeData.profileInfo.profileImg.startsWith('blob:')) {
-                    setImageUrl(resumeData.profileInfo.profileImg);
-                } else {
-                    setImageUrl(resumeData.profileInfo.profileImg);
-                }
-            } else if (resumeData.profileInfo.profileImg instanceof File) {
-                const objectUrl = URL.createObjectURL(resumeData.profileInfo.profileImg);
-                setImageUrl(objectUrl);
-                return () => URL.revokeObjectURL(objectUrl);
-            }
-        } else if (resumeData.profileInfo.profilePreviewUrl) {
-            setImageUrl(resumeData.profileInfo.profilePreviewUrl);
+        const img = resumeData.profileInfo?.profileImg;
+        const previewUrl = resumeData.profileInfo?.profilePreviewUrl;
+
+        if (!img && !previewUrl) {
+            setImageUrl(null);
+            return;
         }
-    }, [resumeData.profileInfo.profileImg, resumeData.profileInfo.profilePreviewUrl]);
 
-useEffect(() => {
-  const img = resumeData.profileInfo?.profileImg;
-console.log('img and profileInfo',resumeData.profileInfo);
-  if (!img) {
-    setImageUrl(null);
-    return;
-  }
+        // Si hay una URL de vista previa, usarla primero
+        if (previewUrl) {
+            setImageUrl(previewUrl);
+            return;
+        }
 
-  if (typeof img === "string") {
-    // Es una URL válida (por ejemplo, de Mongo o Cloudinary)
-    setImageUrl(img);
-  } else if (img instanceof File) {
-    // Es un archivo cargado manualmente
-    const url = URL.createObjectURL(img);
-    setImageUrl(url);
-
-    // Limpieza cuando el componente se desmonta o la imagen cambia
-    return () => URL.revokeObjectURL(url);
-  } else if (img?.data && Array.isArray(img.data)) {
-    // Caso Mongo con buffer (img = { data: [Uint8Array], contentType: 'image/jpeg' })
-    const blob = new Blob([new Uint8Array(img.data)], { type: img.contentType });
-    const url = URL.createObjectURL(blob);
-    setImageUrl(url);
-
-    return () => URL.revokeObjectURL(url);
-  }
-}, [resumeData.profileInfo]);
-
-
+        // Si hay una imagen, procesarla según su tipo
+        if (img) {
+            if (typeof img === "string") {
+                setImageUrl(img);
+            } else if (img instanceof File) {
+                const url = URL.createObjectURL(img);
+                setImageUrl(url);
+                return () => URL.revokeObjectURL(url);
+            } else if (img?.data && Array.isArray(img.data)) {
+                const blob = new Blob([new Uint8Array(img.data)], { type: img.contentType });
+                const url = URL.createObjectURL(blob);
+                setImageUrl(url);
+                return () => URL.revokeObjectURL(url);
+            }
+        }
+    }, [resumeData.profileInfo]);
 
   return (
     
