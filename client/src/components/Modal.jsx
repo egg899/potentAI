@@ -21,7 +21,7 @@ const Modal = ({
         
         {/*Modal Header*/}
         {!hideHeader && (
-            <div className="flex items-center justify-between p-4 border-gray-200">
+            <div className="flex items-center justify-between p-4 border border-gray-200">
                 <h3 className="md:text-lg font-medium text-gray-900">{title}</h3>
 
                 {showActionBtn && (

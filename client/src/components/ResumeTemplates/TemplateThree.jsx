@@ -35,7 +35,7 @@ const Title = ({  text, color }) => {
 
 }
 
-const TemplateOne = ({
+const TemplateThree = ({
     resumeData,
     colorPalette,
     containerWidth,
@@ -107,6 +107,76 @@ const TemplateOne = ({
         height: "auto",
        }}
     >
+
+
+
+        <div className="">
+            <div className=""
+            style={{ backgroundColor: themeColors[1] }}
+            >
+                {resumeData.profileInfo.profilePreviewUrl ? (
+                    <img src={resumeData.profileInfo.profilePreviewUrl}
+                    className=""
+                    />
+                ): (
+                <div
+                  className=""
+                  style={{ color: themeColors[4] }}
+                  >
+                    <LuUser/>
+
+                  </div>
+                )}
+            </div>
+
+
+
+            <div>
+                <div className="">
+                    <div className="">
+                        <h2 className="">
+                            {resumeData.profileInfo.fullName}
+                        </h2>
+                        <p className="">
+                            {resumeData.profileInfo.designation}
+                        </p>
+
+                    <ContactInfo
+                        icon={<LuMapPin/>}
+                        iconBG={themeColors[2]}
+                        value={resumeData.contactInfo.location}
+                        />
+
+                    </div>
+
+                    <div className="">
+                        <ContactInfo
+                          icon={<LuMail/>}
+                          iconBG={themeColors[2]}
+                          value={resumeData.contactInfo.email}  
+                        />
+
+                        <ContactInfo
+                          icon={<LuPhone/>}
+                          iconBG={themeColors[2]}
+                          value={resumeData.contactInfo.phone}  
+                        />
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+
+
+
+
         <div className="grid grid-cols-12 gap-8">
             <div 
                 className="col-span-4 py-10"
@@ -354,4 +424,4 @@ const TemplateOne = ({
   );
 }
 
-export default TemplateOne
+export default TemplateThree
