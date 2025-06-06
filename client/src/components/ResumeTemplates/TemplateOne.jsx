@@ -64,9 +64,14 @@ const TemplateOne = ({
           }, [containerWidth]);
 
     useEffect(() => {
+
+
+      const profileInfo = resumeData?.profileInfo;
+      if (!profileInfo) return;
+
         const img = resumeData.profileInfo?.profileImg;
         const previewUrl = resumeData.profileInfo?.profilePreviewUrl;
-
+        {console.log('resumeData.profileInfo: ',resumeData.profileInfo === undefined)};
         if (!img && !previewUrl) {
             setImageUrl(null);
             return;

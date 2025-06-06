@@ -789,7 +789,7 @@ interests: [""],
             <div ref={resumeDownloadRef} className="w-[90vw] h-[90vh]">
                 <RenderResume
                   templateId={resumeData?.template?.theme || ""}
-                  resuemData={resumeData}
+                  resumeData={resumeData}
                   colorPalette={resumeData?.template?.colorPalette || []}
                   />
             </div>
