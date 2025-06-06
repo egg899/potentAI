@@ -765,6 +765,27 @@ interests: [""],
 
         </Modal>
 
+        <Modal
+          isOpen={openPreviewModal}
+          onClose={() => setOpenPreviewModal(false)}
+          title={resumeData.title}
+          showActionBtn
+          actionBtnText="Download"
+          actionBtnIcon={<LuDownload className="text-[16px]" />}
+          onActionClick={() => reactToPrintln()}
+          >
+            <div ref={resumeDownloadRef} className="w-[90vw] h-[90vh]">
+                <RenderResume
+                  templateId={resumeData?.template?.theme || ""}
+                  resuemData={resumeData}
+                  colorPalette={resumeData?.template?.colorPalette || []}
+                  />
+            </div>
+            
+          </Modal>
+
+
+
     </DashboardLayout>
   );
 };

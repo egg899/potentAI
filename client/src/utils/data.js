@@ -82,9 +82,15 @@ export const DUMMY_RESUME_DATA = {
   ],
   education: [
     {
-      degree: "Tecnicatura en Desarrollo de Software",
+      degree: "Maestría en Ingeniería de Software",
       institution: "UTN - Universidad Tecnológica Nacional",
-      startDate: "2018",
+      startDate: "2021",
+      endDate: "2023"
+    },
+    {
+      degree: "Licenciatura en Desarrollo de Software",
+      institution: "UTN - Universidad Tecnológica Nacional",
+      startDate: "2017",
       endDate: "2021"
     }
   ],

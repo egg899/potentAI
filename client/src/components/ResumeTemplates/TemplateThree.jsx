@@ -110,17 +110,17 @@ const TemplateThree = ({
 
 
 
-        <div className="">
-            <div className=""
+        <div className="flex items-start gap-5 px-2 mb-5">
+            <div className="w-[100px] h-[100px] max-w-[105px] max-h-[105px] rounded-2xl flex items-center justify-center"
             style={{ backgroundColor: themeColors[1] }}
             >
                 {resumeData.profileInfo.profilePreviewUrl ? (
                     <img src={resumeData.profileInfo.profilePreviewUrl}
-                    className=""
+                    className="w-[90px] h-[90px] rounded-2xl"
                     />
                 ): (
                 <div
-                  className=""
+                  className="w-[90px] h-[90px] flex items-center justify-center text-5xl rounded-full"
                   style={{ color: themeColors[4] }}
                   >
                     <LuUser/>
@@ -132,12 +132,12 @@ const TemplateThree = ({
 
 
             <div>
-                <div className="">
-                    <div className="">
-                        <h2 className="">
+                <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-8">
+                        <h2 className="text-2xl font-bold">
                             {resumeData.profileInfo.fullName}
                         </h2>
-                        <p className="">
+                        <p className="text-[15px] font-semibold mb-2">
                             {resumeData.profileInfo.designation}
                         </p>
 
@@ -149,7 +149,7 @@ const TemplateThree = ({
 
                     </div>
 
-                    <div className="">
+                    <div className="col-span-4 flex flex-col gap-5 mt-2">
                         <ContactInfo
                           icon={<LuMail/>}
                           iconBG={themeColors[2]}
@@ -182,71 +182,11 @@ const TemplateThree = ({
                 className="col-span-4 py-10"
                 style={{ backgroundColor : themeColors[0] }}
             >
-                <div className="flex flex-col items-center px-2">
-                    <div 
-                        className="w-[100px] h-[100px] max-w-[110px] max-h-[110px] rounded-full flex items-center justify-center"
-                        style={{ backgroundColor : themeColors[1] }}>
-                          { console.log('la imagen',imageUrl)}
-                         
-                            {imageUrl ? (
-                               
-                                <img 
-                                    src={imageUrl}
-                                    className="w-[90px] h-[90px] rounded-full"/>
-                                
-                            ):(
-                            
-                            <div className="w-[90px] h-[90px] flex items-center justify-center text-5xl rounded-full"
-                                style={{ color: themeColors[4] }}>
-                                    <LuUser/>
-                            </div>)}
-
-                            {/* {resumeData.profileInfo.profilePreviewUrl ? (
-                               
-                                <img 
-                                    src={resumeData.profileInfo.profilePreviewUrl}
-                                    className="w-[90px] h-[90px] rounded-full"/>
-                                
-                            ):(
-                            
-                            <div className="w-[90px] h-[90px] flex items-center justify-center text-5xl rounded-full"
-                                style={{ color: themeColors[4] }}>
-                                    <LuUser/>
-                            </div>
-
-                            
-                            
-                            )} */}
-
-                            </div>
-                            <h2 className="text-xl font-bold mt-3">
-                                {resumeData.profileInfo.fullName}
-                            </h2>
-                            <p className="text-sm text-center">
-                                {resumeData.profileInfo.designation}
-                            </p> 
-                            </div>
+                
 
                        <div className="my-6 mx-6">
                             <div className="flex flex-col gap-4">
-                                <ContactInfo
-                                  icon={<LuMapPin />}
-                                  iconBG={themeColors[2]}
-                                  value={resumeData.contactInfo.location}
-                                />
-                            
-
-                             <ContactInfo
-                                  icon={<LuMail />}
-                                  iconBG={themeColors[2]}
-                                  value={resumeData.contactInfo.email}
-                                />
-
-                                 <ContactInfo
-                                  icon={<LuPhone />}
-                                  iconBG={themeColors[2]}
-                                  value={resumeData.contactInfo.phone}
-                                />
+                                
 
                                {resumeData.contactInfo.linkedin && (
 
