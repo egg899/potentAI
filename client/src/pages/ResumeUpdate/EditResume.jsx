@@ -587,7 +587,19 @@ interests: [""],
   };
 
   //Borrar Curriculum
-  const handleDeleteResume = async() => {};
+  const handleDeleteResume = async() => {
+    try {
+      setIsLoading(true);
+      const repsonse = await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId));
+      toast.success("CV Borrado exitosamente")
+      navigate('/dashboard')
+    } catch(err) {
+      console.error("Error al capturar la imagen", err);
+    } finally {
+      setIsLoading(false);
+    }
+
+  };
 
   // Bajar CV
   const reactToPrintln = useReactToPrint({ contentRef: resumeDownloadRef});
