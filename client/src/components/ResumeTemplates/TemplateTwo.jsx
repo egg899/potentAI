@@ -191,7 +191,7 @@ const TemplateTwo = ({
                  style={{ backgroundColor: themeColors[1] }} 
             >
               {resumeData.profileInfo.profilePreviewUrl ? (
-                <img src={resumeData.profileInfo.profielPreviewUrl}
+                <img src={resumeData.profileInfo.profilePreviewUrl}
                      className="w-[140px] h-[140px] rounded-2xl" 
                 />
               ) : (
