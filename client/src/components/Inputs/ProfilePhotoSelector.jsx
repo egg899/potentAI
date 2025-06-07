@@ -21,17 +21,46 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
     }
   }, [image]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    console.log('file from ProfilePhotoSelector', file);
-    if (file) {
-      setImage(file);
-      if (setPreview) {
-        const objectUrl = URL.createObjectURL(file);
-        setPreview(objectUrl);
-      }
+ const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setImage(file); // Guarda el File en el estado principal
+
+    if (setPreview) {
+      const objectUrl = URL.createObjectURL(file); // ← NECESARIO para que funcione en un <img>
+      setPreview(objectUrl); // Actualiza la preview
     }
-  };
+
+
+
+
+    
+  }
+};
+
+
+// const handleImageChange = (e) => {
+//   const file = e.target.files[0];
+//   if (file) {
+//     setImage(file); // Solo si lo necesitas localmente
+
+//     if (setPreview) {
+//       const objectUrl = URL.createObjectURL(file);
+//       setPreview(objectUrl);
+//     }
+
+//     // 👇 Este paso es CLAVE: guardás el File real en resumeData
+//     setResumeData((prev) => ({
+//       ...prev,
+//       profileInfo: {
+//         ...prev.profileInfo,
+//         profileImageFile: file, // El archivo real para FormData
+//         profilePreviewUrl: URL.createObjectURL(file), // Opcional, si usás esto para mostrar
+//       },
+//     }));
+//   }
+// };
+
 
   const handleRemoveImage = () => {
     setImage(null);

@@ -46,7 +46,7 @@ const EditResume = () => {
     title:"",
     thumbnailLink:"",
     profileInfo: {
-      profileImg:"",
+      profileImg:null,
       profilePreviewUrl: "",
       fullName: "",
       designation: "",
@@ -453,7 +453,7 @@ interests: [""],
 
         if (response.data && response.data.profileInfo) {
           const resumeInfo = response.data;
-
+          // console.log('resumeInfo?.profileInfo',resumeInfo.profileInfo);
           setResumeData((prevState) => ({
             ...prevState,
             title: resumeInfo?.title || "Undefined",
@@ -525,15 +525,19 @@ interests: [""],
 
       fixTailWindColors(resumeRef.current);
       const imageDataUrl = await captureElementAsImage(resumeRef.current);
-
+      // console.log('imageDataUrl', imageDataUrl);
       //convert base64 to file
       const thumbnailFile = dataUrltoFile (
         imageDataUrl,
         `resume-${resumeId}.png`
       );
 
-      const profileImageFile = resumeData?.profileInfo?.profileImg || null;
-      console.log('Edit Resume profieImageFile, linea 536:', profileImageFile);
+     console.log('resumeRef.current', resumeRef.current);
+
+
+      // const profileImageFile = resumeData?.profileInfo?.profilePreviewUrl || null;
+      
+    const profileImageFile = resumeData?.profileInfo?.profileImg || null;      
       const formData = new FormData();
       if(profileImageFile) formData.append("profileImage", profileImageFile);
       if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
@@ -545,12 +549,12 @@ interests: [""],
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       
-      const { thumbnaLink, profilePreviewUrl } = uploadResponse.data;
-
-      console.log("RESUME_DATA___", resumeData);
+      const { thumbnailLink, profilePreviewLink } = uploadResponse.data;
+      console.log('profilePreviewLink', profilePreviewLink);
+      console.log("uploadResponse: ", uploadResponse);
 
       // Llama al segundo API para actualizar la data del Resume
-      await updateResumeDetails(thumbnaLink, profilePreviewUrl);
+      await updateResumeDetails(thumbnailLink, profilePreviewLink);
       toast.success("CV actualizado con éxito!!! ");
       navigate("/dashboard");
     }
@@ -732,7 +736,15 @@ interests: [""],
                         </div>
                     </div>
                               {/* {console.log('RESUME-DATA: ',resumeData.profileInfo)} */}
-                  {resumeData?.template && (
+               
+
+                 
+   
+
+
+      <div ref={resumeRef} className="h-[100vh]">
+                    {/* Resume Template */}
+                       {resumeData?.template && (
                     <RenderResume 
                       templateId={resumeData.template.theme}
                       resumeData={resumeData}
@@ -740,17 +752,6 @@ interests: [""],
                       containerWidth={baseWidth}
                     />
                   )}
-
-                 
-   
-
-
-
-              
-
-
-            <div ref={resumeRef} className="h-[100vh]">
-                    {/* Resume Template */}
             </div>
           </div>
         </div> 
