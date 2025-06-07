@@ -49,7 +49,7 @@ const ContactInfoForm = ({contactInfo, updateSection}) => {
                     placeholder="https://github.com/username"
                     type="text"
                     value={contactInfo.github || ""}
-                    onChange={({target}) => updateSection("gitHub", target.value)}
+                    onChange={({target}) => updateSection("github", target.value)}
                 />    
 
             <div className="md:col-span-2">

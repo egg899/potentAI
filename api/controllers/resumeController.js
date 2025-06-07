@@ -15,7 +15,7 @@ export const createResume = async (req, res) => {
         const defaultResumeData = {
             profileInfo: {
                 profileImg: null,
-                profilepreviewUrl: null,
+                profilePreviewUrl: null,
                 // previewUrl:"",
                 fullName:"",
                 designation:"",

@@ -44,14 +44,15 @@ export const uploadResumeImages = async (req, res) => {
                 }
 
                 resume.profileInfo.profilePreviewUrl = `${baseUrl}/uploads/${newProfileImage.filename}`;
-            }
+                console.log('resume.profileInfo.profilePreviewUrl', resume.profileInfo.profilePreviewUrl);
+                }
 
             await resume.save();
 
             res.status(200).json({
                 message: "Imagen subida con éxito",
                 thumbnailLink: resume.thumbnailLink,
-                profilePreviewLink: resume.profileInfo.profileImg,
+                profilePreviewLink: resume.profileInfo.profilePreviewUrl,
             });
            
         });
