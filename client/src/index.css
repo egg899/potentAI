@@ -1,13 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root{
+    --color-primary-black: #010101;
+    --color-primary-turquoise: #05AB9E;
+    --color-primary-turquoise-o-015: rgba(5, 171, 158, 0.10);
+    --color-secundary-turquoise: #29B6BB;
+}
 
 @theme {
-    --font-display : "Urbanist", sans-serif;
+    --font-display : "Exo 2", sans-serif;
     --breakpoint-3xl: 1920px;
     --color-primary: #9328e7;
-
 }
+
+.color-primary-black{
+    color: var(--color-primary-black);
+}
+.color-primary-turquoise{
+    color: var(--color-primary-turquoise);
+}
+.color-secundary-turquoise{
+    color: var(--color-secundary-turquoise);
+}
+
+.bg-primary-black{
+    background-color: var(--color-primary-black);
+}
+.bg-primary-turquoise{
+    background-color: var(--color-primary-turquoise);
+}
+.bg-secundary-turquoise{
+    background-color: var(--color-secundary-turquoise);
+}
+
+.bg-primary-turquoise-015{
+    background-color: var(--color-primary-turquoise-o-015);
+}
+
+.bg-image-custom{
+    background-image: url(../../src/assets/images/nodos-bg.png);
+    background-repeat: no-repeat;
+    background-position: right 0;
+}
+
 
 
 @layer base {
@@ -35,6 +72,17 @@
 
 .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
+}
+
+.mask-img-perfil{
+    background-image: url(../../src/assets/images/mask-img-perfil.png);
+    background-size: cover;
+    background-position: center;
+    height: 124px;
+    width: 124px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 

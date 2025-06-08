@@ -89,7 +89,7 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
       />
 
       {localPreview ? (
-        <div className="relative">
+        <div className="relative"> 
           <div className="mask-img-perfil">
           <img
             src={localPreview}
