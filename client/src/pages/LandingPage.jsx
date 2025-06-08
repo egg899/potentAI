@@ -74,12 +74,12 @@ const LandingPage = () => {
         </div>
 </div>
         <section className="mt-10 px-4 py-10 mb-10">
-          <h2 className="text-4xl font-bold text-center mb-12">
+          <h2 className="text-4xl font-bold text-center mb-12 color-primary-turquoise">
             Características que te hacen destacar
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 text-center">
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-            <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/edit_icon.png" alt="Icono plantilla" /></div>
+            <div className="text-center grid justify-items-center mb-2"><img src="../src/assets/images/edit_icon.png" alt="Icono plantilla" /></div>
               <h3 className="text-lg font-semibold mb-3">Edición fácil</h3>
               <p className="color-primary-black">
                 Actualiza tu currículum con vista previa en vivo y formato instantáneo.
@@ -87,7 +87,7 @@ const LandingPage = () => {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-            <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/plantillas_icon.png" alt="Icono plantilla" /></div>
+            <div className="text-center grid justify-items-center mb-2"><img src="../src/assets/images/plantillas_icon.png" alt="Icono plantilla" /></div>
               <h3 className="text-lg font-semibold mb-3">
                 Plantillas hermosas
               </h3>
@@ -97,7 +97,7 @@ const LandingPage = () => {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-              <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/download_icon.png" alt="icono editar" /></div>
+              <div className="text-center grid justify-items-center mb-2"><img src="../src/assets/images/download_icon.png" alt="icono editar" /></div>
               <h3 className="text-lg font-semibold mb-3">Exportación con un clic</h3>
               <p className="text-gray-600">
                 Descarga tu currículum al instante como un PDF de alta calidad con un solo clic.
@@ -111,26 +111,37 @@ const LandingPage = () => {
           <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">
             La confianza crece cada día
           </h2>
-          <p className="text-lg color-primary-black mb-8">Miles de usuarios creando currículums inteligentes, usando plantillas modernas y postulándose con éxito.</p>
+          <p className="text-lg text-gray-600 mb-8">Miles de usuarios creando currículums inteligentes, usando plantillas modernas y postulándose con éxito.</p>
           </div>
           <div className="w-full md:w-1/2">
           <div className="flex justify-center gap-8 mt-6">
-            <div>
-              <h3 className="text-xl font-semibold">+12.000</h3>
-              <p className="text-sm text-gray-500">Miembros activos</p>
+            <div className="text-center grid justify-items-center mb-2">
+              <img src="../src/assets/images/icon_users.png" alt="icono usuarios" />
+              <h3 className="color-primary-black text-xl font-semibold text-center">+5.000</h3>
+              <p className="text-sm color-primary-black">Miembros activos</p>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold">+30.000</h3>
-              <p className="text-sm text-gray-500">Currículums generados</p>
+            <div className="text-center grid justify-items-center mb-2">
+              <img src="../src/assets/images/icon_selected.png" alt="icono usuarios" />
+              <h3 className="color-primary-black text-xl font-semibold text-center">+10.000</h3>
+              <p className="text-sm color-primary-black">Currículums generados</p>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold">+50</h3>
-              <p className="text-sm text-gray-500">Plantillas disponibles</p>
+            <div className="text-center grid justify-items-center mb-2">
+              <img src="../src/assets/images/icon_comunidad.png" alt="icono usuarios" />
+              <h3 className="color-primary-black text-xl font-semibold text-center">+10</h3>
+              <p className="text-sm color-primary-black">Plantillas disponibles</p>
             </div>
           </div>
           </div>
         </section>
-        
+
+        <section className="w-full px-10 py-10 mb-10 mt-10">
+        <div className="w-full text-center px-10">
+          <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">Conocé <strong className="color-primary-black">potentIA</strong></h2>
+        <div className="w-full flex justify-center">
+        <iframe width="853" height="480" src="https://www.youtube.com/embed/J5DM6qZcr70?rel=0&modestbranding=1&showinfo=0" title="Promo potentIA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        </div>
+        </section>
 
         <Modal
           isOpen={openAuthModal}
