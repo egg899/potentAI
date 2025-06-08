@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import HERO_IMG from '../assets/hero-img.png';
 import Modal from '../components/Modal';
 import { Login } from './Auth/Login';
@@ -29,8 +29,8 @@ const LandingPage = () => {
 
   return (
     <div className="w-full min-h-full bg-white">
-      <div className="container mx-auto px-4 py-6">
-        <header className="flex justify-between items-center mb-16">
+      <div className="container mx-auto py-6">
+        <header className="flex justify-between items-center px-8 mb-10">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}> 
             <Logo size={160} className="mr-2" />
           </div>
@@ -38,27 +38,27 @@ const LandingPage = () => {
             <ProfileInfoCard />
           ) : (
             <button 
-              className="bg-[#3cff52]/10 text-sm font-semibold text-black px-7 py-2.5 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+              className="bg-primary-turquoise text-sm font-semibold text-white px-7 py-2.5 rounded-lg hover:bg-primary-black cursor-pointer"
               onClick={() => setOpenAuthModal(true)}
             >
               Ingresar / Registrarse
             </button>
           )}
         </header>
-<div className="flex flex-col md:flex-row items-center">
+<div className="flex flex-col md:flex-row items-center px-10 py-8 bg-primary-turquoise-015 mb-10">
         {/* Hero Content */}
-        <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
-          <h1 className="text-5xl font-bold mb-6 leading-tight">
-            Construye tu{" "}
+        <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
+          <h1 className="text-5xl font-bold mb-6 leading-tight color-primary-black">
+            Diseñá el curriculum Vitae{" "}
             <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#7182ff_0%,_#3cff52_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
-              Curriculum Vitae sin problemas
+               que tu talento merece.
             </span>
           </h1>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className="text-lg color-primary-black mb-8">
             Haz un Curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
           </p>
           <button 
-            className="bg-black text-sm font-semibold text-white px-8 py-3 mb-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+            className="bg-primary-black text-sm font-semibold text-white px-8 py-3 mb-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
             onClick={handleCTA}
           >
             Empieza Aqui
@@ -73,19 +73,21 @@ const LandingPage = () => {
           />
         </div>
 </div>
-        <section className="mt-5">
-          <h2 className="text-2xl font-bold text-center mb-12">
+        <section className="mt-10 px-4 py-10 mb-10">
+          <h2 className="text-4xl font-bold text-center mb-12">
             Características que te hacen destacar
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 text-center">
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+            <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/edit_icon.png" alt="Icono plantilla" /></div>
               <h3 className="text-lg font-semibold mb-3">Edición fácil</h3>
-              <p className="text-gray-600">
+              <p className="color-primary-black">
                 Actualiza tu currículum con vista previa en vivo y formato instantáneo.
               </p>
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+            <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/plantillas_icon.png" alt="Icono plantilla" /></div>
               <h3 className="text-lg font-semibold mb-3">
                 Plantillas hermosas
               </h3>
@@ -95,6 +97,7 @@ const LandingPage = () => {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
+              <div className="text-centergrid justify-items-center mb-2"><img src="../src/assets/images/download_icon.png" alt="icono editar" /></div>
               <h3 className="text-lg font-semibold mb-3">Exportación con un clic</h3>
               <p className="text-gray-600">
                 Descarga tu currículum al instante como un PDF de alta calidad con un solo clic.
@@ -102,6 +105,32 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        <section className="flex flex-col md:flex-row items-center px-10 py-10 bg-primary-turquoise-015 mb-10 mt-10 bg-image-custom">
+        <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
+          <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">
+            La confianza crece cada día
+          </h2>
+          <p className="text-lg color-primary-black mb-8">Miles de usuarios creando currículums inteligentes, usando plantillas modernas y postulándose con éxito.</p>
+          </div>
+          <div className="w-full md:w-1/2">
+          <div className="flex justify-center gap-8 mt-6">
+            <div>
+              <h3 className="text-xl font-semibold">+12.000</h3>
+              <p className="text-sm text-gray-500">Miembros activos</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold">+30.000</h3>
+              <p className="text-sm text-gray-500">Currículums generados</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold">+50</h3>
+              <p className="text-sm text-gray-500">Plantillas disponibles</p>
+            </div>
+          </div>
+          </div>
+        </section>
+        
 
         <Modal
           isOpen={openAuthModal}

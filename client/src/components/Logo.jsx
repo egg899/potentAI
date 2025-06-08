@@ -5,8 +5,8 @@ const Logo = ({ className = '', size = 44 }) => (
   <img
     src={logo}
     alt="Logo potentIA"
-    width={size}
-    height={size}
+    width="90px"
+    height="auto"
     className={className}
     style={{ objectFit: 'contain' }}
   />

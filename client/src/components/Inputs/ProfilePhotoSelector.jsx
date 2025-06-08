@@ -79,6 +79,7 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
 
   return (
     <div className="flex justify-center mb-6">
+      
       <input
         type="file"
         accept="image/*"
@@ -89,14 +90,15 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
 
       {localPreview ? (
         <div className="relative">
+          <div className="mask-img-perfil">
           <img
             src={localPreview}
             alt="Foto de Perfil"
             className="w-20 h-20 rounded-full object-cover"
-          />
+          /></div>
           <button
             type="button"
-            className="w-8 h-8 flex items-center justify-center bg-[#3cff52] text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center bg-primary-turquoise text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
             onClick={handleRemoveImage}
           >
             <LuTrash />
@@ -104,12 +106,12 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
         </div>
       ) : (
         <div
-          className="w-20 h-20 flex items-center justify-center bg-[#3cff52]/10 rounded-full relative"
+          className="w-20 h-20 flex items-center justify-center bg-primary-turquoise-015 rounded-full relative"
         >
-          <LuUser className="text-4xl text-[#3cff52]" />
+          <LuUser className="text-4xl text-[#010101]" />
           <button
             type="button"
-            className="w-8 h-8 flex items-center justify-center bg-[#3cff52] text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center bg-primary-turquoise text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
             onClick={onChooseFile}
           >
             <LuUpload />
