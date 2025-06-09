@@ -138,7 +138,7 @@ const LandingPage = () => {
         <div className="w-full text-center px-10">
           <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">Conocé <strong className="color-primary-black">potentIA</strong></h2>
         <div className="w-full flex justify-center">
-        <iframe width="853" height="480" src="https://www.youtube.com/embed/J5DM6qZcr70?rel=0&modestbranding=1&showinfo=0" title="Promo potentIA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="853" height="480" src="https://www.youtube.com/embed/J5DM6qZcr70?rel=0&modestbranding=1&showinfo=0" title="Promo potentIA" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
         </div>
         </div>
         </section>
