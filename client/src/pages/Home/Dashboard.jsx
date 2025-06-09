@@ -41,6 +41,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAllResumes();
+    
+    // Limpiar recursos cuando el componente se desmonte
+    return () => {
+      setAllResumes(null);
+      setOpenCreateModal(false);
+    };
   }, []);
 
   useEffect(() => {

@@ -263,7 +263,16 @@ interests: [""],
       "additionalInfo"
     ];
 
-    if(currentPage === "profile-info") {navigate("/dashboard");}
+    if(currentPage === "profile-info") {
+      // Limpiar cualquier estado o recurso pendiente
+      setIsLoading(false);
+      setErrorMsg("");
+      // Usar setTimeout para asegurar que la limpieza se complete antes de navegar
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 0);
+      return;
+    }
 
     const currentIndex = pages.indexOf(currentPage);
     if (currentIndex > 0) {
@@ -274,8 +283,7 @@ interests: [""],
       const percent = Math.round((prevIndex / (pages.length -1 )) * 100);
       setProgress(percent);
       window.scrollTo({ top: 0, behaviour: "smooth" });
-    };
-
+    }
   };
 
   const renderForm = () => {
