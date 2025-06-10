@@ -1,43 +1,32 @@
-import React, { useState, useEffect } from 'react'
-import { getLightColorFromImage } from '../../utils/helper';
+import React from 'react'
 import { LuTrash2 } from 'react-icons/lu';
+import { FiCheckCircle } from 'react-icons/fi';
 
-const ResumeSummaryCard = ({imgUrl, title, lastUpdated, onSelect, onDelete}) => {
-    const [bgColor, setBgColor] = useState("#ffffff");
-
-    useEffect(() => {
-        if(imgUrl){
-            getLightColorFromImage(imgUrl)
-                .then((color) =>{
-                    setBgColor(color);
-                })
-                .catch(() => {
-                    setBgColor("#ffffff")
-                })
-        }
-    }, [imgUrl]);
-
+const ResumeSummaryCard = ({children, title, lastUpdated, onSelect, onDelete, onSelectButtonClick}) => {
     const handleDelete = (e) => {
         e.stopPropagation(); // Evita que se active el onClick del contenedor
         onDelete();
     };
-  
+
+    const handleSelectButtonClick = (e) => {
+        e.stopPropagation(); // Evita que se active el onClick del contenedor principal
+        if (onSelectButtonClick) onSelectButtonClick();
+    };
+
     return (
     <div 
     className="h-[300px] flex flex-col items-center justify-between bg-white rounded-lg border border-gray-200 hover:border-purple-300 overflow-hidden cursor-pointer relative" 
-    style= {{backgroundColor: bgColor}}
     onClick={onSelect}>
-        <div className="p-4">
-            {imgUrl ? (
-                <img
-                    src={imgUrl}
-                    alt=""
-                    className="w-[100%] h-[200px] rounded"
-                    />
-            ) : 
-            (
-                <div></div>
-            )}
+        {/* Ícono de selección en la parte superior */}
+        <button
+            className="absolute top-2 left-2 p-1 bg-white text-blue-500 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors z-10 shadow"
+            onClick={handleSelectButtonClick}
+            title="Seleccionar"
+        >
+            <FiCheckCircle className="w-5 h-5" />
+        </button>
+        <div className="p-4 w-full h-[200px] flex items-center justify-center overflow-hidden">
+            {children}
         </div>
 
         <div className="w-full bg-white px-4 py-3">

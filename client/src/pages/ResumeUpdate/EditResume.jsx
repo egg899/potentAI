@@ -531,21 +531,21 @@ interests: [""],
     try{
       setIsLoading(true);
 
+      // Asegurarse de que los estilos estén aplicados correctamente
       fixTailWindColors(resumeRef.current);
+      
+      // Esperar a que el elemento esté completamente renderizado
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
       const imageDataUrl = await captureElementAsImage(resumeRef.current);
-      // console.log('imageDataUrl', imageDataUrl);
+      
       //convert base64 to file
-      const thumbnailFile = dataUrltoFile (
+      const thumbnailFile = dataUrltoFile(
         imageDataUrl,
-        `resume-${resumeId}.png`
+        `resume-${resumeId}-${Date.now()}.png`
       );
 
-     console.log('resumeRef.current', resumeRef.current);
-
-
-      // const profileImageFile = resumeData?.profileInfo?.profilePreviewUrl || null;
-      
-    const profileImageFile = resumeData?.profileInfo?.profileImg || null;      
+      const profileImageFile = resumeData?.profileInfo?.profileImg || null;      
       const formData = new FormData();
       if(profileImageFile) formData.append("profileImage", profileImageFile);
       if(thumbnailFile) formData.append("thumbnail", thumbnailFile);
@@ -553,15 +553,16 @@ interests: [""],
       const uploadResponse = await axiosInstance.put(
         API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
         formData, 
-        
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { 
+          headers: { 
+            "Content-Type": "multipart/form-data"
+          }
+        }
       );
       
       const { thumbnailLink, profilePreviewLink } = uploadResponse.data;
-      console.log('profilePreviewLink', profilePreviewLink);
-      console.log("uploadResponse: ", uploadResponse);
 
-      // Llama al segundo API para actualizar la data del Resume
+      // Actualizar los detalles del resume
       await updateResumeDetails(thumbnailLink, profilePreviewLink);
       toast.success("CV actualizado con éxito!!! ");
       navigate("/dashboard");

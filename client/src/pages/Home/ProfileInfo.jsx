@@ -9,9 +9,11 @@ import ProfileInfoCard from '../../components/Cards/ProfileInfoCard';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Logo from '../../components/Logo';
+import { useProfile } from '../../context/ProfileContext';
 
 const ProfileInfo = () => {
   const { user, loading, updateUser } = useContext(UserContext);
+  const { selectedResume } = useProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [editedName, setEditedName] = useState('');
@@ -24,17 +26,24 @@ const ProfileInfo = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (selectedResume) {
+      setResume(selectedResume);
+      setEditedName(selectedResume.profileInfo?.fullName || '');
+      setPreview(selectedResume.profileInfo?.profilePreviewUrl || '');
+    }
+  }, [selectedResume]);
+
+  useEffect(() => {
+    if (user && !selectedResume) {
       setEditedName(user.name || '');
       setPreview(user.profileImageUrl || '');
-      
       if (user.userType === 'job_seeker') {
         fetchUserResume();
       } else if (user.userType === 'employer') {
         fetchEmployerJobs();
       }
     }
-  }, [user]);
+  }, [user, selectedResume]);
 
   const fetchUserResume = async () => {
     try {
