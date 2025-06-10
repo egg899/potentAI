@@ -125,3 +125,8 @@ export const dataUrltoFile = (dataUrl, fileName) => {
 
   return new File([u8arr], fileName, { type: mime });
 };
+
+export function capitalizeFirst(text) {
+  if (!text) return '';
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}

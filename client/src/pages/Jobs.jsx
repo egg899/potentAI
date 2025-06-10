@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiMapPin, FiBriefcase, FiDollarSign } from 'react-icons/fi';
 import moment from 'moment';
 import Logo from '../components/Logo';
+import { capitalizeFirst } from '../utils/helper';
 
 // Componente para la barra de búsqueda y filtros
 const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) => (
@@ -186,7 +187,7 @@ const Jobs = () => {
             {/* Main Content */}
             <main className="container mx-auto px-4 py-8">
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-bold mb-8 text-center">Encuentra tu próximo trabajo</h1>
+                    <h1 className="text-4xl font-bold mb-8 text-center">{capitalizeFirst('encuentra tu próximo trabajo')}</h1>
                     
                     <SearchAndFilters 
                         searchTerm={searchTerm}
