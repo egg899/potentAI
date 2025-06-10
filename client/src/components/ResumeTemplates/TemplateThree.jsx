@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import ContactInfo from '../ResumeSections/ContactInfo';
 
-import { formatYearMonth } from '../../utils/helper';
+import { formatYearMonth, capitalizeFirst } from '../../utils/helper';
 import {
   LuMapPin,
   LuMail,
@@ -134,9 +134,7 @@ const TemplateThree = ({
             <div>
                 <div className="grid grid-cols-12 items-center">
                     <div className="col-span-8">
-                        <h2 className="text-2xl font-bold">
-                            {resumeData.profileInfo.fullName}
-                        </h2>
+                        <h1 className="text-2xl font-bold mt-4 mb-2">{capitalizeFirst(resumeData?.profileInfo?.fullName)}</h1>
                         <p className="text-[15px] font-semibold mb-2">
                             {resumeData.profileInfo.designation}
                         </p>

@@ -29,6 +29,7 @@ const App = () => {
               <Route path="/jobs" element={<JobSearch />} />
               <Route path="/job-details/:id" element={<JobDetails />} />
               <Route path="/job-listings/edit/:id" element={<JobListings />} />
+              <Route path="/job/:id" element={<JobDetails />} />
               
               {/* Rutas protegidas para empleadores */}
               <Route 

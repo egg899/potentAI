@@ -4,6 +4,7 @@ import { API_PATHS } from '../utils/apiPaths';
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
+import { capitalizeFirst } from '../utils/helper';
 
 const EmployerDashboard = () => {
     const navigate = useNavigate();
@@ -100,7 +101,7 @@ const EmployerDashboard = () => {
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-3xl mx-auto">
-                    <h1 className="text-3xl font-bold mb-8">Crear Nueva Publicación de Trabajo</h1>
+                    <h1 className="text-3xl font-bold mb-8">{capitalizeFirst('crear nueva publicación de trabajo')}</h1>
 
                     {error && (
                         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">

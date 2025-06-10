@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Logo from '../../components/Logo';
 import { useProfile } from '../../context/ProfileContext';
+import { capitalizeFirst } from '../../utils/helper';
 
 const ProfileInfo = () => {
   const { user, loading, updateUser } = useContext(UserContext);
@@ -164,7 +165,7 @@ const ProfileInfo = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     />
                   ) : (
-                    <h1 className="text-xl font-bold">{user?.name}</h1>
+                    <h1 className="text-xl font-bold">{capitalizeFirst(user?.name)}</h1>
                   )}
                   
                   {user?.userType === 'job_seeker' && resume && (
@@ -203,7 +204,7 @@ const ProfileInfo = () => {
             <div className="col-span-4 sm:col-span-9">
               <div className="bg-white shadow rounded-lg p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h1 className="text-2xl font-bold text-gray-800">Perfil de Usuario</h1>
+                  <h1 className="text-2xl font-bold text-gray-800">{capitalizeFirst('Perfil de Usuario')}</h1>
                   {!isEditing && !isEditingImage ? (
                     <div className="flex gap-2">
                       <button

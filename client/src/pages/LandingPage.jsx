@@ -7,6 +7,7 @@ import { SignUp } from './Auth/SignUp';
 import { UserContext } from '../context/userContext';
 import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
 import Logo from '../components/Logo';
+import { capitalizeFirst } from '../utils/helper';
 
 const LandingPage = () => {
   const {user} = useContext(UserContext);
@@ -49,9 +50,9 @@ const LandingPage = () => {
         {/* Hero Content */}
         <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
           <h1 className="text-5xl font-bold mb-6 leading-tight color-primary-black">
-            Diseñá el curriculum Vitae{" "}
+            {capitalizeFirst('diseñá el curriculum vitae')} {" "}
             <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#7182ff_0%,_#3cff52_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
-               que tu talento merece.
+               {capitalizeFirst('que tu talento merece.')}
             </span>
           </h1>
           <p className="text-lg color-primary-black mb-8">
@@ -75,7 +76,7 @@ const LandingPage = () => {
 </div>
         <section className="mt-10 px-4 py-10 mb-10">
           <h2 className="text-4xl font-bold text-center mb-12 color-primary-turquoise">
-            Características que te hacen destacar
+            {capitalizeFirst('características que te hacen destacar')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-10 text-center">
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition">
@@ -109,7 +110,7 @@ const LandingPage = () => {
         <section className="flex flex-col md:flex-row items-center px-10 py-10 bg-primary-turquoise-015 mb-10 mt-10 bg-image-custom">
         <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
           <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">
-            La confianza crece cada día
+            {capitalizeFirst('la confianza crece cada día')}
           </h2>
           <p className="text-lg text-gray-600 mb-8">Miles de usuarios creando currículums inteligentes, usando plantillas modernas y postulándose con éxito.</p>
           </div>
@@ -136,7 +137,9 @@ const LandingPage = () => {
 
         <section className="w-full px-10 py-10 mb-10 mt-10">
         <div className="w-full text-center px-10">
-          <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">Conocé <strong className="color-primary-black">potentIA</strong></h2>
+          <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">
+            {capitalizeFirst('conocé potentia')}
+          </h2>
         <div className="w-full flex justify-center">
         <iframe width="853" height="480" src="https://www.youtube.com/embed/J5DM6qZcr70?rel=0&modestbranding=1&showinfo=0" title="Promo potentIA" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
         </div>
