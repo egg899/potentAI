@@ -9,7 +9,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 console.log('El dirname de uploadImages',__dirname);
 export const uploadResumeImages = async (req, res) => {
     try {
-        
         upload.fields([{name: 'thumbnail'}, {name: 'profileImage'}]) (req, res, async (err) => {
             if (err) {
                 return res.status(400).json({ message: "La subida del archivo falló", error: err.message });
@@ -23,7 +22,16 @@ export const uploadResumeImages = async (req, res) => {
             }
 
             const uploadsFolder = path.join(__dirname, '..', 'uploads');
-            const baseUrl = `${req.protocol}://${req.get("host")}`;
+            
+            // Asegurarse de que la carpeta uploads existe
+            if (!fs.existsSync(uploadsFolder)) {
+                fs.mkdirSync(uploadsFolder, { recursive: true });
+            }
+
+            // Construir la URL base correctamente
+            const baseUrl = process.env.NODE_ENV === 'production' 
+                ? process.env.API_URL 
+                : `${req.protocol}://${req.get("host")}`;
 
             const newThumbnail = req.files.thumbnail?.[0];
             const newProfileImage = req.files.profileImage?.[0];
@@ -32,7 +40,13 @@ export const uploadResumeImages = async (req, res) => {
             if(newThumbnail) {
                 if(resume.thumbnailLink){
                     const oldThumbnail = path.join(uploadsFolder, path.basename(resume.thumbnailLink));
-                    if(fs.existsSync(oldThumbnail)) fs.unlinkSync(oldThumbnail);
+                    if(fs.existsSync(oldThumbnail)) {
+                        try {
+                            fs.unlinkSync(oldThumbnail);
+                        } catch (error) {
+                            console.error("Error al eliminar el thumbnail anterior:", error);
+                        }
+                    }
                 }
                 resume.thumbnailLink = `${baseUrl}/uploads/${newThumbnail.filename}`;
             }
@@ -40,26 +54,35 @@ export const uploadResumeImages = async (req, res) => {
             if(newProfileImage) {
                 if(resume.profileInfo?.profilePreviewUrl) {
                     const oldProfile = path.join(uploadsFolder, path.basename(resume.profileInfo.profilePreviewUrl));
-                    if(fs.existsSync(oldProfile)) fs.unlinkSync(oldProfile);
+                    if(fs.existsSync(oldProfile)) {
+                        try {
+                            fs.unlinkSync(oldProfile);
+                        } catch (error) {
+                            console.error("Error al eliminar la imagen de perfil anterior:", error);
+                        }
+                    }
                 }
-
                 resume.profileInfo.profilePreviewUrl = `${baseUrl}/uploads/${newProfileImage.filename}`;
-                console.log('resume.profileInfo.profilePreviewUrl', resume.profileInfo.profilePreviewUrl);
-                }
+            }
 
             await resume.save();
+
+            // Verificar que los archivos existen antes de enviar la respuesta
+            if (newThumbnail && !fs.existsSync(path.join(uploadsFolder, newThumbnail.filename))) {
+                throw new Error('El archivo thumbnail no se guardó correctamente');
+            }
+            if (newProfileImage && !fs.existsSync(path.join(uploadsFolder, newProfileImage.filename))) {
+                throw new Error('El archivo de perfil no se guardó correctamente');
+            }
 
             res.status(200).json({
                 message: "Imagen subida con éxito",
                 thumbnailLink: resume.thumbnailLink,
                 profilePreviewLink: resume.profileInfo.profilePreviewUrl,
             });
-           
         });
-
-
-    } catch(err){
+    } catch(err) {
         console.error("Error al subir las imagenes: ", err);
-        res.status(500).json({messge:"Se ha fallaso al subir las imagenes", error: err.message});
+        res.status(500).json({message: "Se ha fallado al subir las imagenes", error: err.message});
     }
 }

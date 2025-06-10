@@ -1,4 +1,3 @@
-import moment from "moment";
 import "moment/locale/es";
 import html2canvas from "html2canvas";
 
@@ -66,7 +65,7 @@ export const getLightColorFromImage = (imageUrl) => {
 
         };
 
-        img.onerror = (e) => {
+        img.onerror = () => {
             console.error('X Se ha fallado al cargar la imagen');
             reject(new Error('La imagen no pudo ser cargada o fue bloqueada por el CORS'));
         };
@@ -97,10 +96,19 @@ export const fixTailWindColors = (element) => {
 
 //Convertir el componente a Imagen
 export async function captureElementAsImage(element) {
-    if(!element) throw new Error("El elemento no ha sido Provisto");7
+    if(!element) throw new Error("El elemento no ha sido Provisto");
     
-    const canvas = await html2canvas(element);
-    return canvas.toDataURL("image/png");
+    // Asegurarse de que el elemento esté completamente renderizado
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    const canvas = await html2canvas(element, {
+        scale: 2, // Mejor calidad
+        useCORS: true, // Permitir imágenes cross-origin
+        logging: false,
+        backgroundColor: '#ffffff'
+    });
+    
+    return canvas.toDataURL("image/png", 1.0); // Máxima calidad
 }
 
 // Utilidad para convertir base64 data URL a file Object

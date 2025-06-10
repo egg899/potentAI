@@ -10,10 +10,13 @@ import ResumeSummaryCard from '../../components/Cards/ResumeSummaryCard';
 import CreateResumeForm from './CreateResumeForm.jsx';
 import Modal from '../../components/Modal.jsx';
 import toast from 'react-hot-toast';
+import RenderResume from '../../components/ResumeTemplates/RenderResume';
+import { useProfile } from '../../context/ProfileContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, loading } = useContext(UserContext);
+  const { setSelectedResume } = useProfile();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [allResumes, setAllResumes] = useState(null);
@@ -71,14 +74,23 @@ const Dashboard = () => {
           return (
             <ResumeSummaryCard 
               key={resume?._id}
-              imgUrl={resume?.thumbnailLink || null}
               title={resume.title}
               lastUpdated={
                 resume?.updatedAt ? moment(resume.updatedAt).format("DD MMM YYYY") : ""
               }
               onSelect={() => navigate(`/resume/${resume?._id}`)}
               onDelete={() => handleDeleteResume(resume._id)}
-            />
+              onSelectButtonClick={() => setSelectedResume(resume)}
+            >
+              <div style={{ transform: 'scale(0.25)', transformOrigin: 'top left', width: 800, height: 1131, pointerEvents: 'none', overflow: 'hidden' }}>
+                <RenderResume
+                  templateId={resume?.template?.theme}
+                  resumeData={resume}
+                  colorPalette={resume?.template?.colorPalette || []}
+                  containerWidth={800}
+                />
+              </div>
+            </ResumeSummaryCard>
           );
         })}
       </div>
