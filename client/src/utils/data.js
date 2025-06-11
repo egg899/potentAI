@@ -48,94 +48,23 @@ export const DUMMY_RESUME_DATA = {
   profileInfo: {
     profileImg: null,
     profilePreviewUrl: "",
-    fullName: "John Doe",
-    designation: "Desarrollador Full Stack",
-    summary: "Apasionado por la tecnología, con más de 3 años de experiencia desarrollando aplicaciones web modernas y eficientes. Me destaco por la escritura de código limpio y soluciones centradas en el usuario."
+    fullName: "",
+    designation: "",
+    summary: ""
   },
-//   template: {
-//     theme: "modern",
-//     colorPalette: "themeOne",
-//   },
   contactInfo: {
-    email: "john.doe@example.com",
-    phone: "+54 9 11 2345 6789",
-    location: "#12 Anywhere, Any City, Any COuntry",
-    linkedin: "https://linkedin.com/in/juanperez",
-    github: "https://github.com/juanperez",
-    website: "https://juanperez.dev",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    github: "",
+    website: ""
   },
-  workExperience: [
-    {
-      company: "Tech Solutions SA",
-      role: "Desarrollador Frontend",
-      startDate: "2022-3",
-      endDate: "2025-2",
-      description: "Desarrollo de interfaces modernas con React, integración con APIs REST y colaboración en equipos ágiles usando metodologías Scrum.",
-    },
-    {
-      company: "Digital Agency SRL",
-      role: "Desarrollador Web",
-      startDate: "2020-01",
-      endDate: "2022-02",
-      description: "Mantenimiento de sitios WordPress, diseño de componentes en JavaScript y soporte técnico para clientes empresariales.",
-    }
-  ],
-  education: [
-    {
-      degree: "Maestría en Ingeniería de Software",
-      institution: "UTN - Universidad Tecnológica Nacional",
-      startDate: "2021",
-      endDate: "2023"
-    },
-    {
-      degree: "Licenciatura en Desarrollo de Software",
-      institution: "UTN - Universidad Tecnológica Nacional",
-      startDate: "2017",
-      endDate: "2021"
-    }
-  ],
-  skills: [
-    { name: "JavaScript", progress: 90 },
-    { name: "React", progress: 85 },
-    { name: "Node.js", progress: 80 },
-    { name: "MongoDB", progress: 75 },
-    { name: "Git", progress: 85 }
-  ],
-  projects: [
-    {
-      title: "Gestor de Tareas",
-      description: "Aplicación web para gestionar tareas personales con autenticación y filtros por estado.",
-      github: "https://github.com/juanperez/task-manager",
-      liveDemo: "https://taskmanager.juanperez.dev"
-    },
-    {
-      title: "E-commerce de Guitarras",
-      description: "Tienda en línea con carrito, login de usuarios y administración de productos.",
-      github: "https://github.com/juanperez/guitar-store",
-      liveDemo: "https://guitarstore.juanperez.dev"
-    }
-  ],
-  certifications: [
-    {
-      title: "Full Stack Developer",
-      issuer: "Academia Coderhouse",
-      year: "2022"
-    },
-    {
-      title: "JavaScript Avanzado",
-      issuer: "Platzi",
-      year: "2021"
-    }
-  ],
-  languages: [
-    {
-      name: "Español",
-      progress: 100
-    },
-    {
-      name: "Inglés",
-      progress: 80
-    }
-  ],
-  interests: ["Música", "Videojuegos", "Lectura de ciencia ficción", "Hackathons"]
+  workExperience: [],
+  education: [],
+  skills: [],
+  projects: [],
+  certifications: [],
+  languages: [],
+  interests: []
 };
