@@ -8,85 +8,40 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //Crear un curriculum
 export const createResume = async (req, res) => {
-    try{
+    try {
         const { title } = req.body;
 
-        // Plantilla por default
-        const defaultResumeData = {
-            profileInfo: {
-                profileImg: null,
-                profilePreviewUrl: null,
-                // previewUrl:"",
-                fullName:"",
-                designation:"",
-                summary:"",
-            },
-            contactInfo: {
-                email:"",
-                phone:"",
-                location:"",
-                linkedin:"",
-                github:"",
-                website:"",
-            },
-            workExperience: [
-                {
-                    company:"",
-                    role:"",
-                    startDate:"",
-                    endDate:"",
-                    description:""
-                },
-            ],
-            education: [
-                {
-                    degree:"",
-                    institution:"",
-                    startDate:"",
-                    endDate:"",
-                },
-            ],
-            skills:[
-                {
-                    name: "",
-                    progress: 0,
-                },
-            ],
-            projects: [
-                {
-                    title:"",
-                    description:"",
-                    github:"",
-                    liveDemo:"",
-                }
-            ],
-            certifications: [
-                {
-                    title: "",
-                    issuer: "",
-                    year: "",
-                },
-        ],
-        languages: [
-            {
-                name: "",
-                progress: 0,
-            },
-        ],
-        interests: [""],
-        };//DefaultResume
-
-        const newResume = await Resume.create ({
+        const newResume = await Resume.create({
             userId: req.user._id,
             title,
-            ...defaultResumeData,
+            profileInfo: {
+                fullName: "",
+                designation: "",
+                summary: "",
+                profilePreviewUrl: ""
+            },
+            contactInfo: {
+                email: "",
+                phone: "",
+                location: "",
+                linkedin: "",
+                github: "",
+                website: ""
+            },
+            workExperience: [],
+            education: [],
+            skills: [],
+            projects: [],
+            certifications: [],
+            languages: [],
+            interests: []
         });
 
         res.status(201).json(newResume);
-    } catch (error){
-        res.status(500).json({ message: "Se falló al crear el CV", error: error.message});
+    } catch (error) {
+        res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
     }
-}/// CreateResume
+};/// CreateResume
 
 //Ver todos los curriculums al hacer Log In
 export const getUserResumes = async (req, res) => {

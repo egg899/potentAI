@@ -9,30 +9,28 @@ const ProfileInfoForm = ({profileData, updateSection}) => {
         Información Personal
       </h2>
 
-      
       <div className="mt-4">
         <ProfilePhotoSelector
           image={profileData?.profileImg}
           setImage={(value) => updateSection("profileImg", value)}
           preview={profileData?.profilePreviewUrl}
           setPreview={(value) => updateSection("profilePreviewUrl", value)}
-           
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
-            value={profileData.fullName || ""}
+            value={profileData?.fullName || ""}
             onChange={({ target }) => updateSection("fullName", target.value)}
             label="Nombre Completo"
-            placeholder="John"
+            placeholder="Ingresa tu nombre completo"
             type="text"
           />
 
           <Input
-            value={profileData.designation || ""}
+            value={profileData?.designation || ""}
             onChange={({ target }) => updateSection("designation", target.value)}
             label="Cargo"
-            placeholder="Diseñador UI"
+            placeholder="Ingresa tu cargo actual"
             type="text"
           />
 
@@ -41,11 +39,11 @@ const ProfileInfoForm = ({profileData, updateSection}) => {
               Resumen
             </label>
             <textarea
-              value={profileData.summary || ""}
+              value={profileData?.summary || ""}
               onChange={({ target }) => updateSection("summary", target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
               rows="4"
-              placeholder="Escribe un breve resumen sobre ti..."
+              placeholder="Escribe un breve resumen sobre ti y tu experiencia profesional..."
             />
           </div>
         </div>
