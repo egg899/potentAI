@@ -23,7 +23,7 @@ const ResumeSummaryCard = ({children, title, lastUpdated, onSelect, onDelete, on
             onClick={handleSelectButtonClick}
             title="Seleccionar"
         >
-            <FiCheckCircle className="w-5 h-5" />
+            <FiCheckCircle className="w-5 h-5 cursor-pointer" />
         </button>
         <div className="p-4 w-full h-[200px] flex items-center justify-center overflow-hidden">
             {children}

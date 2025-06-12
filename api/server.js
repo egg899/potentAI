@@ -10,6 +10,12 @@ import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
+import analyzeRoutes from './routes/analyzeRoutes.js'
+
+import multer from 'multer';
+// import pdfParse from 'pdf-parse';
+import mammoth from 'mammoth';
+import fs from 'fs';
 
 dotenv.config();
 const app = express();
@@ -36,7 +42,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/employer", employerRoutes);
 app.use("/api/jobs", jobRoutes);
-
+app.use("/api/ai", analyzeRoutes);
 //Ruta de prueba para la raíz
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!")

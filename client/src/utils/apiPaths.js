@@ -27,7 +27,8 @@ export const API_PATHS = {
         GET_BY_ID:(id)=>`/api/resume/${id}`,
         UPDATE:(id)=>`/api/resume/${id}`,
         DELETE: (id)=>`/api/resume/${id}`,
-        UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-images`
+        UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-images`,
+        uploadAndAnalyzeCV: '/api/ai/extract-text',
     },
 
     IMAGE: {
