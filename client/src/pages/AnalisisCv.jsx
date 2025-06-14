@@ -7,6 +7,8 @@ import { UserContext } from '../context/userContext';
 const Analisis = () => {
   
  const [cvFile, setCvFile] = useState();
+ const [textoCV, setTextoCV] = useState(''); 
+
  const { user, loading } = useContext(UserContext);
   
 
@@ -32,13 +34,13 @@ const Analisis = () => {
       });
 
       const analyzedData = response.data;
-      console.log("CV analizado: ", analyzedData);
-
+      // console.log("CV analizado: ", analyzedData);
+      setTextoCV(response.data.textoExtraido);
 
     }
     catch(error) {
       console.error("Error al analizar el CV:", error);
-      alert("Hubo un problemaa al analizar el CV.");
+      alert("Hubo un problema al analizar el CV.");
 
     }
 
@@ -48,16 +50,17 @@ const Analisis = () => {
   useEffect(() => {
       if(cvFile){
         console.log('cvFile', cvFile);
-      }
+         console.log('textoCV',textoCV);
+      } 
 
-  }, [cvFile]);
+  }, [cvFile, textoCV]);
 
   return (
     <DashboardLayout>
      <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
  
 <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
-  <h2 className="text-2xl font-bold text-gray-800 mb-6">Sube tu CV para análisis</h2>
+  <h2 className="text-3xl font-bold text-gray-800 mb-6">Sube tu CV para análisis</h2>
 
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
     <div>
@@ -92,6 +95,16 @@ const Analisis = () => {
     </div>
   </div>
 </div>
+{textoCV && (
+  <div className="mt-5">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6">Texto Extraído</h3>
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{textoCV}</pre>
+
+</div>
+
+)}
+
+
 
 </div>
         
