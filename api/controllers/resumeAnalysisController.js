@@ -15,9 +15,10 @@ export const extractTextFromCV = async (req, res) => {
     });
 
     console.log('Respuestas de Flask:', response.data);
+    // console.log(response);
 
     // Envía la respuesta al cliente frontend
-    res.json({ textoExtraido: response.data.texto });
+    res.status(200).json({ textoExtraido: response.data.texto });
 
   } catch (error) {
     console.error('Error en extractTextFromCV:', error.message);
