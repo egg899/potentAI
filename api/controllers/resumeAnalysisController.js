@@ -1,5 +1,5 @@
-import fs from 'fs';
-import Tesseract from 'tesseract.js';
+import axios from 'axios';
+import path from 'path';
 
 export const extractTextFromCV = async (req, res) => {
   try {
@@ -7,14 +7,20 @@ export const extractTextFromCV = async (req, res) => {
       return res.status(400).json({ error: 'No se subió ningún archivo' });
     }
 
-    console.log('Archivo recibido desde resumeAnalysisController:', req.file.originalname);
-    console.log('El path: ',req.file.path);
-    // Borramos el archivo para no dejarlo guardado (opcional)
-    fs.unlinkSync(req.file.path);
+    const pdfPath = path.resolve(req.file.path); // ruta absoluta
+    console.log('Ruta absoluta del PDF:', pdfPath);
 
-    res.json({ message: `Archivo '${req.file.originalname}' recibido correctamente desde resumeAnalysisController` });
+    const response = await axios.post('http://localhost:5001/ocr', {
+      pdf_path: pdfPath
+    });
+
+    console.log('Respuestas de Flask:', response.data);
+
+    // Envía la respuesta al cliente frontend
+    res.json({ textoExtraido: response.data.texto });
+
   } catch (error) {
-    console.error('Error en resumeAnalysisController:', error);
-    res.status(500).json({ error: 'Error al procesar el archivo en resumeAnalysisController' });
+    console.error('Error en extractTextFromCV:', error.message);
+    res.status(500).json({ error: 'Error al procesar el archivo' });
   }
 };
