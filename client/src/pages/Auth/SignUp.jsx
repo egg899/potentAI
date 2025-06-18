@@ -5,6 +5,7 @@ import { UserContext } from '../../context/userContext';
 import { useContext } from 'react';
 import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
 import Input from "../../components/Inputs/Input";
+import { API_PATHS } from '../../utils/apiPaths';
 
 const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
   const navigate = useNavigate();
@@ -76,7 +77,9 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
         password: '***' // No loguear la contraseña
       });
 
-      const response = await axiosInstance.post('/api/auth/register', formData);
+      // const response = await axiosInstance.post('/api/auth/register', formData);
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, formData);
+
       console.log('Respuesta del servidor:', response.data);
 
       if (response.data.token) {

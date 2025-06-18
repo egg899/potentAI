@@ -19,10 +19,12 @@ const LandingPage = () => {
     if(!user){
       setOpenAuthModal(true);
     } else{
-      navigate("/dashboard");
+      // navigate("/dashboard");
+      
+      navigate(`/analisis/${user._id}`)
     }
   };
-
+// {console.log('user', user);}
   const handleCloseModal = () => {
     setOpenAuthModal(false);
     setCurrentPage("login");

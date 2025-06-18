@@ -29,6 +29,7 @@ export const API_PATHS = {
         DELETE: (id)=>`/api/resume/${id}`,
         UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-images`,
         uploadAndAnalyzeCV: '/api/ai/extract-text',
+        mejorar:'api/cv/mejorar',
     },
 
     IMAGE: {

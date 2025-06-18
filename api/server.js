@@ -11,6 +11,7 @@ import resumeRoutes from './routes/resumeRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import analyzeRoutes from './routes/analyzeRoutes.js'
+import mejorarCVRoutes from './routes/mejorarCVRoutes.js'
 
 import multer from 'multer';
 // import pdfParse from 'pdf-parse';
@@ -44,9 +45,12 @@ app.use("/api/employer", employerRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/ai", analyzeRoutes);
 //Ruta de prueba para la raíz
+app.use("/api/cv", mejorarCVRoutes);
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!")
 })
+
+
 
 //Serve uploads folder
 app.use(

@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance'; 
 import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import { UserContext } from '../context/userContext';
 const Analisis = () => {
-  
+
+ const { id } = useParams();
  const [cvFile, setCvFile] = useState();
  const [textoCV, setTextoCV] = useState(''); 
 
@@ -17,7 +18,7 @@ const Analisis = () => {
     if(file) {
       setCvFile(file);
     }
-
+console.log('id', id);
   };
 
   const handleSubmitCV = async() => {
@@ -34,8 +35,11 @@ const Analisis = () => {
       });
 
       const analyzedData = response.data;
-      // console.log("CV analizado: ", analyzedData);
+     console.log("CV analizado: ", analyzedData);
       setTextoCV(response.data.textoExtraido);
+
+
+
 
     }
     catch(error) {
@@ -46,6 +50,33 @@ const Analisis = () => {
 
 
   }//handleSubmitCV
+
+
+  const handleMejoraCV = async() => {
+    const textoExtraido = textoCV;
+
+    // console.log("texto que se envirá para mejorar", textoExtraido);
+
+    if(!textoExtraido) {
+      console.warn("No hay texto extraído. No se enviará nada.");
+      return;
+    }
+
+
+    try {
+           const mejora = await axiosInstance.post(API_PATHS.RESUME.mejorar, { textoExtraido });
+          // const mejora = await axiosInstance.post('api/cv/mejorar', { textoExtraido });
+          console.log("Respuesta de mejora:", mejora.data.textoMejorado);
+        }
+
+    catch (error) {
+      console.error("Error al mejorar el CV:", error.response?.data || error.message);
+    }    
+      
+      
+
+
+  }//handleMejoraCV
 
   useEffect(() => {
       if(cvFile){
@@ -60,7 +91,7 @@ const Analisis = () => {
      <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
  
 <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
-  <h2 className="text-3xl font-bold text-gray-800 mb-6">Sube tu CV para análisis</h2>
+  <h2 className="text-3xl font-bold text-gray-800 mb-6">Subí tu CV para análisis</h2>
 
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
     <div>
@@ -87,11 +118,19 @@ const Analisis = () => {
       <button
         onClick={handleSubmitCV}
         disabled={!cvFile}
-        className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200
+        className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200 cursor-pointer
           ${cvFile ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-300 cursor-not-allowed'}`}
       >
         Analizar CV
       </button>
+
+
+      <button
+        onClick={handleMejoraCV}
+        disabled={!textoCV}
+        className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200 ms-3 cursor-pointer
+          ${textoCV ? 'bg-red-600 hover:bg-purple-700' : 'bg-gray-300 cursor-not-allowed'}`}
+      >Mejorar CV</button>
     </div>
   </div>
 </div>

@@ -30,7 +30,7 @@ const App = () => {
               <Route path="/job-details/:id" element={<JobDetails />} />
               <Route path="/job-listings/edit/:id" element={<JobListings />} />
               <Route path="/job/:id" element={<JobDetails />} />
-              <Route path="/analisis" element={<Analisis />} />
+              <Route path="/analisis/:id" element={<Analisis />} />
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 
