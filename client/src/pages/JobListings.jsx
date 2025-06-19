@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import { FiSearch } from 'react-icons/fi';
 import moment from 'moment';
+import Modal from '../components/Modal';
+import RenderResume from '../components/ResumeTemplates/RenderResume';
 
 // Componente para la barra de búsqueda y filtros
 const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) => (
@@ -73,7 +75,7 @@ const JobActions = ({ onEdit, onDelete }) => (
 );
 
 // Componente para mostrar una publicación individual
-const JobCard = ({ job, onEdit, onDelete }) => (
+const JobCard = ({ job, onEdit, onDelete, onViewApplications }) => (
     <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-start">
             <div>
@@ -89,10 +91,18 @@ const JobCard = ({ job, onEdit, onDelete }) => (
                     Publicado el {moment(job.createdAt).format('DD/MM/YYYY')}
                 </p>
             </div>
-            <JobActions 
-                onEdit={() => onEdit(job._id)} 
-                onDelete={() => onDelete(job._id)} 
-            />
+            <div className="flex flex-col gap-2">
+                <JobActions 
+                    onEdit={() => onEdit(job._id)} 
+                    onDelete={() => onDelete(job._id)} 
+                />
+                <button
+                    className="px-4 py-2 text-white bg-[#3cff52] rounded-lg hover:bg-[#32baa5] transition-colors mt-2"
+                    onClick={() => onViewApplications(job._id)}
+                >
+                    Postulaciones
+                </button>
+            </div>
         </div>
     </div>
 );
@@ -108,6 +118,12 @@ const JobListings = () => {
         type: 'all',
         location: ''
     });
+    const [showApplicationsModal, setShowApplicationsModal] = useState(false);
+    const [applications, setApplications] = useState([]);
+    const [loadingApplications, setLoadingApplications] = useState(false);
+    const [errorApplications, setErrorApplications] = useState('');
+    const [showResumeModal, setShowResumeModal] = useState(false);
+    const [selectedResume, setSelectedResume] = useState(null);
 
     const fetchJobs = async () => {
         try {
@@ -168,6 +184,21 @@ const JobListings = () => {
         }
     };
 
+    const handleViewApplications = async (jobId) => {
+        setShowApplicationsModal(true);
+        setLoadingApplications(true);
+        setErrorApplications('');
+        try {
+            const res = await axiosInstance.get(`/api/applications/job/${jobId}`);
+            setApplications(res.data);
+        } catch {
+            setErrorApplications('Error al cargar las postulaciones');
+            setApplications([]);
+        } finally {
+            setLoadingApplications(false);
+        }
+    };
+
     const filteredJobs = jobs.filter(job => {
         if (!job) return false;
         const matchesSearch = job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -224,11 +255,55 @@ const JobListings = () => {
                                 job={job}
                                 onEdit={handleEdit}
                                 onDelete={handleDelete}
+                                onViewApplications={handleViewApplications}
                             />
                         ))
                     )}
                 </div>
             </div>
+            <Modal isOpen={showApplicationsModal} onClose={() => setShowApplicationsModal(false)} title="Postulaciones recibidas">
+                <div className="space-y-4">
+                    {loadingApplications && <p>Cargando postulaciones...</p>}
+                    {errorApplications && <p className="text-red-500">{errorApplications}</p>}
+                    {!loadingApplications && applications.length === 0 && <p>No hay postulaciones para este trabajo.</p>}
+                    {applications.map((app) => (
+                        <div key={app._id} className="border p-3 rounded">
+                            <div className="font-semibold">{app.applicant?.name || app.applicant?.email || 'Usuario'}</div>
+                            <div className="text-xs text-gray-500 mb-2">Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}</div>
+                            <div className="font-medium">CV: {app.resume?.title || 'Sin título'}</div>
+                            <button
+                                className="mt-2 px-3 py-1 bg-[#3cff52] text-white rounded hover:bg-[#32baa5]"
+                                onClick={() => { setSelectedResume(app.resume); setShowResumeModal(true); }}
+                            >
+                                Ver CV
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </Modal>
+            <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
+                <div className="relative w-full flex flex-col items-center justify-center min-h-[80vh]">
+                    <button
+                        className="absolute top-4 right-4 z-50 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition-colors"
+                        onClick={() => setShowResumeModal(false)}
+                        aria-label="Cerrar CV"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <div className="w-full max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl overflow-auto bg-white rounded-lg shadow-lg p-2 md:p-6">
+                        {selectedResume && (
+                            <RenderResume
+                                templateId={selectedResume.templateId || '01'}
+                                resumeData={selectedResume}
+                                colorPalette={['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
+                                containerWidth={Math.min(window.innerWidth - 40, 900)}
+                            />
+                        )}
+                    </div>
+                </div>
+            </Modal>
         </DashboardLayout>
     );
 };

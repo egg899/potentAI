@@ -5,6 +5,7 @@ import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import { FiMapPin, FiDollarSign, FiClock, FiCalendar } from 'react-icons/fi';
 import moment from 'moment';
+import Modal from '../components/Modal';
 
 const JobDetails = () => {
     const { id } = useParams();
@@ -12,6 +13,12 @@ const JobDetails = () => {
     const [job, setJob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showApplyModal, setShowApplyModal] = useState(false);
+    const [userResumes, setUserResumes] = useState([]);
+    const [selectedResumeId, setSelectedResumeId] = useState(null);
+    const [applyError, setApplyError] = useState('');
+    const [applySuccess, setApplySuccess] = useState('');
+    const [isApplying, setIsApplying] = useState(false);
 
     useEffect(() => {
         const fetchJobDetails = async () => {
@@ -30,6 +37,42 @@ const JobDetails = () => {
 
         fetchJobDetails();
     }, [id]);
+
+    // Obtener los CVs del usuario al abrir el modal
+    const fetchUserResumes = async () => {
+        try {
+            const res = await axiosInstance.get(API_PATHS.RESUME.GET_USER_RESUMES);
+            setUserResumes(res.data);
+        } catch {
+            setUserResumes([]);
+        }
+    };
+
+    useEffect(() => {
+        if (showApplyModal) fetchUserResumes();
+    }, [showApplyModal]);
+
+    const handleApply = async () => {
+        if (!selectedResumeId) {
+            setApplyError('Selecciona un CV para postularte.');
+            return;
+        }
+        setIsApplying(true);
+        setApplyError('');
+        setApplySuccess('');
+        try {
+            await axiosInstance.post('/api/applications', {
+                jobId: job._id,
+                resumeId: selectedResumeId
+            });
+            setApplySuccess('¡Postulación enviada con éxito!');
+            setTimeout(() => setShowApplyModal(false), 1500);
+        } catch (err) {
+            setApplyError(err.response?.data?.message || 'Error al postularte.');
+        } finally {
+            setIsApplying(false);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -108,7 +151,7 @@ const JobDetails = () => {
 
                     <div className="flex justify-end">
                         <button
-                            onClick={() => window.location.href = `mailto:${job.employer?.email || ''}`}
+                            onClick={() => setShowApplyModal(true)}
                             className="bg-[#3cff52] text-white px-6 py-3 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
                         >
                             Aplicar Ahora
@@ -116,6 +159,26 @@ const JobDetails = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={showApplyModal} onClose={() => setShowApplyModal(false)} title="Selecciona un CV para postularte">
+                <div className="space-y-4">
+                    {userResumes.length === 0 && <p>No tienes CVs guardados.</p>}
+                    {userResumes.map((resume) => (
+                        <div key={resume._id} className={`border p-3 rounded flex items-center gap-4 cursor-pointer ${selectedResumeId === resume._id ? 'border-[#3cff52] bg-[#eaffea]' : 'border-gray-200'}`} onClick={() => setSelectedResumeId(resume._id)}>
+                            <span className="font-semibold">{resume.title}</span>
+                            <span className="text-xs text-gray-500 ml-auto">Actualizado: {new Date(resume.updatedAt).toLocaleDateString()}</span>
+                        </div>
+                    ))}
+                    {applyError && <p className="text-red-500 text-sm">{applyError}</p>}
+                    {applySuccess && <p className="text-green-600 text-sm">{applySuccess}</p>}
+                    <button
+                        className="bg-[#3cff52] text-white px-4 py-2 rounded hover:bg-[#32baa5] transition-colors w-full mt-2"
+                        onClick={handleApply}
+                        disabled={isApplying}
+                    >
+                        {isApplying ? 'Enviando...' : 'Confirmar Postulación'}
+                    </button>
+                </div>
+            </Modal>
         </DashboardLayout>
     );
 };
