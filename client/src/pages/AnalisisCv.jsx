@@ -67,6 +67,7 @@ console.log('id', id);
            const mejora = await axiosInstance.post(API_PATHS.RESUME.mejorar, { textoExtraido });
           // const mejora = await axiosInstance.post('api/cv/mejorar', { textoExtraido });
           console.log("Respuesta de mejora:", mejora.data.textoMejorado);
+          setTextoCV(mejora.data.textoMejorado);
         }
 
     catch (error) {

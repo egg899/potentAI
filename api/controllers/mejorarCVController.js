@@ -19,17 +19,44 @@ export const mejorarYParsearCV = async (req, res) => {
             }
 
 
-            const prompt = `
-            Este es el texto de un CV extraído de un archivo PDF o DOCX.
-            Quiero que lo reestructures, mejores sus sintaxis y lo tranformes en un 
-            resumen con parrafos bien escritos y sini errores.
+                    const prompt = `
+                            Este es el texto de un CV extraído de un archivo PDF o DOCX.
+                            Quiero que hagas dos cosas:
 
-            No devuelvas nada en formato JSON, solo como un texto para que una persona lo pueda leer
-            fácilmente.
+                            1. Mejora y reescribe el texto en forma de un resumen profesional con párrafos bien redactados, sin errores, fácil de leer para humanos.
 
-            Texto extraído:
-            """${textoExtraido}"""
-            `;
+                            2. También, extrae la información clave del CV y organízala en una estructura como la siguiente (en formato JSON):
+
+                            {
+                            "profileInfo": {
+                                "fullName": "",
+                                "designation": "",
+                                "summary": "",
+                                "profilePreviewUrl": ""
+                            },
+                            "contactInfo": {
+                                "email": "",
+                                "phone": "",
+                                "location": "",
+                                "linkedin": "",
+                                "github": "",
+                                "website": ""
+                            },
+                            "workExperience": [],
+                            "education": [],
+                            "skills": [],
+                            "projects": [],
+                            "certifications": [],
+                            "languages": [],
+                            "interests": []
+                            }
+
+                            Texto extraído:
+                            """${textoExtraido}"""
+
+                            Devuelve primero el texto mejorado como resumen, separalo con tres guiones (---), y luego el JSON estructurado.
+                            `;
+
 
             const response = await openai.chat.completions.create({
                 model: "meta-llama/llama-4-scout-17b-16e-instruct", // modelo gratuito de Groq
@@ -43,13 +70,13 @@ export const mejorarYParsearCV = async (req, res) => {
             return res.json({ textoMejorado });    
             // console.log(`Este es el texto Extraido de mejorarCVController: ${textoExtraido}`);
 
-            return res.status(200).json({
-                mensaje:"Texto recibido y procesdo correctamente",
-                textoMejorado: textoExtraido,
-            });
+            // return res.status(200).json({
+            //     mensaje:"Texto recibido y procesdo correctamente",
+            //     textoMejorado: textoExtraido,
+            // });
 
         } catch(error){
-            console.error("Error en OpenAI", error.message);;
+            console.error("Error en OpenAI", error.response?.data || error.message || error);
             res.status(500).json({ error: "Error al mejorar el CV con IA" });
         }
 
