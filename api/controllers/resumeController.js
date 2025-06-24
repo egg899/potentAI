@@ -7,41 +7,79 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //Crear un curriculum
+// export const createResume = async (req, res) => {
+//     try {
+//         const { title } = req.body;
+
+//         const newResume = await Resume.create({
+//             userId: req.user._id,
+//             title,
+//             profileInfo: {
+//                 fullName: "",
+//                 designation: "",
+//                 summary: "",
+//                 profilePreviewUrl: ""
+//             },
+//             contactInfo: {
+//                 email: "",
+//                 phone: "",
+//                 location: "",
+//                 linkedin: "",
+//                 github: "",
+//                 website: ""
+//             },
+//             workExperience: [],
+//             education: [],
+//             skills: [],
+//             projects: [],
+//             certifications: [],
+//             languages: [],
+//             interests: []
+//         });
+
+//         res.status(201).json(newResume);
+//     } catch (error) {
+//         res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
+//     }
+// };/// CreateResume
+
 export const createResume = async (req, res) => {
-    try {
-        const { title } = req.body;
-
-        const newResume = await Resume.create({
-            userId: req.user._id,
-            title,
-            profileInfo: {
-                fullName: "",
-                designation: "",
-                summary: "",
-                profilePreviewUrl: ""
-            },
-            contactInfo: {
-                email: "",
-                phone: "",
-                location: "",
-                linkedin: "",
-                github: "",
-                website: ""
-            },
-            workExperience: [],
-            education: [],
-            skills: [],
-            projects: [],
-            certifications: [],
-            languages: [],
-            interests: []
-        });
-
-        res.status(201).json(newResume);
-    } catch (error) {
-        res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
-    }
-};/// CreateResume
+  try {
+    const { title, estructuraCV, profileInfo} = req.body;
+   
+    console.log('estructura desde Resume Controller',title);
+    console.log('estructura desde Resume Controller',profileInfo);
+    const newResume = await Resume.create({
+      userId: req.user._id,
+      title,
+      profileInfo:  {
+        fullName: profileInfo.fullName || '',
+        designation: "",
+        summary: "",
+        profilePreviewUrl: ""
+      },
+      contactInfo:  {
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        github: "",
+        website: ""
+      },
+      workExperience:  [],
+      education:  [],
+      skills:  [],
+      projects:  [],
+      certifications:  [],
+      languages:  [],
+      interests: estructuraCV?.interests || []
+    });
+    // console.log('newResume desde resumeController: ',newResume);
+    res.status(201).json(newResume);
+  } catch (error) {
+    res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
+  }
+};
 
 //Ver todos los curriculums al hacer Log In
 export const getUserResumes = async (req, res) => {

@@ -19,43 +19,127 @@ export const mejorarYParsearCV = async (req, res) => {
             }
 
 
-                    const prompt = `
-                            Este es el texto de un CV extraído de un archivo PDF o DOCX.
-                            Quiero que hagas dos cosas:
+                //    const prompt = `
+                //         Este es el texto de un CV extraído de un archivo PDF o DOCX.
 
-                            1. Mejora y reescribe el texto en forma de un resumen profesional con párrafos bien redactados, sin errores, fácil de leer para humanos.
+                //         Tu tarea es realizar dos cosas:
 
-                            2. También, extrae la información clave del CV y organízala en una estructura como la siguiente (en formato JSON):
+                //         1. Reescribe el texto como un resumen profesional claro, organizado y fácil de leer, sin errores gramaticales.
 
+                //         2. Extrae la información clave del CV y 
+                //         devuélvela en un objeto JSON con la siguiente estructura EXACTA. 
+                //         No incluyas nada antes ni después del JSON (no agregues explicaciones, 
+                //         etiquetas como "json", bloques de código con \`\`\`, ni ningún texto adicional).
+
+                //         Formato del JSON:
+                //         {
+                //         "profileInfo": {
+                //             "fullName": "",
+                //             "designation": "",
+                //             "summary": "",
+                //             "profilePreviewUrl": ""
+                //         },
+                //         "contactInfo": {
+                //             "email": "",
+                //             "phone": "",
+                //             "location": "",
+                //             "linkedin": "",
+                //             "github": "",
+                //             "website": ""
+                //         },
+                //         "workExperience": [],
+                //         "education": [],
+                //         "skills": [],
+                //         "projects": [],
+                //         "certifications": [],
+                //         "languages": [],
+                //         "interests": []
+                //         }
+
+                //         Texto extraído:
+                //         """${textoExtraido}"""
+
+                //         Devuelve el resumen redactado primero, luego escribe tres guiones (---) en una línea sola, y luego **únicamente el JSON limpio**, sin ningún otro contenido.
+                //         `;
+
+                const prompt = `
+                        Este es el texto de un CV extraído de un archivo PDF o DOCX.
+
+                        Tu tarea es realizar dos cosas:
+
+                        1. Reescribe el texto como un resumen profesional claro, organizado y fácil de leer, sin errores gramaticales.
+
+                        2. Extrae la información clave del CV y devuélvela en un objeto JSON con la siguiente estructura EXACTA. No incluyas nada antes ni después del JSON (no agregues explicaciones, etiquetas como "json", bloques de código con \`\`\`, ni ningún texto adicional).
+
+                        Formato del JSON:
+                        {
+                        "profileInfo": {
+                            "fullName": "",
+                            "designation": "",
+                            "summary": "",
+                            "profilePreviewUrl": ""
+                        },
+                        "contactInfo": {
+                            "email": "",
+                            "phone": "",
+                            "location": "",
+                            "linkedin": "",
+                            "github": "",
+                            "website": ""
+                        },
+                        "workExperience": [
                             {
-                            "profileInfo": {
-                                "fullName": "",
-                                "designation": "",
-                                "summary": "",
-                                "profilePreviewUrl": ""
-                            },
-                            "contactInfo": {
-                                "email": "",
-                                "phone": "",
-                                "location": "",
-                                "linkedin": "",
-                                "github": "",
-                                "website": ""
-                            },
-                            "workExperience": [],
-                            "education": [],
-                            "skills": [],
-                            "projects": [],
-                            "certifications": [],
-                            "languages": [],
-                            "interests": []
+                            "company": "",
+                            "role": "",
+                            "startDate": "",
+                            "endDate": "",
+                            "description": ""
                             }
+                        ],
+                        "education": [
+                            {
+                            "degree": "",
+                            "Institution": "",
+                            "startDate": "",
+                            "endDate": ""
+                            }
+                        ],
+                        "skills": [
+                            {
+                            "name": "",
+                            "progress": 0
+                            }
+                        ],
+                        "projects": [
+                            {
+                            "title": "",
+                            "description": "",
+                            "github": "",
+                            "liveDemo": ""
+                            }
+                        ],
+                        "certifications": [
+                            {
+                            "title": "",
+                            "issuer": "",
+                            "year": ""
+                            }
+                        ],
+                        "languages": [
+                            {
+                            "name": "",
+                            "progress": 0
+                            }
+                        ],
+                        "interests": [""]
+                        }
 
-                            Texto extraído:
-                            """${textoExtraido}"""
+                        Texto extraído:
+                        """${textoExtraido}"""
 
-                            Devuelve primero el texto mejorado como resumen, separalo con tres guiones (---), y luego el JSON estructurado.
-                            `;
+                        Devuelve el resumen redactado primero, luego escribe tres guiones (---) en una línea sola, y luego únicamente el JSON limpio, sin ningún otro contenido.
+                        `;
+
 
 
             const response = await openai.chat.completions.create({
@@ -64,20 +148,36 @@ export const mejorarYParsearCV = async (req, res) => {
                 temperature: 0.7
                 });
 
-            const textoMejorado = response.choices[0].message.content;
-            console.log('Este es el texto mejorado', textoMejorado);
+           
 
-            return res.json({ textoMejorado });    
-            // console.log(`Este es el texto Extraido de mejorarCVController: ${textoExtraido}`);
 
-            // return res.status(200).json({
-            //     mensaje:"Texto recibido y procesdo correctamente",
-            //     textoMejorado: textoExtraido,
-            // });
+            const textoIA = response.choices[0].message.content;
 
-        } catch(error){
+                    // Si no hay separador, lanzar error
+                    if (!textoIA.includes('---')) {
+                    return res.status(500).json({ error: "El texto de la IA no tiene el separador ---" });
+                    }
+
+                    const [resumenLegibleRaw, jsonTextoRaw] = textoIA.split('---');
+                    const cleanedJson = jsonTextoRaw.trim().replace(/^```(json)?|```$/g, '').trim();
+
+                    let jsonEstructurado = null;
+                    try {
+                    // jsonEstructurado = JSON.parse(cleanedJson);
+                     jsonEstructurado =  JSON.parse(cleanedJson);
+                     console.log(jsonEstructurado);
+                    } catch (e) {
+                    return res.status(500).json({ error: "Error al parsear JSON desde IA", detalle: e.message });
+                    }
+
+                    res.json({ resumen: resumenLegibleRaw.trim(), estructura: jsonEstructurado });
+
+            
+            
+
+} catch(error){
             console.error("Error en OpenAI", error.response?.data || error.message || error);
             res.status(500).json({ error: "Error al mejorar el CV con IA" });
-        }
+  }
 
 }//mejorarYParseaCV
