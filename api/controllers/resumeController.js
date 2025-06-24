@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 //             userId: req.user._id,
 //             title,
 //             profileInfo: {
-//                 fullName: "",
+//                 fullName: profileInfo?.fullName || "",
 //                 designation: "",
 //                 summary: "",
 //                 profilePreviewUrl: ""
@@ -45,41 +45,52 @@ const __dirname = path.dirname(__filename);
 
 export const createResume = async (req, res) => {
   try {
-    const { title, estructuraCV, profileInfo} = req.body;
-   
-    console.log('estructura desde Resume Controller',title);
-    console.log('estructura desde Resume Controller',profileInfo);
+    const {
+      title,
+      profileInfo = {},
+      contactInfo = {},
+      workExperience = [],
+      education = [],
+      skills = [],
+      projects = [],
+      certifications = [],
+      languages = [],
+      interests = []
+    } = req.body;
+
     const newResume = await Resume.create({
       userId: req.user._id,
       title,
-      profileInfo:  {
-        fullName: profileInfo.fullName || '',
-        designation: "",
-        summary: "",
-        profilePreviewUrl: ""
+      profileInfo: {
+        fullName: profileInfo.fullName || "",
+        designation: profileInfo.designation || "",
+        summary: profileInfo.summary || "",
+        profilePreviewUrl: profileInfo.profilePreviewUrl || ""
       },
-      contactInfo:  {
-        email: "",
-        phone: "",
-        location: "",
-        linkedin: "",
-        github: "",
-        website: ""
+      contactInfo: {
+        email: contactInfo.email || "",
+        phone: contactInfo.phone || "",
+        location: contactInfo.location || "",
+        linkedin: contactInfo.linkedin || "",
+        github: contactInfo.github || "",
+        website: contactInfo.website || ""
       },
-      workExperience:  [],
-      education:  [],
-      skills:  [],
-      projects:  [],
-      certifications:  [],
-      languages:  [],
-      interests: estructuraCV?.interests || []
+      workExperience,
+      education,
+      skills,
+      projects,
+      certifications,
+      languages,
+      interests
     });
-    // console.log('newResume desde resumeController: ',newResume);
+
     res.status(201).json(newResume);
   } catch (error) {
+    console.error("Error al crear el CV:", error);
     res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
   }
 };
+
 
 //Ver todos los curriculums al hacer Log In
 export const getUserResumes = async (req, res) => {
