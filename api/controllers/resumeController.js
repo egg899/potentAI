@@ -58,6 +58,13 @@ export const createResume = async (req, res) => {
       interests = []
     } = req.body;
 
+    //Verificar si ya existe un CV con el mismo titulo para este usuario
+    const existingResume = await Resume.findOne({ userId: req.user._id, title  });
+
+    if(existingResume) {
+      return res.status(400).json({ message: "Ya existe un CV con ese titulo. Elegí otro por favor" });
+    }//if existingResume
+
     const newResume = await Resume.create({
       userId: req.user._id,
       title,

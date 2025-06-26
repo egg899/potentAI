@@ -17,7 +17,7 @@ const LandingPage = () => {
   const [bounce, setBounce] = useState(true);
 
   useEffect(() =>{
-    const timer = setTimeout(() => setBounce(false), 2500); 
+    const timer = setTimeout(() => setBounce(false), 500); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -147,7 +147,9 @@ const LandingPage = () => {
         <section className="w-full px-10 py-10 mb-10 mt-10">
         <div className="w-full text-center px-10">
           <h2 className="text-4xl font-bold mb-6 leading-tight color-primary-black">
-            {capitalizeFirst('conocé potentia')}
+            {capitalizeFirst('conocé ')} 
+             <span className="text-[#13afa4]">
+                potentIA</span>
           </h2>
         <div className="w-full flex justify-center">
         <iframe width="853" height="480" src="https://www.youtube.com/embed/J5DM6qZcr70?rel=0&modestbranding=1&showinfo=0" title="Promo potentIA" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>

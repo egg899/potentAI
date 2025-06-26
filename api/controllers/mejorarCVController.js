@@ -19,55 +19,15 @@ export const mejorarYParsearCV = async (req, res) => {
             }
 
 
-                //    const prompt = `
-                //         Este es el texto de un CV extraído de un archivo PDF o DOCX.
-
-                //         Tu tarea es realizar dos cosas:
-
-                //         1. Reescribe el texto como un resumen profesional claro, organizado y fácil de leer, sin errores gramaticales.
-
-                //         2. Extrae la información clave del CV y 
-                //         devuélvela en un objeto JSON con la siguiente estructura EXACTA. 
-                //         No incluyas nada antes ni después del JSON (no agregues explicaciones, 
-                //         etiquetas como "json", bloques de código con \`\`\`, ni ningún texto adicional).
-
-                //         Formato del JSON:
-                //         {
-                //         "profileInfo": {
-                //             "fullName": "",
-                //             "designation": "",
-                //             "summary": "",
-                //             "profilePreviewUrl": ""
-                //         },
-                //         "contactInfo": {
-                //             "email": "",
-                //             "phone": "",
-                //             "location": "",
-                //             "linkedin": "",
-                //             "github": "",
-                //             "website": ""
-                //         },
-                //         "workExperience": [],
-                //         "education": [],
-                //         "skills": [],
-                //         "projects": [],
-                //         "certifications": [],
-                //         "languages": [],
-                //         "interests": []
-                //         }
-
-                //         Texto extraído:
-                //         """${textoExtraido}"""
-
-                //         Devuelve el resumen redactado primero, luego escribe tres guiones (---) en una línea sola, y luego **únicamente el JSON limpio**, sin ningún otro contenido.
-                //         `;
 
                 const prompt = `
                         Este es el texto de un CV extraído de un archivo PDF o DOCX.
 
                         Tu tarea es realizar dos cosas:
 
-                        1. Reescribe el texto como un resumen profesional claro, organizado y fácil de leer, sin errores gramaticales.
+                        1. Reescribe el texto como una ficha profesional clara, organizada y fácil de leer, usando un formato de texto plano estructurado. 
+                        Utiliza etiquetas como: "Nombre completo:", "Puesto:", "Resumen:", "Contacto:", "Experiencia laboral:", "Educación:", "Habilidades:", "Idiomas:", etc. 
+                        Presenta cada bloque en líneas separadas, con formato limpio y legible, como si fuera un resumen tipo ficha técnica.
 
                         2. Extrae la información clave del CV y devuélvela en un objeto JSON con la siguiente estructura EXACTA. No incluyas nada antes ni después del JSON (no agregues explicaciones, etiquetas como "json", bloques de código con \`\`\`, ni ningún texto adicional).
 

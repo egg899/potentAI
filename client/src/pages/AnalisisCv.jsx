@@ -14,6 +14,7 @@ const Analisis = () => {
  const [textoCV, setTextoCV] = useState(''); 
  const [estructuraCV, setEstructuraCV] = useState(null);
  const { user, loading } = useContext(UserContext);
+ const [ errorEstructura, setErrorEstructura ] = useState(false);
 
  const [openCreateModal, setOpenCreateModal] = useState(false);
 
@@ -73,19 +74,39 @@ console.log('id', id);
           // console.log("Respuesta de mejora: ", mejora.data);
           // console.log("Estructura lista para guardar: ", mejora.data.estructura);
           console.log('Todo junto: ', mejora.data);
-          setTextoCV(mejora.data.resumen);
-          setEstructuraCV(mejora.data.estructura);
-          
+
+          const resumen = mejora.data.resumen;
+          const estructura = mejora.data.estructura;
+
+
+        // Validación básica del objeto estructura
+          const esValido =
+          estructura &&
+          typeof estructura === "object" &&
+          estructura.profileInfo &&
+          estructura.contactInfo &&
+          estructura.workExperience &&
+          estructura.education;
+
+
+          if(!esValido) {
+            setErrorEstructura(true);
+            setEstructuraCV(null);
+            return;
+          }
+
+
+          setTextoCV(resumen);
+          setEstructuraCV(estructura);
+          setErrorEstructura(false);
         }
 
     catch (error) {
       console.error("Error al mejorar el CV:", error.response?.data || error.message);
-    }    
-      
-      
-
-
-  }//handleMejoraCV
+      setErrorEstructura(true);
+      setEstructuraCV(null);
+    }   
+  }; //handleMejoraCV
 
   useEffect(() => {
       if(cvFile){
@@ -121,7 +142,7 @@ console.log('id', id);
           file:text-sm file:font-semibold
           file:bg-purple-50 file:text-purple-700
           hover:file:bg-purple-100
-          mb-4"
+          mb-4 cursor-pointer"
       />
 
 
@@ -162,6 +183,11 @@ console.log('id', id);
           <h3 className="text-2xl font-bold text-gray-800 mb-6">Texto Extraído</h3>
           <pre style={{ whiteSpace: 'pre-wrap' }}>{textoCV}</pre>
 
+          {errorEstructura && (
+            <div className="mt-6 text-red-600 font-semibold">
+              ⚠️ Hubo un problema al interpretar tu CV. Intentá nuevamente o probá con otro archivo.
+            </div>
+          )}
 
           {estructuraCV && Object.keys(estructuraCV).length > 0 && (
             <div className="grid grid-cols-1  gap-4 md:gap-7 pt-1 pb-6 md:px-0">                

@@ -99,10 +99,11 @@ const CreateResumeForm = ({ estructuraCV = null, onSuccess }) => {
       }
 
     } catch (error) {
+      console.error(error);
       if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else {
-        setError("Algo salió mal. Por favor, intente nuevamente.");
+        setError("Algo salió mal. Por favor, intentá nuevamente.");
       }
     }
   };
