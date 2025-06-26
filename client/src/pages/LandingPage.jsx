@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import HERO_IMG from '../assets/hero-img.png';
 import Modal from '../components/Modal';
@@ -14,6 +14,13 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [currentPage, setCurrentPage] = useState("login");
+  const [bounce, setBounce] = useState(true);
+
+  useEffect(() =>{
+    const timer = setTimeout(() => setBounce(false), 2500); 
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const handleCTA = () => {
     if(!user){
@@ -53,7 +60,7 @@ const LandingPage = () => {
         <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
           <h1 className="text-5xl font-bold mb-6 leading-tight color-primary-black">
             {capitalizeFirst('diseñá el curriculum vitae')} {" "}
-            <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#7182ff_0%,_#3cff52_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
+            <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#13afa4_0%,_#13afa4_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
                {capitalizeFirst('que tu talento merece.')}
             </span>
           </h1>
@@ -61,10 +68,10 @@ const LandingPage = () => {
             Haz un Curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
           </p>
           <button 
-            className="bg-primary-black text-sm font-semibold text-white px-8 py-3 mb-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+            className={`bg-primary-black text-lg sm:text-xl font-bold text-white px-10 py-5 mb-6 rounded-xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer ${bounce ? 'animate-bounce': ''}`}
             onClick={handleCTA}
           >
-            Empieza Aqui
+            Empieza Aquí
           </button>
         </div>
 

@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import ProfileInfoCard from "../Cards/ProfileInfoCard";
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo';
+import { UserContext } from '../../context/userContext';
 
-const navigation = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Dashboard', href: '/dashboard' },
-];
+
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const {user} = useContext(UserContext);
+
+
+
+  const navigation = [
+  { name: 'Inicio', href: '/' },
+  ...(user ? [{ name: 'Análisis de CV', href: `/analisis/${user._id}` }] : []),
+  { name: 'Dashboard', href: '/dashboard' },
+];
+// console.log('user desde el Nav', user);
   return (
     <div className="h-auto bg-white border-b border-gray-200/50 backdrop-blur-[2px] py-2.5 px-4 md:px-0 sticky top-0 z-30">
       <div className="container mx-auto flex flex-wrap items-center justify-between gap-4">
@@ -33,6 +41,7 @@ const Navbar = () => {
               Constructor de Curriculums Vitae
             </NavLink>
           </h2>
+          
         </div>
 
         {/* Botón hamburguesa (solo mobile) */}
@@ -74,6 +83,10 @@ const Navbar = () => {
             </NavLink>
           ))}
 
+         
+
+
+
           <NavLink
             to="/jobs"
             className={({ isActive }) =>
@@ -108,6 +121,8 @@ const Navbar = () => {
                 {item.name}
               </NavLink>
             ))}
+
+            
 
             <NavLink
               to="/jobs"

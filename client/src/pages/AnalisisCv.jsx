@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance'; 
 import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
@@ -14,7 +14,7 @@ const Analisis = () => {
  const [textoCV, setTextoCV] = useState(''); 
  const [estructuraCV, setEstructuraCV] = useState(null);
  const { user, loading } = useContext(UserContext);
- 
+
  const [openCreateModal, setOpenCreateModal] = useState(false);
 
   const handleFileChange = (e) => {
@@ -101,7 +101,7 @@ console.log('id', id);
      <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
  
         <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Subí tu CV para análisis</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">Subí tu CV para análisis  </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div>
@@ -110,6 +110,7 @@ console.log('id', id);
                 <span className="font-semibold"> PDF</span> o
                 <span className="font-semibold"> DOCX</span>
               </label>
+
 
       <input
         type="file"
@@ -122,6 +123,18 @@ console.log('id', id);
           hover:file:bg-purple-100
           mb-4"
       />
+
+
+      <div className="mt-4">
+                   
+                    También podés ingresar tu CV manualmente haciendo click{" "}  
+                     <Link 
+                        to="/dashboard"
+                        className="text-purple-600 hover:underline font-semibold "
+                     >
+                      aquí
+                    </Link>
+                  </div>
     </div>
 
     <div className="flex justify-start md:justify-end">
@@ -160,7 +173,7 @@ console.log('id', id);
               
                         <h3 className="font-medium text-gray-800">Adherir el Curriculum</h3>
                       </div>
-                
+                  
                   </div>
           )}
         <Modal
