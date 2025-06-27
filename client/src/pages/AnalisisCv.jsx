@@ -57,11 +57,11 @@ console.log('id', id);
   }//handleSubmitCV
 const laburo = JSON.parse(localStorage.getItem("Laburo"));
 if(laburo){
-    alert('Puesto desde los laburos: ESTE ITEM EXISTE!!!!');
+    // alert('Puesto desde los laburos: ESTE ITEM EXISTE!!!!');
     console.log('Laburito: ', laburo);
-    alert( `Laburito Descripción: ${laburo.description}`);
+    // alert( `Laburito Descripción: ${laburo.description}`);
     }else{
-      alert('No existe');
+      // alert('No existe');
     }
   const handleMejoraCV = async() => {
     const textoExtraido = textoCV;
