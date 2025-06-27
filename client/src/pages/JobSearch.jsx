@@ -76,7 +76,7 @@ const JobCard = ({ job, onViewDetails }) => (
                     Publicado el {moment(job.createdAt).format('DD/MM/YYYY')}
                 </p>
                 <button
-                    className="bg-[#3cff52] text-white px-4 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                    className="bg-[#32baa5] text-white px-4 py-2 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                     onClick={() => onViewDetails(job._id)}
                 >
                     Ver Detalles

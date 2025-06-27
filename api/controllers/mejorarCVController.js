@@ -6,7 +6,7 @@ const openai = new OpenAI({
     baseURL: 'https://api.groq.com/openai/v1'  
 });
 
-console.log('openai: ',openai);
+// console.log('openai: ',openai);
 
 export const mejorarYParsearCV = async (req, res) => {
 

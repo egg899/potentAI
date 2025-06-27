@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/userContext';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
@@ -9,6 +10,7 @@ import Modal from '../components/Modal';
 
 const JobDetails = () => {
     const { id } = useParams();
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const [job, setJob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +22,7 @@ const JobDetails = () => {
     const [applySuccess, setApplySuccess] = useState('');
     const [isApplying, setIsApplying] = useState(false);
 
+console.log()
     useEffect(() => {
         const fetchJobDetails = async () => {
             try {
@@ -36,7 +39,16 @@ const JobDetails = () => {
         };
 
         fetchJobDetails();
+       
     }, [id]);
+     console.log('Set Jobs: ', job);
+     console.log('User: ', user);
+
+    const handleCTA = () => {
+        // alert();
+        const laburo = localStorage.setItem("Laburo", JSON.stringify(job));
+        navigate(`/analisis/${user._id}`);
+    }//handleCTA
 
     // Obtener los CVs del usuario al abrir el modal
     const fetchUserResumes = async () => {
@@ -78,7 +90,7 @@ const JobDetails = () => {
         return (
             <DashboardLayout>
                 <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3cff52]"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#32baa5]"></div>
                 </div>
             </DashboardLayout>
         );
@@ -105,7 +117,7 @@ const JobDetails = () => {
             <div className="container mx-auto px-4 py-8">
                 <button
                     onClick={() => navigate('/jobs')}
-                    className="text-[#3cff52] hover:underline mb-6 flex items-center"
+                    className="text-[#32baa5] hover:underline mb-6 flex items-center cursor-pointer"
                 >
                     ← Volver a la lista de trabajos
                 </button>
@@ -152,7 +164,7 @@ const JobDetails = () => {
                     <div className="flex justify-end">
                         <button
                             onClick={() => setShowApplyModal(true)}
-                            className="bg-[#3cff52] text-white px-6 py-3 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                            className="bg-[#32baa5] text-white px-6 py-3 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                         >
                             Aplicar Ahora
                         </button>
@@ -160,10 +172,10 @@ const JobDetails = () => {
                 </div>
             </div>
             <Modal isOpen={showApplyModal} onClose={() => setShowApplyModal(false)} title="Selecciona un CV para postularte">
-                <div className="space-y-4">
+                <div className="space-y-4 m-8">
                     {userResumes.length === 0 && <p>No tienes CVs guardados.</p>}
                     {userResumes.map((resume) => (
-                        <div key={resume._id} className={`border p-3 rounded flex items-center gap-4 cursor-pointer ${selectedResumeId === resume._id ? 'border-[#3cff52] bg-[#eaffea]' : 'border-gray-200'}`} onClick={() => setSelectedResumeId(resume._id)}>
+                        <div key={resume._id} className={`border p-3 rounded flex items-center gap-4 cursor-pointer hover:border-[#3cff52] hover:bg-[#eaffea] transition-colors ${selectedResumeId === resume._id ? 'border-[#3cff52] bg-[#eaffea]' : 'border-gray-200'}`} onClick={() => setSelectedResumeId(resume._id)}>
                             <span className="font-semibold">{resume.title}</span>
                             <span className="text-xs text-gray-500 ml-auto">Actualizado: {new Date(resume.updatedAt).toLocaleDateString()}</span>
                         </div>
@@ -171,12 +183,14 @@ const JobDetails = () => {
                     {applyError && <p className="text-red-500 text-sm">{applyError}</p>}
                     {applySuccess && <p className="text-green-600 text-sm">{applySuccess}</p>}
                     <button
-                        className="bg-[#3cff52] text-white px-4 py-2 rounded hover:bg-[#32baa5] transition-colors w-full mt-2"
+                        className="bg-[#32baa5] text-white px-4 py-2 rounded hover:bg-[#32baa5]/90 transition-colors w-full mt-2 cursor-pointer"
                         onClick={handleApply}
                         disabled={isApplying}
                     >
                         {isApplying ? 'Enviando...' : 'Confirmar Postulación'}
                     </button>
+                    <button className="bg-[#32baa5] text-white px-4 py-2 rounded hover:bg-[#32baa5]/90 transition-colors w-full mt-2 cursor-pointer"
+                        onClick={handleCTA}> Crear CV para esta posición </button>
                 </div>
             </Modal>
         </DashboardLayout>
