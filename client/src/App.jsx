@@ -48,6 +48,14 @@ const App = () => {
                   </ProtectedEmployerRoute>
                 }
               />
+              <Route 
+                path="/jobs/create" 
+                element={
+                  <ProtectedEmployerRoute>
+                    <EmployerDashboard />
+                  </ProtectedEmployerRoute>
+                }
+              />
             </Routes>
 
             <Toaster
