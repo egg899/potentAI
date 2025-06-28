@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useRef} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   LuArrowLeft,
   LuCircleAlert,
@@ -33,6 +33,16 @@ import ThemeSelector from './ThemeSelector.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
   const navigate = useNavigate();
+//   const location = useLocation();
+  
+//   let laburo = location.state?.laburo;
+  
+// if (!laburo) {
+//   const storedLaburo = localStorage.getItem("Laburo");
+//   laburo = storedLaburo ? JSON.parse(storedLaburo) : null;
+// }
+
+
 
   const resumeRef = useRef(null);
   const resumeDownloadRef = useRef(null);
@@ -45,6 +55,7 @@ const EditResume = () => {
   const [resumeData, setResumeData] = useState({
     title:"",
     thumbnailLink:"",
+    jobId:null,
     profileInfo: {
       profileImg:null,
       profilePreviewUrl: "",
@@ -465,6 +476,7 @@ interests: [""],
           setResumeData((prevState) => ({
             ...prevState,
             title: resumeInfo?.title || "Undefined",
+            jobId:resumeInfo?.jobId || null,
             template: resumeInfo?.template || prevState?.template,
             profileInfo: resumeInfo?.profileInfo || prevState?.profileInfo,
             contactInfo: resumeInfo?.contactInfo || prevState?.contactInfo,
@@ -487,45 +499,7 @@ interests: [""],
     }
   };
 
-  //Sube Thumbnail e imagen de perfil de los thumbnails
-  // const uploadResumeImages = async() => {
-  //   try {
-  //     setIsLoading(true);
-      
-  //     // Crear un FormData para enviar las imágenes
-  //     const formData = new FormData();
-      
-  //     // Agregar la imagen de perfil si existe
-  //     if (resumeData.profileInfo.profileImg instanceof File) {
-  //       formData.append('profileImg', resumeData.profileInfo.profileImg);
-  //     }
 
-  //     // Enviar las imágenes al servidor
-  //     const response = await axiosInstance.post(
-  //       API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
-  //       formData,
-  //       {
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       }
-  //     );
-
-  //     // Actualizar el currículum con las URLs de las imágenes
-  //     await updateResumeDetails(
-  //       response.data.thumbnailLink,
-  //       response.data.profilePreviewUrl
-  //     );
-
-  //     toast.success("Currículum guardado exitosamente");
-  //     navigate("/dashboard");
-  //   } catch (error) {
-  //     console.error("Error al guardar el currículum:", error);
-  //     toast.error("Error al guardar el currículum");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const uploadResumeImages = async() => {
     try{
@@ -685,8 +659,13 @@ interests: [""],
                   <span className="hidden md:block">Vista Previa y Descarga</span> 
                   </button>
               </div> {/* Botones de  Descarga, borrado y vista previa*/}
+              {console.log('Resuem Data de Edit Resume',resumeData)}
+              {resumeData?.jobId && (
+                <div className="bg-yellow-100 border-yellow-300 text-yellow-800 p-4 rounded-md mb-4 text-sm">
+                    Estás editando este CV para aplicar al empleo: <strong>{resumeData.jobId.title}</strong>
 
-              
+                </div>
+              )}
            </div>
 
 

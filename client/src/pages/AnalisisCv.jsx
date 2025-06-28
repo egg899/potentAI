@@ -225,6 +225,7 @@ if(laburo){
             <div className="">
               <CreateResumeForm 
               estructuraCV={estructuraCV}
+              laburo={parsedLaburo}
               onSuccess={()=>{
                 setOpenCreateModal(false);
               }}/>

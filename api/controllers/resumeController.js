@@ -55,7 +55,8 @@ export const createResume = async (req, res) => {
       projects = [],
       certifications = [],
       languages = [],
-      interests = []
+      interests = [],
+      jobId,
     } = req.body;
 
     //Verificar si ya existe un CV con el mismo titulo para este usuario
@@ -68,6 +69,7 @@ export const createResume = async (req, res) => {
     const newResume = await Resume.create({
       userId: req.user._id,
       title,
+      jobId,
       profileInfo: {
         fullName: profileInfo.fullName || "",
         designation: profileInfo.designation || "",
@@ -117,7 +119,7 @@ export const getUserResumes = async (req, res) => {
 //Ver Curriculum por Id
 export const getResumeById = async (req, res) => {
     try {
-       const resume = await Resume.findOne({ _id: req.params.id, userId: req.user._id });
+       const resume = await Resume.findOne({ _id: req.params.id, userId: req.user._id }).populate('jobId');
        if(!resume) {
         return res.status(404).json({ message:"CV no encontrado" })
        }     

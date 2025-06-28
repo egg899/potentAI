@@ -20,6 +20,7 @@ const ResumeSchema = new mongoose.Schema({
         colorPalette: [String]
 
     },
+    
     profileInfo: {
         
         profilePreviewUrl : String,
@@ -81,9 +82,14 @@ const ResumeSchema = new mongoose.Schema({
         }
     ],
     interests: [String],
-   
+   jobId: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Job",
+        required: false,//opcional
+    },
 
 },
+
 {
     timestamps: { createdAt: "createdAt", updatedAt: "updatedAt"},
 }
