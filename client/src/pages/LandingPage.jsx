@@ -17,7 +17,7 @@ const LandingPage = () => {
   const [bounce, setBounce] = useState(true);
 
   useEffect(() =>{
-    const timer = setTimeout(() => setBounce(false), 500); 
+    const timer = setTimeout(() => setBounce(false), 1500); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -55,7 +55,7 @@ const LandingPage = () => {
             </button>
           )}
         </header>
-<div className="flex flex-col md:flex-row items-center px-10 py-8 bg-primary-turquoise-015 mb-10">
+<div className="flex flex-col md:flex-row items-center px-10 py-8 bg-primary-turquoise-015 mb-10 rounded-md border-[1px] border-[#13afa4] shadow-lg">
         {/* Hero Content */}
         <div className="w-full md:w-1/2 pr-4 mb-4 md:mb-0 mb-10">
           <h1 className="text-5xl font-bold mb-6 leading-tight color-primary-black">
@@ -68,11 +68,15 @@ const LandingPage = () => {
             Haz un Curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
           </p>
           <button 
-            className={`bg-primary-black text-lg sm:text-xl font-bold text-white px-10 py-5 mb-6 rounded-xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer ${bounce ? 'animate-bounce': ''}`}
+            className={`bg-[#13afa4] text-lg sm:text-xl font-bold text-white px-10 py-5 mb-6 
+              rounded-xl hover:bg-gray-800 transition-all duration-300 
+              transform hover:scale-105 shadow-lg cursor-pointer 
+              border-4 border-white outline outline-[1.5px] outline-[#13afa4]
+              ${bounce ? 'animate-bounce' : ''}`}
             onClick={handleCTA}
-          >
-            Empieza Aquí
-          </button>
+            >
+              Empieza Aquí
+            </button>
         </div>
 
         <div className="w-full md:w-1/2">

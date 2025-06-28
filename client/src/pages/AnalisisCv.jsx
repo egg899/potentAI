@@ -55,7 +55,11 @@ console.log('id', id);
 
 
   }//handleSubmitCV
-const laburo = JSON.parse(localStorage.getItem("Laburo"));
+
+const laburo = localStorage.getItem("Laburo");
+const parsedLaburo = laburo ? JSON.parse(laburo) : null;
+
+
 if(laburo){
     // alert('Puesto desde los laburos: ESTE ITEM EXISTE!!!!');
     console.log('Laburito: ', laburo);
@@ -75,7 +79,10 @@ if(laburo){
 
 
     try {
-           const mejora = await axiosInstance.post(API_PATHS.RESUME.mejorar, { textoExtraido });
+           const mejora = await axiosInstance.post(API_PATHS.RESUME.mejorar, { 
+            textoExtraido,
+            laburo: parsedLaburo
+           });
           // const mejora = await axiosInstance.post('api/cv/mejorar', { textoExtraido });
           // console.log("Respuesta de mejora: ", mejora.data);
           // console.log("Estructura lista para guardar: ", mejora.data.estructura);
@@ -171,7 +178,7 @@ if(laburo){
         className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200 cursor-pointer
           ${cvFile ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-300 cursor-not-allowed'}`}
       >
-        Analizar CV
+        Extraer CV
       </button>
 
 
