@@ -1,7 +1,8 @@
-import React from 'react'
-import { useContext } from 'react';
+import React, {useState, useContext} from 'react';
+// import { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 
 const ProfileInfoCard = () => {
     const { user, clearUser } = useContext(UserContext);
@@ -10,6 +11,8 @@ const ProfileInfoCard = () => {
     const isProfilePage = location.pathname === "/profile";
     const isDashboardPage = location.pathname === "/employer/dashboard";
     const isJobsPage = location.pathname === "/jobs";
+
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleCTA = () => {
         navigate("/profile");
@@ -43,52 +46,83 @@ const ProfileInfoCard = () => {
                     className="w-11 h-11 bg-gray-300 rounded-full mr-3"
                 />
                 </div>
-                <div>
-                    <div className="text-[15px] font-bold leading-3">
+                <div className="relative inline-block">
+                    <div className="text-[15px] font-bold leading-3 flex items-center gap-1">
                         {user.name || ""}
+                        
+                         <button onClick={() => setIsOpen(!isOpen)}  className="focus:outline-none mt-2 text-[#32baa5] flex items-center">
+                    
+                            <ChevronDown
+                                size={20}
+                                strokeWidth={2.5}
+                                className={`transition-transform duration-300 cursor-pointer ${isOpen ? "rotate-180" : ""}`}
+                            />
+
+                        </button>
+
+
                     </div>
+
                     <div className="text-[12px] text-gray-600">
                         {getUserTypeText(user.userType)}
+                       
                     </div>
-                    <div className="flex items-center gap-2">
-                        {!isProfilePage && (
+
+                
+                    
+                {/* Menú desplegable */}
+
+                {isOpen && (
+                    <div className="absolute left-0 mt-2 bg-white shadow-lg rounded p-3 z-50 min-w-[180px] flex flex-col space-y-1">
+                            {!isProfilePage && (
                             <button
-                                className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
-                                onClick={handleCTA}
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleCTA();
+                                }}
                             >
                                 Perfil
                             </button>
-                        )}
-                        {user.userType === 'job_seeker' && !isJobsPage && (
-                            <>
-                                <span className="text-gray-400">|</span>
-                                <button
-                                    className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
-                                    onClick={handleJobs}
-                                >
-                                    Buscar Trabajos
-                                </button>
-                            </>
-                        )}
-                        {user.userType === 'employer' && !isDashboardPage && (
-                            <>
-                                <span className="text-gray-400">|</span>
-                                <button
-                                    className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
-                                    onClick={handleDashboard}
-                                >
-                                    Dashboard
-                                </button>
-                            </>
-                        )}
-                        <span className="text-gray-400">|</span>
-                        <button
-                            className="text-[#32baa5] text-sm font-semibold cursor-pointer hover:underline"
-                            onClick={handleLogout}
-                        >
+                            )}
+
+                            {user.userType === 'job_seeker' && !isJobsPage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleJobs();
+                                }}
+                            >
+                                Buscar Trabajos
+                            </button>
+                            )}
+
+                            {user.userType === 'employer' && !isDashboardPage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleDashboard();
+                                }}
+                            >
+                                Dashboard
+                            </button>
+                            )}
+
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleLogout();
+                                }}
+                            >
                             Logout
-                        </button>
-                    </div>
+                            </button>
+                        </div>
+
+                )}
+                    
                 </div>
             </div>
         )
