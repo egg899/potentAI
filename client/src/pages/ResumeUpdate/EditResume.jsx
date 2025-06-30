@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useRef} from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, NavLink } from 'react-router-dom';
 import {
   LuArrowLeft,
   LuCircleAlert,
@@ -501,7 +501,7 @@ interests: [""],
 
 
 
-  const uploadResumeImages = async() => {
+  const uploadResumeImages = async(shouldNavigate = false) => {
     try{
       setIsLoading(true);
 
@@ -539,7 +539,11 @@ interests: [""],
       // Actualizar los detalles del resume
       await updateResumeDetails(thumbnailLink, profilePreviewLink);
       toast.success("CV actualizado con éxito!!! ");
-      navigate("/dashboard");
+
+      if(shouldNavigate) {
+        navigate("/dashboard");
+      }
+      
     }
     catch(error){
       console.error("Error al subir imágenes:", error);
@@ -641,7 +645,15 @@ interests: [""],
                   <span className="hidden md:block">Cambiar Tema</span>
               </button>
 
-
+               <button 
+                              className="btn-small-light"
+                              onClick={() => uploadResumeImages(false)}
+                              disabled={isLoading}
+                              
+                            >
+                              <LuSave className="text-[16px]"/>
+                              {isLoading ? "Actualizando..." : "Actualizar"}
+                            </button>
 
 
                 <button className="btn-small-light" onClick={handleDeleteResume}>
@@ -659,10 +671,15 @@ interests: [""],
                   <span className="hidden md:block">Vista Previa y Descarga</span> 
                   </button>
               </div> {/* Botones de  Descarga, borrado y vista previa*/}
-              {console.log('Resuem Data de Edit Resume',resumeData)}
+              {console.log('Resumen Data de Edit Resume', resumeData)}
               {resumeData?.jobId && (
                 <div className="bg-yellow-100 border-yellow-300 text-yellow-800 p-4 rounded-md mb-4 text-sm">
-                    Estás editando este CV para aplicar al empleo: <strong>{resumeData.jobId.title}</strong>
+                    Estás editando este CV para aplicar al empleo: 
+                    {" "}
+                    <NavLink className="hover:underline" to={`/job/${resumeData.jobId._id}`}>
+                    
+                    <strong>{resumeData.jobId.title}</strong>
+                    </NavLink>
 
                 </div>
               )}
@@ -697,13 +714,15 @@ interests: [""],
                             </button>
                             <button 
                               className="btn-small-light"
-                              onClick={uploadResumeImages}
+                              onClick={() => uploadResumeImages(true)}
                               disabled={isLoading}
                               
                             >
                               <LuSave className="text-[16px]"/>
                               {isLoading ? "Actualizando..." : "Guardar & Salir"}
                             </button>
+
+                           
 
                             <button 
                             className="btn-small"

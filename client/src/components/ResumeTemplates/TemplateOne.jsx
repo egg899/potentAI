@@ -277,10 +277,11 @@ const TemplateOne = ({
                       
                       </div>
                       <div className="mt-4">
-    
+                            {console.log('Projects',resumeData.projects)}
                       <Title text="Proyectos" color={themeColors[1]}/>
-
+                            
                         {resumeData.projects.map((project, index) =>(
+                          
                           <ProjectInfo
                          key={`projects_${index}`}
                          title={project.title}
