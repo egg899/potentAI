@@ -65,7 +65,7 @@ const LandingPage = () => {
             </span>
           </h1>
           <p className="text-lg color-primary-black mb-8">
-            Haz un Curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
+            Hacé un curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
           </p>
           <button 
             className={`bg-[#13afa4] text-lg sm:text-xl font-bold text-white px-10 py-5 mb-6 
@@ -75,7 +75,7 @@ const LandingPage = () => {
               ${bounce ? 'animate-bounce' : ''}`}
             onClick={handleCTA}
             >
-              Empieza Aquí
+              Empezá Acá
             </button>
         </div>
 
