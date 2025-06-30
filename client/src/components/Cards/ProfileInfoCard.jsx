@@ -14,12 +14,25 @@ const ProfileInfoCard = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
+     const handleInicio = () => {
+        navigate("/");
+    };
+
     const handleCTA = () => {
         navigate("/profile");
     };
 
-    const handleDashboard = () => {
-        navigate("/employer/dashboard");
+       const handleAnalizar = () => {
+        navigate(`/analisis/${user._id}`);
+    };
+
+    const handleDashboard = (buscando = false) => {
+        
+        if(buscando) {
+             navigate("/dashboard");
+        } else {
+            navigate("/employer/dashboard");
+        }
     };
 
     const handleJobs = () => {
@@ -74,6 +87,18 @@ const ProfileInfoCard = () => {
 
                 {isOpen && (
                     <div className="absolute left-0 mt-2 bg-white shadow-lg rounded p-3 z-50 min-w-[180px] flex flex-col space-y-1">
+                            
+                             {isProfilePage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleInicio();
+                                }}
+                            >
+                                Inicio
+                            </button>
+                            )}
                             {!isProfilePage && (
                             <button
                                 className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
@@ -83,6 +108,18 @@ const ProfileInfoCard = () => {
                                 }}
                             >
                                 Perfil
+                            </button>
+                            )}
+
+                             {user.userType === 'job_seeker' && !isJobsPage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleAnalizar();
+                                }}
+                            >
+                                Analizar CV
                             </button>
                             )}
 
@@ -104,6 +141,18 @@ const ProfileInfoCard = () => {
                                 onClick={() => {
                                 setIsOpen(false);
                                 handleDashboard();
+                                }}
+                            >
+                                Dashboard
+                            </button>
+                            )}
+
+                             {user.userType === 'job_seeker' && !isDashboardPage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleDashboard(true);
                                 }}
                             >
                                 Dashboard

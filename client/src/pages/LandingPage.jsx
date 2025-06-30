@@ -61,11 +61,12 @@ const LandingPage = () => {
           <h1 className="text-5xl font-bold mb-6 leading-tight color-primary-black">
             {capitalizeFirst('diseñá el curriculum vitae')} {" "}
             <span className="text-transparent bg-clip-text bg-[radial-gradient(circle,_#13afa4_0%,_#13afa4_100%)] bg-[length:200%_200%] bg-center animate-text-shin">
-               {capitalizeFirst('que tu talento merece.')}
+              que tu talento merece.
             </span>
           </h1>
           <p className="text-lg color-primary-black mb-8">
-            Hacé un curriculum en minutos con nuestro inteligente e intuitivo constructor de Curriculums.
+            Hacé un curriculum en minutos con nuestro inteligente e 
+            intuitivo constructor de Curriculums.
           </p>
           <button 
             className={`bg-[#13afa4] text-lg sm:text-xl font-bold text-white px-10 py-5 mb-6 
@@ -75,7 +76,7 @@ const LandingPage = () => {
               ${bounce ? 'animate-bounce' : ''}`}
             onClick={handleCTA}
             >
-              Empezá Acá
+              Empezá acá
             </button>
         </div>
 
@@ -96,7 +97,7 @@ const LandingPage = () => {
             <div className="text-center grid justify-items-center mb-2"><img src="../src/assets/images/edit_icon.png" alt="Icono plantilla" /></div>
               <h3 className="text-lg font-semibold mb-3">Edición fácil</h3>
               <p className="color-primary-black">
-                Actualiza tu currículum con vista previa en vivo y formato instantáneo.
+                Actualizá tu currículum con vista previa en vivo y formato instantáneo.
               </p>
             </div>
 
@@ -106,7 +107,7 @@ const LandingPage = () => {
                 Plantillas hermosas
               </h3>
               <p className="text-gray-600">
-                Elige entre plantillas modernas y profesionales que son fáciles de personalizar.
+                Elegí entre plantillas modernas y profesionales que son fáciles de personalizar.
               </p>
             </div>
 
@@ -114,7 +115,7 @@ const LandingPage = () => {
               <div className="text-center grid justify-items-center mb-2"><img src="../src/assets/images/download_icon.png" alt="icono editar" /></div>
               <h3 className="text-lg font-semibold mb-3">Exportación con un clic</h3>
               <p className="text-gray-600">
-                Descarga tu currículum al instante como un PDF de alta calidad con un solo clic.
+                Descargá tu currículum al instante como un PDF de alta calidad con un solo clic.
               </p>
             </div>
           </div>

@@ -9,7 +9,7 @@ import Tabs from '../../components/Tabs';
 import TemplateCard from '../../components/Cards/TemplateCard';
 import RenderResume from '../../components/ResumeTemplates/RenderResume';
 
-const TAB_DATA = [{label:"Templates"}, {label: "Color Palettes"}];
+const TAB_DATA = [{label:"Plantillas"}, {label: "Paleta de colores"}];
 const ThemeSelector = ({
     selectedTheme,
     setSelectedTheme,
@@ -63,7 +63,7 @@ const ThemeSelector = ({
           onClick={()=> handleThemeSelection()}
           >
             <LuCircleCheck className="text-[16px]"/>
-            Done
+            Listo
         </button>
       </div>
 
@@ -71,7 +71,7 @@ const ThemeSelector = ({
         <div className="col-span-12 md:col-span-5 bg-white">
           <div className="grid grid-cols-2 gap-5 max-h-[80vh] overflow-scroll custom-scrollbar cursor-pointer">
 
-            {tabValue === "Templates" && 
+            {tabValue === "Plantillas" && 
               resumeTemplates.map((template, index) => (
                 <TemplateCard
                   key={`templates_${index}`}
@@ -83,7 +83,7 @@ const ThemeSelector = ({
                 />
               ))}
 
-              {tabValue === "Color Palettes" && 
+              {tabValue === "Paleta de colores" && 
               themeColorPalette.themeOne.map((colors, index) => (
                 <ColorPalette
                   key={`palette_${index}`}

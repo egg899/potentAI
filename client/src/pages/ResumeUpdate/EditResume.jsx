@@ -766,7 +766,7 @@ interests: [""],
         <Modal 
           isOpen={openThemeSelector}
           onClose={() => setOpenThemeSelector(false)}
-          title="Cambia el Tema">
+          title="Cambiá el Tema">
             <div className="w-[90vw] h-[80vh]">
               <ThemeSelector
                 selectedTheme={resumeData?.template}
