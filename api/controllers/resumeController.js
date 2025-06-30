@@ -96,7 +96,7 @@ export const createResume = async (req, res) => {
     res.status(201).json(newResume);
   } catch (error) {
     console.error("Error al crear el CV:", error);
-    res.status(500).json({ message: "Se falló al crear el CV", error: error.message });
+    res.status(500).json({ message: "Se falló al crear el CV. Intentá más tarde", error: error.message });
   }
 };
 
