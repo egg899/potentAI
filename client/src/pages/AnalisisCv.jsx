@@ -1,20 +1,21 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import { useParams, Link } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance'; 
 import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
-import { UserContext } from '../context/userContext';
 import Modal from '../components/Modal';
 import { LuCirclePlus } from 'react-icons/lu';
 import CreateResumeForm from './Home/CreateResumeForm';
+import logoPotentia from '../assets/images/logo-potentia.png';
 const Analisis = () => {
 
  const { id } = useParams();
  const [cvFile, setCvFile] = useState();
  const [textoCV, setTextoCV] = useState(''); 
  const [estructuraCV, setEstructuraCV] = useState(null);
- const { user, loading } = useContext(UserContext);
+
  const [ errorEstructura, setErrorEstructura ] = useState(false);
+ const [isImprovingCV, setIsImprovingCV] = useState(false);
 
  const [openCreateModal, setOpenCreateModal] = useState(false);
 
@@ -77,6 +78,8 @@ if(laburo){
       return;
     }
 
+    setIsImprovingCV(true);
+    setErrorEstructura(false);
 
     try {
            const mejora = await axiosInstance.post(API_PATHS.RESUME.mejorar, { 
@@ -118,8 +121,23 @@ if(laburo){
       console.error("Error al mejorar el CV:", error.response?.data || error.message);
       setErrorEstructura(true);
       setEstructuraCV(null);
+    } finally {
+      setIsImprovingCV(false);
     }   
   }; //handleMejoraCV
+
+  const handleReset = () => {
+    setCvFile(null);
+    setTextoCV('');
+    setEstructuraCV(null);
+    setErrorEstructura(false);
+    setIsImprovingCV(false);
+    // Limpiar el input de archivo
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
 
   useEffect(() => {
       if(cvFile){
@@ -130,8 +148,32 @@ if(laburo){
 
   }, [cvFile, textoCV, estructuraCV]);
 
+  // Componente del Loader
+  const Loader = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl p-8 flex flex-col items-center shadow-2xl">
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="animate-spin rounded-full h-20 w-20 border-4 border-purple-200 border-t-purple-600"></div>
+          <img 
+            src={logoPotentia} 
+            alt="PotentAI Logo" 
+            className="absolute h-10 w-10"
+          />
+        </div>
+        <p className="text-gray-800 font-semibold text-lg mb-2">Mejorando tu CV...</p>
+        <p className="text-gray-500 text-sm">Esto puede tomar unos segundos</p>
+        <div className="flex space-x-1 mt-4">
+          <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></div>
+          <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+          <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <DashboardLayout>
+      {isImprovingCV && <Loader />}
      <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
  
         <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
@@ -171,7 +213,7 @@ if(laburo){
                   </div>
     </div>
 
-    <div className="flex justify-start md:justify-end">
+    <div className="flex justify-start md:justify-end gap-3">
       <button
         onClick={handleSubmitCV}
         disabled={!cvFile}
@@ -181,13 +223,23 @@ if(laburo){
         Extraer CV
       </button>
 
-
       <button
         onClick={handleMejoraCV}
-        disabled={!textoCV}
-        className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200 ms-3 cursor-pointer
-          ${textoCV ? 'bg-red-600 hover:bg-purple-700' : 'bg-gray-300 cursor-not-allowed'}`}
-      >Mejorar CV</button>
+        disabled={!textoCV || isImprovingCV}
+        className={`w-full md:w-auto py-3 px-6 rounded-lg text-white font-semibold transition-colors duration-200 cursor-pointer
+          ${textoCV && !isImprovingCV ? 'bg-red-600 hover:bg-purple-700' : 'bg-gray-300 cursor-not-allowed'}`}
+      >
+        {isImprovingCV ? 'Mejorando...' : 'Mejorar CV'}
+      </button>
+
+      {(cvFile || textoCV || estructuraCV) && (
+        <button
+          onClick={handleReset}
+          className="w-full md:w-auto py-3 px-6 rounded-lg text-gray-700 font-semibold transition-colors duration-200 cursor-pointer bg-gray-100 hover:bg-gray-200 border border-gray-300"
+        >
+          Actualizar
+        </button>
+      )}
     </div>
   </div>
 </div>
