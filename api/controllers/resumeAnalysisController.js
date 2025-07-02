@@ -9,7 +9,7 @@ export const extractTextFromCV = async (req, res) => {
 
     const pdfPath = path.resolve(req.file.path); // ruta absoluta
     console.log('Ruta absoluta del PDF:', pdfPath);
-    console.log('Archivo existe:', require('fs').existsSync(pdfPath));
+    // console.log('Archivo existe:', require('fs').existsSync(pdfPath));
 
     console.log('Enviando petición a Python con ruta:', pdfPath);
     

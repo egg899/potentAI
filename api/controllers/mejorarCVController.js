@@ -126,6 +126,7 @@ export const mejorarYParsearCV = async (req, res) => {
                         ${extraPrompt}
 
                         Devuelve el resumen redactado primero, luego escribe tres guiones (---) en una línea sola, y luego únicamente el JSON limpio, sin ningún otro contenido.
+                        Otra cosa, en contactInfo.email, solo pon un email, si pones mas que eso, este se rompe.
                         `;
 
 
