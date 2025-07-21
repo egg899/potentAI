@@ -13,7 +13,7 @@ import jobRoutes from './routes/jobRoutes.js';
 import analyzeRoutes from './routes/analyzeRoutes.js'
 import mejorarCVRoutes from './routes/mejorarCVRoutes.js'
 import applicationRoutes from './routes/applicationRoutes.js';
-
+import verifyEmailRoutes from './routes/verifyEmailRoutes.js'
 import multer from 'multer';
 // import pdfParse from 'pdf-parse';
 import mammoth from 'mammoth';
@@ -41,6 +41,7 @@ app.use(express.json());
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/auth", verifyEmailRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/employer", employerRoutes);
 app.use("/api/jobs", jobRoutes);

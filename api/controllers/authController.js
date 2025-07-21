@@ -1,8 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
-
+import { enviarCorreo } from "../services/emailService.js"; 
 
 dotenv.config();
 //Generate JWT Token
@@ -64,6 +65,9 @@ export const registerUser = async (req, res) => {
             });
         }
 
+
+        //Generamos el token de verificación
+        const verificationToken = crypto.randomBytes(32).toString('hex');
         //El password Hasheado
         try {
             const salt = await bcrypt.genSalt(10);
@@ -75,29 +79,49 @@ export const registerUser = async (req, res) => {
                 email,
                 password: hashedPassword,
                 profileImageUrl,
-                userType: userType || 'job_seeker'
+                userType: userType || 'job_seeker',
+                isVerified: false, ///// Esto es nuevo para la verficación
+                verificationToken
             });
+
+            // const verificationLink = `${process.env.BASE_URL}/auth/verify-email?user=${user._id}`;///Esto es el codigo de verificacion
+            const verificationLink = `${process.env.BASE_URL}/auth/verify/${verificationToken}`;
+    
+
+            //Armando el contenido del correo
+                    const html = `
+                        <h1>Hola ${name}</h1>
+                        <p>Gracias por registrarte. Por favor confirmá tu correo haciendo clic <a href="${verificationLink}">aquí</a>.</p>
+                        `;
+
+
+            //Enviar correo usando la funcion de enviarCorreo
+            await enviarCorreo(email, 'Confirma tu correo', html);
 
             console.log("Usuario creado exitosamente:", { 
                 id: user._id,
                 email: user.email,
-                userType: user.userType 
-            });
-
-            // Generar token
-            const token = generateToken(user._id);
-            if (!token) {
-                throw new Error("Error al generar el token");
-            }
-
-            res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                profileImageUrl: user.profileImageUrl,
                 userType: user.userType,
-                token
+                isVerified: user.isVerified, 
             });
+
+            return res.status(201).json({
+                message: "Registro exitoso. Te hemos enviado un correo para confirmar tu cuenta."
+                });
+            // Generar token
+            // const token = generateToken(user._id);
+            // if (!token) {
+            //     throw new Error("Error al generar el token");
+            // }
+
+            // res.status(201).json({
+            //     _id: user._id,
+            //     name: user.name,
+            //     email: user.email,
+            //     profileImageUrl: user.profileImageUrl,
+            //     userType: user.userType,
+            //     token
+            // });
         } catch (hashError) {
             console.error("Error al procesar la contraseña:", hashError);
             return res.status(500).json({ 
@@ -130,6 +154,12 @@ export const loginUser = async (req, res) => {
         if (!user) {
             return res.status(401).json({ 
                 message: "Email o contraseña inválida" 
+            });
+        }
+
+        if(!user.isVerified) {
+            return res.status(403).json({
+                message: 'Tu correo no ha sido verificado. Revisá tu bandeja de entrada.',
             });
         }
 

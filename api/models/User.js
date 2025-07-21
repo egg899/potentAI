@@ -11,7 +11,10 @@ const UserSchema = new mongoose.Schema(
       required: true,
       enum: ['job_seeker', 'employer'],
       default: 'job_seeker'
-    }
+    },
+    isVerified: { type: Boolean, default: false }, //Campo nuevo para saber si el usuario ha sido verificado
+    verificationToken: { type: String, default: null },  // <-- agregar este campo
+
   },
   { timestamps: true }
 );
