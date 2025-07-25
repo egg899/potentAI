@@ -246,3 +246,61 @@ export const updateUserProfile = async (req, res) => {
     }
 };
 
+// Recuperar contraseña - enviar email con token
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Por seguridad, no revelar si el email existe o no
+            return res.status(200).json({ message: 'Si el correo existe, se ha enviado un enlace para restablecer la contraseña.' });
+        }
+        // Generar token y expiración (1 hora)
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+        await user.save();
+
+        // Enlace de recuperación
+        const resetLink = `${process.env.BASE_URL}/auth/reset-password/${resetToken}`;
+        const html = `
+            <h1>Recuperar contraseña</h1>
+            <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+            <a href="${resetLink}">${resetLink}</a>
+            <p>Si no solicitaste este cambio, ignora este correo.</p>
+        `;
+        await enviarCorreo(user.email, 'Recuperar contraseña', html);
+        return res.status(200).json({ message: 'Si el correo existe, se ha enviado un enlace para restablecer la contraseña.' });
+    } catch (error) {
+        console.error('Error en forgotPassword:', error);
+        return res.status(500).json({ message: 'Error al procesar la solicitud.' });
+    }
+};
+
+// Cambiar contraseña usando el token
+export const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'El enlace es inválido o ha expirado.' });
+        }
+        if (!password || password.length < 8) {
+            return res.status(400).json({ message: 'La contraseña debe tener al menos 8 caracteres.' });
+        }
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        await user.save();
+        return res.status(200).json({ message: 'Contraseña actualizada correctamente.' });
+    } catch (error) {
+        console.error('Error en resetPassword:', error);
+        return res.status(500).json({ message: 'Error al procesar la solicitud.' });
+    }
+};
+

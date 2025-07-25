@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema(
     isVerified: { type: Boolean, default: false }, //Campo nuevo para saber si el usuario ha sido verificado
     verificationToken: { type: String, default: null },  // <-- agregar este campo
 
+    // Campos para recuperación de contraseña
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
+
   },
   { timestamps: true }
 );

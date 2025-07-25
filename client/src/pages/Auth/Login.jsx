@@ -104,6 +104,17 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
           />
         </div>
 
+        {/* Enlace para recuperar contraseña */}
+        <div className="flex justify-end mb-2">
+          <button
+            type="button"
+            className="text-xs text-primary underline cursor-pointer"
+            onClick={() => setCurrentPage && setCurrentPage("forgotPassword")}
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
+
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
         <button 

@@ -8,6 +8,7 @@ import { UserContext } from '../context/userContext';
 import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
 import Logo from '../components/Logo';
 import { capitalizeFirst } from '../utils/helper';
+import ForgotPassword from './Auth/ForgotPassword';
 
 const LandingPage = () => {
   const {user} = useContext(UserContext);
@@ -171,6 +172,9 @@ const LandingPage = () => {
             {currentPage === "login" && <Login setCurrentPage={setCurrentPage} setOpenAuthModal={setOpenAuthModal}/>}
             {currentPage === "signUp" && (
               <SignUp setCurrentPage={setCurrentPage} setOpenAuthModal={setOpenAuthModal}/>
+            )}
+            {currentPage === "forgotPassword" && (
+              <ForgotPassword setCurrentPage={setCurrentPage} />
             )}
           </div>
         </Modal>

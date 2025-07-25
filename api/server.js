@@ -5,26 +5,22 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import connectDB from './config/db.js';
-import crypto from 'crypto';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
-import analyzeRoutes from './routes/analyzeRoutes.js'
-import mejorarCVRoutes from './routes/mejorarCVRoutes.js'
+import analyzeRoutes from './routes/analyzeRoutes.js';
+import mejorarCVRoutes from './routes/mejorarCVRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
-import verifyEmailRoutes from './routes/verifyEmailRoutes.js'
-import multer from 'multer';
-// import pdfParse from 'pdf-parse';
-import mammoth from 'mammoth';
-import fs from 'fs';
+import verifyEmailRoutes from './routes/verifyEmailRoutes.js';
 
 dotenv.config();
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-// Middleware to handle CORS
+
+// Middleware CORS y JSON
 app.use(
     cors({
         origin: process.env.CLIENT_URL || '*',
@@ -32,30 +28,25 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
-
-//Connect to DataBase
 connectDB();
-
-//Middleware
 app.use(express.json());
 
-//Routes
+// Rutas de la API
 app.use("/api/auth", authRoutes);
 app.use("/api/auth", verifyEmailRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/employer", employerRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/ai", analyzeRoutes);
-//Ruta de prueba para la raíz
 app.use("/api/cv", mejorarCVRoutes);
 app.use("/api/applications", applicationRoutes);
+
+// Ruta de prueba para la raíz
 app.get('/', (req, res) => {
-    res.send("¡Servidor funcionando correctamente!")
-})
+    res.send("¡Servidor funcionando correctamente!");
+});
 
-
-
-//Serve uploads folder
+// Servir la carpeta de uploads (si la usas)
 app.use(
     "/uploads",
     express.static(path.join(__dirname, "uploads"), {
@@ -68,9 +59,15 @@ app.use(
     })
 );
 
-// const token = crypto.randomBytes(64).toString('hex');
-// console.log('El token: ', token);
-//Start Server
+// Servir archivos estáticos del frontend (Vite build)
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Redirigir todas las rutas desconocidas al index.html del frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
+
+// Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port at http://localhost:${PORT}`));
 

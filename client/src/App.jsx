@@ -10,6 +10,8 @@ import JobListings from './pages/JobListings';
 import Jobs from './pages/Jobs';
 import JobSearch from './pages/JobSearch';
 import JobDetails from './pages/JobDetails';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
 
 const App = () => {
   return (
@@ -32,6 +34,8 @@ const App = () => {
               <Route path="/job/:id" element={<JobDetails />} />
               <Route path="/analisis/:id" element={<Analisis />} />
               <Route path="/auth/verify/:token" element={<VerificacionCorreo />}/>
+              <Route path="/auth/forgot-password" element={<ForgotPassword/>}/>
+              <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 
