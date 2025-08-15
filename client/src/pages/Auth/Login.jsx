@@ -52,7 +52,7 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
       console.log("Respuesta del servidor:", response.data);
 
       const { token } = response.data;
-
+      
       if(token) {
         localStorage.setItem("token", token);
         updateUser(response.data);
@@ -99,7 +99,7 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             label="Contraseña"
-            placeholder="Mínimo 8 caracteres"
+            placeholder="Ingresar la contraseña"
             type="password"
           />
         </div>
