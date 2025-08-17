@@ -97,7 +97,7 @@ const JobCard = ({ job, onEdit, onDelete, onViewApplications }) => (
                     onDelete={() => onDelete(job._id)} 
                 />
                 <button
-                    className="px-4 py-2 text-white bg-[#3cff52] rounded-lg hover:bg-[#32baa5] transition-colors mt-2"
+                    className="bg-[#32baa5] text-white px-6 py-3 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                     onClick={() => onViewApplications(job._id)}
                 >
                     Postulaciones
@@ -124,6 +124,9 @@ const JobListings = () => {
     const [errorApplications, setErrorApplications] = useState('');
     const [showResumeModal, setShowResumeModal] = useState(false);
     const [selectedResume, setSelectedResume] = useState(null);
+    const [selectedApplication, setSelectedApplication] = useState(null);
+    const [showApplicationModal, setShowApplicationModal] = useState(false);
+
 
     const fetchJobs = async () => {
         try {
@@ -230,7 +233,7 @@ const JobListings = () => {
                     <h1 className="text-3xl font-bold">Publicaciones de Trabajo</h1>
                     <button
                         onClick={() => navigate('/employer/dashboard')}
-                        className="bg-[#3cff52] text-white px-6 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                        className="bg-[#32baa5] text-white px-6 py-3 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                     >
                         Nueva Publicación
                     </button>
@@ -262,26 +265,36 @@ const JobListings = () => {
                 </div>
             </div>
             <Modal isOpen={showApplicationsModal} onClose={() => setShowApplicationsModal(false)} title="Postulaciones recibidas">
-                <div className="space-y-4">
+                <div className="w-[90vw] md:w-[70vh] p-7 flex flex-col justify-center">
                     {loadingApplications && <p>Cargando postulaciones...</p>}
                     {errorApplications && <p className="text-red-500">{errorApplications}</p>}
                     {!loadingApplications && applications.length === 0 && <p>No hay postulaciones para este trabajo.</p>}
                     {applications.map((app) => (
-                        <div key={app._id} className="border p-3 rounded">
+                        <div key={app._id} className="border p-3 rounded mb-5">
                             <div className="font-semibold">{app.applicant?.name || app.applicant?.email || 'Usuario'}</div>
                             <div className="text-xs text-gray-500 mb-2">Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}</div>
                             <div className="font-medium">CV: {app.resume?.title || 'Sin título'}</div>
                             <button
-                                className="mt-2 px-3 py-1 bg-[#3cff52] text-white rounded hover:bg-[#32baa5]"
-                                onClick={() => { setSelectedResume(app.resume); setShowResumeModal(true); }}
+                                className="mt-2 px-3 py-1 bg-[#32baa5] text-white rounded hover:bg-[#32baa5]/90 cursor-pointer"
+                                onClick={() => { 
+                                    setSelectedResume(app.resume); 
+                                    setSelectedApplication(app);
+                                    setShowResumeModal(true); 
+                                    
+                                }}
                             >
-                                Ver CV
+                                Ver CV y Postulación
                             </button>
+
+                      
+                      
+
                         </div>
                     ))}
                 </div>
             </Modal>
-            <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
+            
+            {/* <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
                 <div className="relative w-full flex flex-col items-center justify-center min-h-[80vh]">
                     <button
                         className="absolute top-4 right-4 z-50 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition-colors"
@@ -303,7 +316,40 @@ const JobListings = () => {
                         )}
                     </div>
                 </div>
-            </Modal>
+            </Modal> */}
+            <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
+    <div className="relative w-full flex flex-col items-center justify-center">
+        <button
+            className="absolute top-4 right-4 z-50 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition-colors cursor-pointer"
+            onClick={() => setShowResumeModal(false)}
+            aria-label="Cerrar CV"
+        >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div className="w-full  max-h-[90vh] overflow-auto bg-white rounded-lg shadow-lg p-2 md:p-6">
+            {selectedResume && (
+                <RenderResume
+                    templateId={selectedResume.templateId || '01'}
+                    resumeData={selectedResume}
+                    colorPalette={['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
+                    containerWidth={Math.min(window.innerWidth * 0.6, 700)}
+                />
+            )}
+
+            {selectedApplication && (
+                <div className="mt-6 w-full border-t pt-4">
+                <p><strong>Estado:</strong> {selectedApplication.status}</p>
+                {/* <p><strong>Carta de presentación:</strong> {selectedApplication.coverLetter || "No enviada"}</p> */}
+                <p><strong>Fecha de postulación:</strong> {moment(selectedApplication.appliedAt).format('DD/MM/YYYY')}</p>
+                </div>
+            )}
+        </div>
+    </div>
+</Modal>
+
         </DashboardLayout>
     );
 };

@@ -141,7 +141,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
             onChange={(e) => handleChange(e)}
             name="password"
             label="Contraseña"
-            placeholder="Mínimo 6 caracteres, por favor"
+            placeholder="Mínimo 8 caracteres, por favor"
             type="password"
           />
 

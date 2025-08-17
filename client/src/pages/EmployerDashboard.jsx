@@ -89,7 +89,7 @@ const EmployerDashboard = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/employer/jobs')}
-                            className="bg-white text-[#3cff52] border border-[#3cff52] px-6 py-2 rounded-lg hover:bg-[#3cff52]/10 transition-colors"
+                            className="bg-[#32baa5] text-white px-6 py-3 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                         >
                             Ver Publicaciones
                         </button>
@@ -207,7 +207,7 @@ const EmployerDashboard = () => {
 
                             <button
                                 type="submit"
-                                className="w-full bg-[#3cff52] text-white py-2 px-4 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                                className="w-full bg-[#32baa5] text-white py-2 px-4 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                                 disabled={isLoading}
                             >
                                 {isLoading ? "CREANDO..." : "CREAR PUBLICACIÓN"}

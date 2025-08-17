@@ -18,7 +18,7 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                     placeholder="Buscar por título o descripción..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent"
                 />
             </div>
             <div className="relative">
@@ -28,7 +28,7 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                     placeholder="Ubicación..."
                     value={filters.location}
                     onChange={(e) => setFilters({...filters, location: e.target.value})}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent"
                 />
             </div>
             <div className="relative">
@@ -36,7 +36,7 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                 <select
                     value={filters.type}
                     onChange={(e) => setFilters({...filters, type: e.target.value})}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent appearance-none"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent appearance-none"
                 >
                     <option value="all">Todos los tipos</option>
                     <option value="full-time">Tiempo Completo</option>
@@ -45,7 +45,7 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                 </select>
             </div>
             <button
-                className="bg-[#3cff52] text-white py-3 px-6 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                className="bg-[#32baa5] text-white py-3 px-6 rounded-lg hover:bg-[#32baa5]/90 transition-colors"
             >
                 Buscar
             </button>
@@ -88,7 +88,7 @@ const JobCard = ({ job, onApply }) => (
                     </p>
                     <button
                         onClick={() => onApply(job._id)}
-                        className="bg-[#3cff52] text-white px-6 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                        className="bg-[#32baa5] text-white px-6 py-2 rounded-lg hover:bg-[#32baa5]/90 transition-colors"
                     >
                         Aplicar
                     </button>
@@ -146,7 +146,7 @@ const Jobs = () => {
     if (isLoading) return (
         <div className="min-h-screen bg-gray-50">
             <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3cff52]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#32baa5]"></div>
             </div>
         </div>
     );
@@ -169,13 +169,13 @@ const Jobs = () => {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => navigate('/login')}
-                                className="text-gray-600 hover:text-gray-900"
+                                className="text-gray-600 hover:text-gray-900 cursor-pointer"
                             >
                                 Iniciar Sesión
                             </button>
                             <button
                                 onClick={() => navigate('/signup')}
-                                className="bg-[#3cff52] text-white px-6 py-2 rounded-lg hover:bg-[#3cff52]/90 transition-colors"
+                                className="bg-[#32baa5] text-white px-6 py-2 rounded-lg hover:bg-[#32baa5]/90 transition-colors cursor-pointer"
                             >
                                 Registrarse
                             </button>

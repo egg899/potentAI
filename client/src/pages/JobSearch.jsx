@@ -17,13 +17,13 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                     placeholder="Buscar por título o descripción..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent"
                 />
             </div>
             <select
                 value={filters.type}
                 onChange={(e) => setFilters({...filters, type: e.target.value})}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent"
             >
                 <option value="all">Todos los tipos</option>
                 <option value="full-time">Tiempo Completo</option>
@@ -35,7 +35,7 @@ const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) =>
                 placeholder="Filtrar por ubicación..."
                 value={filters.location}
                 onChange={(e) => setFilters({...filters, location: e.target.value})}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3cff52] focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#32baa5] focus:border-transparent"
             />
         </div>
     </div>
@@ -146,7 +146,7 @@ const JobSearch = () => {
     if (isLoading) return (
         <DashboardLayout>
             <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3cff52]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#32baa5]"></div>
             </div>
         </DashboardLayout>
     );

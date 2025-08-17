@@ -36,6 +36,7 @@ const App = () => {
               <Route path="/auth/verify/:token" element={<VerificacionCorreo />}/>
               <Route path="/auth/forgot-password" element={<ForgotPassword/>}/>
               <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
+              
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 

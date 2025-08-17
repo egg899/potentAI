@@ -19,7 +19,8 @@ const applicationSchema = new mongoose.Schema({
     resume: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Resume',
-        required: false
+        required: false,
+        
     },
     coverLetter: {
         type: String,
