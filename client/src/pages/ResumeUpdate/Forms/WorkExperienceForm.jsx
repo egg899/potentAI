@@ -2,13 +2,16 @@ import React from 'react';
 import Input from '../../../components/Inputs/Input';
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  removeArrayItem}) => {
-  return (
+    return (
+    
     <div className="px-5 pt-5">
         <h2 className="text-lg font-semibold text-gray-900">Experiencia Laboral</h2>
 
         <div className="mt-4 flex flex-col gap-4 mb-3">
             {workExperience.map((experience, index) => (
+                
                 <div key={index} className="border border-gray-200/80 p-4 rounded-lg relative">
+                   
                     <div className="grid grid-cols-1 md:grid-cols-2 gp-4">
                         <Input
                            label="Company"
@@ -35,17 +38,31 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
                         <Input
                            label="Fecha de Inicio"
                            type="month"
-                           value={experience.startDate || ""}
-                           onChange= {({ target }) => 
-                            updateArrayItem(index, "startDate", target.value)
+                        //    value={experience.startDate || ""}//--> Hay que accionar aca
+                            value={
+                            experience.startDate
+                            ? experience.startDate.length === 4 // solo año
+                                ? `${experience.startDate}-01`
+                                : experience.startDate
+                            : ""
                         }
+
+                        
+                           onChange= {({ target }) => {
+
+                            updateArrayItem(index, "startDate", target.value);
+                           }
+                            
+                            
+                        }
+                       
                         />
 
 
                           <Input
                            label="Fecha de Finalización"
                            type="month"
-                           value={experience.endDate || ""}
+                           value={experience.endDate || ""}//--> Hay que accionar aca
                            onChange= {({ target }) => 
                             updateArrayItem(index, "endDate", target.value)
                         }

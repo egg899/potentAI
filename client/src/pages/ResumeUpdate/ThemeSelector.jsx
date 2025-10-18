@@ -19,7 +19,7 @@ const ThemeSelector = ({
   const resumeRef = useRef(null);
   const [baseWidth, setBaseWidth] = useState(800);
   
-  const [tabValue, setTabValue] = useState("Templates");
+  const [tabValue, setTabValue] = useState("Plantillas");
   const [selectedColorPalette, setSelectedColorPalette] = useState({
     colors: selectedTheme?.colorPalette,
     index: -1,
