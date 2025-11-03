@@ -1,5 +1,10 @@
 import axios from 'axios';
-import path from 'path';
+import fs from 'fs';
+import FormData from 'form-data';
+import dotenv from 'dotenv';
+
+// Carga variables de entorno desde .env
+dotenv.config();
 
 export const extractTextFromCV = async (req, res) => {
   try {
@@ -7,44 +12,41 @@ export const extractTextFromCV = async (req, res) => {
       return res.status(400).json({ error: 'No se subió ningún archivo' });
     }
 
-    const pdfPath = path.resolve(req.file.path); // ruta absoluta
-    console.log('Ruta absoluta del PDF:', pdfPath);
-    // console.log('Archivo existe:', require('fs').existsSync(pdfPath));
+    const filePath = req.file.path;
+    const originalName = req.file.originalname;
 
-    console.log('Enviando petición a Python con ruta:', pdfPath);
-    
-    const response = await axios.post('http://localhost:5001/ocr', {
-      pdf_path: pdfPath
-    });
+    console.log('Archivo recibido:', originalName);
+    console.log('Ruta temporal:', filePath);
 
-    console.log('Respuesta de Flask:', response.data);
-    console.log('Status de respuesta:', response.status);
+    // Crear FormData para OCR.space
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(filePath), { filename: originalName });
+    formData.append('language', 'spa');           // idioma español
+    formData.append('isOverlayRequired', 'false'); 
+    formData.append('OCREngine', '2');           // OCR Engine 2
+    // opcional: filetype si quieres forzar
+    // formData.append('filetype', 'PDF');
 
-    // Envía la respuesta al cliente frontend
-    res.status(200).json({ textoExtraido: response.data.texto });
+    console.log('Enviando archivo a OCR.space...');
+    const response = await axios.post(
+      'https://api.ocr.space/parse/image',
+      formData,
+      { headers: { ...formData.getHeaders(), apikey: process.env.OCR_API_KEY } }
+    );
+
+    fs.unlinkSync(filePath); // borrar archivo temporal
+
+    console.log('Respuesta completa OCR.space:', response.data);
+
+    const parsedResults = response.data.ParsedResults;
+    const texto = parsedResults && parsedResults.length > 0
+      ? parsedResults.map(p => p.ParsedText).join("\n")
+      : '';
+
+    res.status(200).json({ textoExtraido: texto });
 
   } catch (error) {
-    console.error('Error en extractTextFromCV:', error.message);
-    console.error('Error completo:', error);
-    
-    // Si es un error de axios, mostrar más detalles
-    if (error.response) {
-      console.error('Error response data:', error.response.data);
-      console.error('Error response status:', error.response.status);
-      return res.status(500).json({ 
-        error: 'Error al procesar el archivo', 
-        details: error.response.data 
-      });
-    }
-    
-    // Si es un error de red
-    if (error.code === 'ECONNREFUSED') {
-      return res.status(500).json({ 
-        error: 'Error al procesar el archivo', 
-        details: 'No se puede conectar al servicio de OCR' 
-      });
-    }
-    
-    res.status(500).json({ error: 'Error al procesar el archivo' });
+    console.error('Error procesando CV:', error);
+    res.status(500).json({ error: 'Error procesando el archivo', details: error.message });
   }
 };

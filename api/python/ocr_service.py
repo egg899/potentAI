@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
-import fitz # PyMuPDF
+import fitz  # PyMuPDF
 import logging
 
 # Configurar logging
@@ -8,6 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app)  # ✅ permite peticiones desde otros dominios (React, etc.)
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
@@ -33,11 +35,6 @@ def ocr():
 
         logger.info(f"Procesando archivo: {file_path}")
         
-        # Verificar que es un archivo PDF
-        if not file_path.lower().endswith('.pdf'):
-            logger.warning(f"Archivo no es PDF: {file_path}")
-            # Por ahora permitimos otros formatos para testing
-
         text = ""
         with fitz.Document(file_path) as doc:
             logger.info(f"Documento abierto, páginas: {len(doc)}")
@@ -46,16 +43,17 @@ def ocr():
                 text += page.get_text()
 
         logger.info(f"Texto extraído, longitud: {len(text)}")
-        return jsonify({ 'texto': text })        
+        return jsonify({'texto': text})        
 
     except Exception as e:
         logger.error(f"Error en OCR: {str(e)}", exc_info=True)
-        return jsonify({ 'error': str(e) }), 500
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    logger.info("Iniciando servicio OCR en puerto 5001")
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))  # ✅ Render asignará el puerto
+    logger.info(f"Iniciando servicio OCR en puerto {port}")
+    app.run(host="0.0.0.0", port=port, debug=False)

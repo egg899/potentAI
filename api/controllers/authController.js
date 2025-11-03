@@ -305,3 +305,50 @@ export const resetPassword = async (req, res) => {
     }
 };
 
+//Cambiar contraseña desde el perfil con el usuario logueado
+export const changePassword = async (req, res) => {
+    try {
+
+        const { currentPassword, newPassword } = req.body;
+        const userId =  req.user.id; // viene del middleware
+
+        // Verifica que se envian ambos campos
+        if(!currentPassword || !newPassword) {
+            return res.status(404).json({ message: "Por favor, complete todos los campos" });
+        }
+
+        // Validar longitud de la nueva contraseña
+        if (newPassword.length < 8) {
+            return res.status(400).json({ message: "La nueva contraseña debe tener al menos 8 caracteres" });
+        }
+
+
+        //Buscar el ususario por ID
+        const user = await User.findById(userId);
+        if(!user) {
+            return res.status(404).json({message: "Usuario no encontrado"});
+        }
+
+        // Verificar la contraseña actual
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if(!isMatch) {
+            return res.status(401).json({ message: "La contraseña actual es incorrecta." });
+        }
+
+        // Hashear y actualizar la nueva contraseña
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json({ message:  "Contraseña actualizada correctamente"});
+
+    }
+    catch (error) {
+        console.error("Error al cambiar la contraseña: ", error);
+        return res.status(500).json({ message: "Error en el servidror", error: error.messaage });
+    }
+
+
+
+}//cahngePassword
