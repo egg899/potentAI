@@ -28,7 +28,7 @@ const EducationDetailsForm = ({
                             updateArrayItem(index, "degree", target.value)
                         }
                         />
-
+                        
 
                          <Input
                           label="Institución"
@@ -41,9 +41,16 @@ const EducationDetailsForm = ({
                         />
 
                          <Input
-                           label="Fecha de Incio"
+                           label="Fecha de Incio "
                            type="month"
-                           value={education.startDate || ""}
+                           //value={education.startDate || ""}
+                            value={
+                            education.startDate
+                            ? education.startDate.length === 4 // solo año
+                                ? `${education.startDate}-01`
+                                : education.startDate
+                            : ""
+                        }
                            onChange= {({ target }) => 
                             updateArrayItem(index, "startDate", target.value)
                         }
@@ -52,7 +59,14 @@ const EducationDetailsForm = ({
                         <Input
                            label="Fecha de Finalización"
                            type="month"
-                           value={education.endDate || ""}
+                           //value={education.startDate || ""}
+                           value={
+                            education.endDate
+                            ? education.endDate.length === 4 // solo año
+                                ? `${education.endDate}-01`
+                                : education.endDate
+                            : `${education.startDate}-01`
+                        }
                            onChange= {({ target }) => 
                             updateArrayItem(index, "endDate", target.value)
                         }
@@ -82,7 +96,7 @@ const EducationDetailsForm = ({
                         onClick={() =>
                             addArrayItem({
                                degree:"",
-                               institution:"",
+                               Institution:"",
                                startDate:"",
                                endDate:"",
                              

@@ -38,7 +38,7 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
                         <Input
                            label="Fecha de Inicio"
                            type="month"
-                        //    value={experience.startDate || ""}//--> Hay que accionar aca
+                           //value={experience.startDate || ""}//--> Hay que accionar aca
                             value={
                             experience.startDate
                             ? experience.startDate.length === 4 // solo año
@@ -62,7 +62,14 @@ const WorkExperienceForm = ({workExperience, updateArrayItem, addArrayItem,  rem
                           <Input
                            label="Fecha de Finalización"
                            type="month"
-                           value={experience.endDate || ""}//--> Hay que accionar aca
+                           //value={experience.endDate || ""}//--> Hay que accionar aca
+                        value={
+                            experience.endDate
+                            ? experience.endDate.length === 4 // solo año
+                                ? `${experience.endDate}-01`
+                                : experience.endDate
+                            :`${experience.startDate}-01`
+                        }
                            onChange= {({ target }) => 
                             updateArrayItem(index, "endDate", target.value)
                         }
