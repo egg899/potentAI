@@ -150,6 +150,14 @@ interests: [""],
               if(!startDate || !endDate){
                 errors.push(`La fecha de inicio y finalización es requerida ${index + 1}`);
               }
+
+              else {
+                  const start = new Date(startDate);
+                  const end = new Date(endDate);
+                  if(start > end){
+                    errors.push(`La fecha de inicio no puede ser mayor que la fecha de fin ${index + 1}`);
+                  }
+                }
             }
           );
           break;
@@ -163,9 +171,16 @@ interests: [""],
               if(!institution?.trim()){
                 errors.push(`La institución es requerida en educación ${index + 1}`);
               }
-              if(!startDate || !endDate){
-                errors.push(`La fecha de inicio y finalización en educación es requerida ${index + 1}`);
+              if(!startDate ){
+                errors.push(`La fecha de inicio  en educación es requerida ${index + 1}`);
               }
+               else {
+                  const start = new Date(startDate);
+                  const end = new Date(endDate);
+                  if(start > end){
+                    errors.push(`La fecha de inicio no puede ser mayor que la fecha de fin ${index + 1}`);
+                  }
+                }
             });
           break;
 

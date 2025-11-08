@@ -312,7 +312,7 @@ const TemplateTwo = ({
                       </div>
 
                       <div className="mt-5">
-                            <Title text="Education" color={themeColors[1]}/>
+                            <Title text="Educación" color={themeColors[1]}/>
 
                         <div className="grid grid-cols-2 gap-3">
                             {resumeData.education.map((data, index) => {
@@ -322,8 +322,11 @@ const TemplateTwo = ({
                                   key={`education_${index}`}
                                   degree={data.degree}
                                   institution={data.institution}
+                                  // duration={`${formatYearMonth(
+                                  //   data.startDate)} - ${formatYearMonth(data.endDate)}`}
                                   duration={`${formatYearMonth(
-                                    data.startDate)} - ${formatYearMonth(data.endDate)}`}
+                                    data.startDate
+                                  )} - ${data.endDate && data.endDate !=="Present" && data.endDate !== "Presente" ? formatYearMonth(data.endDate): "Presente"}`}
                                 />
                                   )
                             })}
@@ -369,7 +372,7 @@ const TemplateTwo = ({
 
                   <div className="grid grid-cols-2 gap-10 mt-4">
                    <div className="">
-                              <Title text="Languages" color={themeColors[1]}/>
+                              <Title text="Idiomas" color={themeColors[1]}/>
 
                               <LanguageSection
                                 languages={resumeData.languages}

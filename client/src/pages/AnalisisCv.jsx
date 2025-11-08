@@ -16,7 +16,7 @@ const Analisis = () => {
 
  const [ errorEstructura, setErrorEstructura ] = useState(false);
  const [isImprovingCV, setIsImprovingCV] = useState(false);
-
+ const [isExtracting, setIsExtracting] = useState(false);
  const [openCreateModal, setOpenCreateModal] = useState(false);
 
   const handleFileChange = (e) => {
@@ -29,7 +29,7 @@ console.log('id', id);
 
   const handleSubmitCV = async() => {
     if(!cvFile) return;
-
+    setIsExtracting(true); //Inicia el loading
     try {
       const formData = new FormData();
       formData.append('cv', cvFile);
@@ -53,7 +53,10 @@ console.log('id', id);
       alert("Hubo un problema al analizar el CV.");
 
     }
+    finally {
+      setIsExtracting(false); // Termina el loading
 
+    }//finally
 
   }//handleSubmitCV
 
@@ -222,7 +225,6 @@ if(laburo){
       >
         Extraer CV
       </button>
-
       <button
         onClick={handleMejoraCV}
         disabled={!textoCV || isImprovingCV}
@@ -243,7 +245,18 @@ if(laburo){
     </div>
   </div>
 </div>
-{textoCV && (
+
+
+      {isExtracting && (
+        <div className="flex flex-col items-center justify-center mt-6">
+ <div
+      className="w-10 h-10 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"
+      style={{ borderTopColor: "transparent" }}
+    ></div>          <p className="mt-3 text-gray-700">Extrayendo texto del archivo...</p>
+        </div>
+    )}
+
+{!isExtracting && textoCV && (
   <div className="mt-5">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">Texto Extraído</h3>
           <pre style={{ whiteSpace: 'pre-wrap' }}>{textoCV}</pre>

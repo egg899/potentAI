@@ -86,7 +86,7 @@ export const mejorarYParsearCV = async (req, res) => {
                         "education": [
                             {
                             "degree": "",
-                            "Institution": "",
+                            "institution": "",
                             "startDate": "",
                             "endDate": ""
                             }

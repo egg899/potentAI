@@ -13,6 +13,7 @@ const EducationDetailsForm = ({
         <h2 className="text-lg font-semibold text-gray-900">Educación</h2>
 
         <div className="mt-4 flex flex-col gap-4 mb-3">
+          {console.log('lA INFO NENE: ',educationInfo)}
             {educationInfo.map((education, index) => (
                 <div 
                   key={index}  
@@ -96,7 +97,7 @@ const EducationDetailsForm = ({
                         onClick={() =>
                             addArrayItem({
                                degree:"",
-                               Institution:"",
+                               institution:"",
                                startDate:"",
                                endDate:"",
                              
