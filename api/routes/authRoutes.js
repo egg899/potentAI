@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, getUserProfile, updateUserProfile, forgotPassword, resetPassword } from "../controllers/authController.js";
+import { registerUser, loginUser, getUserProfile, updateUserProfile, forgotPassword, resetPassword, changePassword } from "../controllers/authController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/uploadMiddleware.js";
 const router = express.Router();
@@ -11,6 +11,7 @@ router.get("/profile", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);
 router.post("/forgot-password", forgotPassword); // Recuperar contraseña
 router.post("/reset-password/:token", resetPassword); // Cambiar contraseña con token
+router.post("/change-password", protect, changePassword);//Cambiar tu contraseña
 
 router.post("/upload-image", protect, upload.single("image"), (req, res) => {
     if(!req.file) {

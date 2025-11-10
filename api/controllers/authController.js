@@ -346,9 +346,9 @@ export const changePassword = async (req, res) => {
     }
     catch (error) {
         console.error("Error al cambiar la contraseña: ", error);
-        return res.status(500).json({ message: "Error en el servidror", error: error.messaage });
+        return res.status(500).json({ message: "Error en el servidror", error: error.message });
     }
 
 
 
-}//cahngePassword
+}//changePassword

@@ -8,7 +8,8 @@ export const API_PATHS = {
         GET_PROFILE: '/api/auth/profile',
         UPDATE_PROFILE: '/api/auth/profile',
         // VERIFY: `/api/auth/verify/${token}`
-        VERIFY: `/api/auth/verify/`
+        VERIFY: `/api/auth/verify/`,
+        CHANGE_PASSWORD: '/api/auth/change-password',
     },
     EMPLOYER: {
         GET_STATS: '/api/employer/stats',

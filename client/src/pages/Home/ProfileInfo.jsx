@@ -11,7 +11,7 @@ import Footer from '../../components/Footer';
 import Logo from '../../components/Logo';
 import { useProfile } from '../../context/ProfileContext';
 import { capitalizeFirst } from '../../utils/helper';
-
+import ChangePasswordForm from '../../components/Forms/ChangePasswordForm';
 const ProfileInfo = () => {
   const { user, loading, updateUser } = useContext(UserContext);
   const { selectedResume } = useProfile();
@@ -179,6 +179,10 @@ const ProfileInfo = () => {
                           >
                             Editar CV
                           </button>
+                          
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <ChangePasswordForm/>
                         </div>
                       </div>
                     </>
