@@ -12,6 +12,8 @@ import Logo from '../../components/Logo';
 import { useProfile } from '../../context/ProfileContext';
 import { capitalizeFirst } from '../../utils/helper';
 import ChangePasswordForm from '../../components/Forms/ChangePasswordForm';
+import Modal from '../../components/Modal';
+
 const ProfileInfo = () => {
   const { user, loading, updateUser } = useContext(UserContext);
   const { selectedResume } = useProfile();
@@ -24,6 +26,8 @@ const ProfileInfo = () => {
   const [success, setSuccess] = useState(null);
   const [resume, setResume] = useState(null);
   const [jobs, setJobs] = useState([]);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,6 +88,11 @@ const ProfileInfo = () => {
     setProfilePic(null);
     setPreview(user?.profileImageUrl || '');
   };
+
+const handleChangePassword = () => {
+  setOpenCreateModal(true);
+}
+
 
   const handleSave = async () => {
     try {
@@ -175,15 +184,13 @@ const ProfileInfo = () => {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => navigate("/dashboard")}
-                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
                           >
                             Editar CV
                           </button>
                           
                         </div>
-                        <div className="flex items-center gap-2">
-                          <ChangePasswordForm/>
-                        </div>
+                       
                       </div>
                     </>
                   )}
@@ -213,16 +220,22 @@ const ProfileInfo = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={handleEdit}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
                       >
                         Editar Perfil
                       </button>
                       <button
                         onClick={handleEditImage}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 cursor-pointer"
                       >
                         <LuCamera size={18} />
                         Cambiar Foto
+                      </button>
+                      <button
+                        onClick={handleChangePassword}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 cursor-pointer"
+>
+                         Cambiar Contraseña
                       </button>
                     </div>
                   ) : (
@@ -235,14 +248,26 @@ const ProfileInfo = () => {
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                       >
                         Cancelar
                       </button>
                     </div>
                   )}
                 </div>
+                {
 
+                  <Modal
+                    isOpen={openCreateModal}
+                    onClose={() =>{
+                      setOpenCreateModal(false);
+                    }}
+                  >
+                    <ChangePasswordForm/>
+
+                  </Modal>
+
+                }
                 {error && (
                   <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
                     {error}
