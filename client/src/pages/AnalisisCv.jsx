@@ -259,7 +259,13 @@ if(laburo){
 {!isExtracting && textoCV && (
   <div className="mt-5">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">Texto Extraído</h3>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{textoCV}</pre>
+          {/* <pre style={{ whiteSpace: 'pre-wrap' }}>{textoCV}</pre> */}
+          <textarea
+      value={textoCV}
+      onChange={(e) => setTextoCV(e.target.value)}
+      className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+      placeholder="El texto extraído aparecerá aquí y podrás editarlo..."
+    />
 
           {errorEstructura && (
             <div className="mt-6 text-red-600 font-semibold">
