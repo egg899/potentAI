@@ -186,8 +186,8 @@ if(laburo){
             <div>
               <label className="block text-base font-medium text-gray-700 mb-2">
                 Archivos permitidos:
-                <span className="font-semibold"> PDF</span> o
-                <span className="font-semibold"> DOCX</span>
+                <span className="font-semibold"> PDF</span> 
+                {/* <span className="font-semibold"> DOCX</span> */}
               </label>
 
 
