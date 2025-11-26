@@ -12,6 +12,9 @@ import JobSearch from './pages/JobSearch';
 import JobDetails from './pages/JobDetails';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
+import ChatBot from './components/ChatBot/ChatBot.jsx';
+
+
 
 const App = () => {
   return (
@@ -73,6 +76,7 @@ const App = () => {
               }}
             />
           </div>
+          <ChatBot/>
           <Footer />
         </Router>
       </div>
