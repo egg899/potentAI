@@ -6,4 +6,4 @@ export {Dashboard} from "./Home/Dashboard";
 export {ProfileInfo} from "./Home/ProfileInfo";
 export {EditResume} from "./ResumeUpdate/EditResume";
 export {Analisis} from "./AnalisisCv";
-
+export {ProcesarUrl} from "./ProcesarUrl";

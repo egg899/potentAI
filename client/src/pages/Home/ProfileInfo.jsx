@@ -50,6 +50,15 @@ const ProfileInfo = () => {
     }
   }, [user, selectedResume]);
 
+
+
+   // Protección de la RUTA
+    useEffect(() => {
+        if(!loading && !user) {
+            navigate("/"); // redirige si NO esta Logueado
+        }
+    }, [loading, user, navigate]);
+
   const fetchUserResume = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.RESUME.GET_USER_RESUMES);

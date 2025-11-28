@@ -45,6 +45,12 @@ export default function ChatBot() {
       {/* VENTANA DEL CHAT */}
       {open && (
         <div className="fixed bottom-28 right-6 w-80 h-96 bg-white rounded-2xl shadow-2xl p-4 flex flex-col z-50">
+                
+                <button
+              onClick={() => setOpen(!open)}
+              className="relative left-60 bg-blue-600 text-white w-7 h-7 rounded-full shadow-xl hover:bg-blue-700 transition z-50 flex items-center justify-center text-1xl cursor-pointer"
+            >✖
+            </button>
           <h2 className="text-lg font-semibold text-gray-700 text-center mb-2">
             Asistente Virtual
           </h2>

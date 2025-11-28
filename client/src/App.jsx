@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
-import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo } from './pages'
+import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo, ProcesarUrl } from './pages'
 import UserProvider from './context/userContext.jsx'
 import Footer from './components/Footer';
 import ProtectedEmployerRoute from './components/ProtectedEmployerRoute';
@@ -13,7 +13,6 @@ import JobDetails from './pages/JobDetails';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import ChatBot from './components/ChatBot/ChatBot.jsx';
-
 
 
 const App = () => {
@@ -39,7 +38,7 @@ const App = () => {
               <Route path="/auth/verify/:token" element={<VerificacionCorreo />}/>
               <Route path="/auth/forgot-password" element={<ForgotPassword/>}/>
               <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
-              
+              <Route path="/procesar-url" element={<ProcesarUrl/>} />
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 
