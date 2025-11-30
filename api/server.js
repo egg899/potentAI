@@ -13,6 +13,7 @@ import analyzeRoutes from './routes/analyzeRoutes.js';
 import mejorarCVRoutes from './routes/mejorarCVRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
 import verifyEmailRoutes from './routes/verifyEmailRoutes.js';
+import scrapeRoutes from './routes/scrapeRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -40,7 +41,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/ai", analyzeRoutes);
 app.use("/api/cv", mejorarCVRoutes);
 app.use("/api/applications", applicationRoutes);
-
+app.use("/api/scrape", scrapeRoutes);
 // Ruta de prueba para la raíz
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!");

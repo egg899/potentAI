@@ -32,16 +32,14 @@ const ProcesarUrl = () => {
     
     
         try {
-            //Solo para traer algo simple
-            const response = await axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
-            const html = response.data.contents;
+           // Llamada al banckend para scrappear Linkedin
+           const response = await axios.post(
+            "http://localhost:3000/api/scrape", // el backend
+            { url } // POST body
+           );
 
-
-            //Buscar título con regex simple
-            const tituloMatch = html.match(/<title>(.*?)<\/title>/i);
-            const titulo = tituloMatch ? tituloMatch[1]: "No se encontró titulo";
-
-            setResultado(`El título de la página es: "${titulo}"`);
+           const { title } = response.data;
+           setResultado(`El título de la página es: "${title}"`);
         }
         catch (error) {
             console.error(error);
