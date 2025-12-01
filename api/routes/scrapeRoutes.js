@@ -1,8 +1,8 @@
 import express from "express";
-import { scrapeLinkedinTitle } from "../controllers/scrapeController.js"; 
+import { scrapeLinkedinJob } from "../controllers/scrapeController.js"; 
 
 const router = express.Router();
 
-router.post("/", scrapeLinkedinTitle);
+router.post("/", scrapeLinkedinJob);
 
 export default router;
