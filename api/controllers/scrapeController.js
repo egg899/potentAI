@@ -53,9 +53,15 @@ export const scrapeLinkedinJob = async (req, res) => {
             $('div[class*="description__text"]').html() ||
             $('div[data-test-description"]').html();
 
-        const descriptionText =
-            $('div[class*="description__text"]').text().trim() ||
-            $('div[data-test-description"]').text().trim();
+
+        // Remover los botones de show more/show less
+        const descriptionDiv = $('div[class*="description__text"]');
+
+        // ❌ Eliminar cualquier <footer> dentro (que contiene los botones)        descriptionDiv.find('button, a').remove();
+        const descriptionText = descriptionDiv.text().trim();
+        // const descriptionText =
+        //     $('div[class*="description__text"]').text().trim() ||
+        //     $('div[data-test-description"]').text().trim();
 
         res.json({
             success: true,

@@ -48,6 +48,16 @@ const ProcesarUrl = () => {
 
     setCargando(false);
   };
+  console.log('User: ', user);
+  console.log('El resultadito viejita: ', resultado);
+
+  const handleCTA = () => {
+    //const laburoLinkedin = localStorage.setItem("LaburoLinkedin", JSON.stringify(resultado));
+    navigate(`/analisis/${user._id}`);
+  }// handleCta
+
+
+
 
   return (
     <div>
@@ -91,6 +101,7 @@ const ProcesarUrl = () => {
 
         {/* ✔ Mostrar RESULTADOS si NO hay error */}
         {resultado && !resultado.error && (
+            <>
           <div className="mt-4 p-3 bg-gray-100 rounded border">
             <h3 className="font-bold">Titulo del TAB:</h3>
             <p>{resultado.title}</p>
@@ -107,7 +118,12 @@ const ProcesarUrl = () => {
             <h3 className="font-bold mt-3">Descripción:</h3>
             <p className="whitespace-pre-line">{resultado.descriptionText}</p>
           </div>
+          <button className="bg-[#32baa5] text-white px-4 py-2 rounded hover:bg-[#32baa5]/90 transition-colors w-full mt-2 cursor-pointer"
+        onClick={handleCTA}> Crear CV para esta posición
+        </button>
+          </>
         )}
+        
       </div>
     </div>
   );
