@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
-import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo, ProcesarUrl } from './pages'
+import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo, ProcesarUrl, RemoteJobs } from './pages'
 import UserProvider from './context/userContext.jsx'
 import Footer from './components/Footer';
 import ProtectedEmployerRoute from './components/ProtectedEmployerRoute';
@@ -30,6 +30,7 @@ const App = () => {
               <Route path="/signUp" element={<SignUp/>}/>
               <Route path="/dashboard" element={<Dashboard/>}/>
               <Route path="/resume/:resumeId" element={<EditResume/>}/>
+              <Route path="/remote-jobs" element={<RemoteJobs/>} />
               <Route path="/jobs" element={<JobSearch />} />
               <Route path="/job-details/:id" element={<JobDetails />} />
               <Route path="/job-listings/edit/:id" element={<JobListings />} />
@@ -39,6 +40,7 @@ const App = () => {
               <Route path="/auth/forgot-password" element={<ForgotPassword/>}/>
               <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
               <Route path="/procesar-url" element={<ProcesarUrl/>} />
+              
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 

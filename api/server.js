@@ -14,6 +14,9 @@ import mejorarCVRoutes from './routes/mejorarCVRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
 import verifyEmailRoutes from './routes/verifyEmailRoutes.js';
 import scrapeRoutes from './routes/scrapeRoutes.js';
+import remoteJobRoutes from './routes/remoteJobRoutes.js';
+
+
 
 dotenv.config();
 const app = express();
@@ -37,11 +40,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth", verifyEmailRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/employer", employerRoutes);
+app.use("/api/remote-jobs", remoteJobRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/ai", analyzeRoutes);
 app.use("/api/cv", mejorarCVRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/scrape", scrapeRoutes);
+
 // Ruta de prueba para la raíz
 app.get('/', (req, res) => {
     res.send("¡Servidor funcionando correctamente!");
