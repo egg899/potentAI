@@ -2,14 +2,15 @@ import fetch from "node-fetch";
 
 export const getRemoteJobs = async (req, res) => {
     const { search, category } = req.query;
-    // let url = "https://remotive.com/api/remote-jobs?";
+    let url = "https://remotive.com/api/remote-jobs?";
 
-    // if(search)  url += `search=${encodeURIComponent(search)}&`;
-    // if(category) url += `cateory=${encodeURIComponent(category)}&`;
+    if(search)  url += `search=${encodeURIComponent(search)}&`;
+    if(category) url += `category=${encodeURIComponent(category)}&`;
+
 
 
     try {
-        const response = await fetch("https://remotive.com/api/remote-jobs");
+        const response = await fetch(url);
         const data = await response.json();
         res.json(data); // devuelve array de trabajos
     }

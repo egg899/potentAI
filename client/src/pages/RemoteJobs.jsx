@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { FiClock, FiDollarSign, FiMapPin } from "react-icons/fi";
+import RemSearchBar from "../components/Inputs/RemSearchBar";
 import moment from "moment";
 
 // Componente para mostrar etiquetas de tipo de trabajo y salario
 const JobTags = ({ type, salary }) => (
-  <div className="flex gap-2 mb-4">
+  <div className="flex gap-2 mb-4 flex-wrap">
     <span className="px-3 py-1 bg-[#e0f7fa] text-[#007B9E] rounded-full text-sm flex items-center">
       <FiClock className="mr-1" />
       {type === "full-time"
@@ -27,17 +28,15 @@ const JobTags = ({ type, salary }) => (
 const JobCard = ({ job, onApply }) => (
   <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col justify-between">
     <div>
-      <h2 className="text-xl font-semibold mb-2 text-[#007B9E]">{job.title}</h2>
-      <p className="text-gray-600 mb-1">{job.company_name}</p>
-      <p className="text-gray-500 mb-2 text-sm">{job.candidate_required_location}</p>
+      <h2 className="text-xl font-semibold mb-1 text-[#007B9E]">{job.title}</h2>
+      <p className="text-gray-600 mb-1 font-medium">{job.company_name}</p>
+      <p className="text-gray-500 mb-2 text-sm flex items-center">
+        <FiMapPin className="mr-1" /> {job.candidate_required_location}
+      </p>
 
       <p className="text-gray-700 mb-4 line-clamp-3 bg-[#e0f7fa] px-2 py-1 rounded">
-        {(job.description ?? "").replace(/<[^>]+>/g, "").slice(0, 200)}...
-        
+        {(job.description ?? "").replace(/<[^>]+>/g, "").slice(0, 150)}...
       </p>
-     <p
- 
-></p>
 
       <JobTags type={job.job_type} salary={job.salary} />
     </div>
@@ -46,7 +45,7 @@ const JobCard = ({ job, onApply }) => (
       onClick={() => onApply(job.url)}
       className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold cursor-pointer"
     >
-      Aplicar
+      Ver Puesto y Aplicar
     </button>
   </div>
 );
@@ -56,15 +55,36 @@ const RemoteJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:3000/api/remote-jobs");
+      const data = await res.json();
+      setJobs(data.jobs || []);
+    } catch (err) {
+      setError("Error al cargar los trabajos");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/remote-jobs")
+    fetchJobs();
+  }, []);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    // Fetch filtrado
+    fetch(`http://localhost:3000/api/remote-jobs?search=${encodeURIComponent(value)}`)
       .then((res) => res.json())
       .then((data) => setJobs(data.jobs || []))
-      .catch((err) => setError("Error al cargar los trabajos"))
-      .finally(() => setLoading(false));
-  }, []);
-console.log(jobs);
+      .catch(() => setError("Error al cargar los trabajos"));
+  };
+
   const handleApply = (url) => window.open(url, "_blank");
 
   if (loading)
@@ -91,6 +111,20 @@ console.log(jobs);
           ⚡ Trabajos obtenidos desde <span className="font-bold">Remotive</span>
         </div>
 
+        {/* Search */}
+        {/* <input
+          type="text"
+          placeholder="Buscar trabajos..."
+          value={search}
+          onChange={handleSearch}
+          className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#32baa5]"
+        /> */}
+
+      <RemSearchBar
+        search={search}
+        onChange={handleSearch} // pasamos la función directamente
+      />
+
         <h1 className="text-3xl font-bold mb-8 text-[#007B9E] text-center">
           Empleos Remotos
         </h1>
@@ -101,9 +135,7 @@ console.log(jobs);
               No se encontraron trabajos
             </p>
           ) : (
-            jobs.map((job) => (
-              <JobCard key={job.id} job={job} onApply={handleApply} />
-            ))
+            jobs.map((job) => <JobCard key={job.id} job={job} onApply={handleApply} />)
           )}
         </div>
       </div>
