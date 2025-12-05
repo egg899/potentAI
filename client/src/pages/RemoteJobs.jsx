@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { DashboardLayout } from "../components/layouts/DashboardLayout";
 import { FiClock, FiDollarSign, FiMapPin } from "react-icons/fi";
 import RemSearchBar from "../components/Inputs/RemSearchBar";
 import moment from "moment";
+import { UserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
+
 
 // Componente para mostrar etiquetas de tipo de trabajo y salario
 const JobTags = ({ type, salary }) => (
@@ -24,8 +27,11 @@ const JobTags = ({ type, salary }) => (
   </div>
 );
 
+
+
+
 // Componente para mostrar una publicación individual
-const JobCard = ({ job, onApply }) => (
+const JobCard = ({ job, onApply, onCreateCV }) => (
   <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow flex flex-col justify-between">
     <div>
       <h2 className="text-xl font-semibold mb-1 text-[#007B9E]">{job.title}</h2>
@@ -43,9 +49,16 @@ const JobCard = ({ job, onApply }) => (
 
     <button
       onClick={() => onApply(job.url)}
-      className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold cursor-pointer"
+      className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold 
+      cursor-pointer"
     >
       Ver Puesto y Aplicar
+    </button>
+
+
+    <button  onClick={onCreateCV} className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold 
+      cursor-pointer">
+        Crear CV para esta Posición
     </button>
   </div>
 );
@@ -56,6 +69,18 @@ const RemoteJobs = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  
+
+  const handleCTA = (job) => {
+      if (!user) return navigate("/");
+      localStorage.setItem("selectedRemJob", JSON.stringify(job));
+      navigate(`/analisis/${user._id}`);
+}
+
+
+
 
   const fetchJobs = async () => {
     try {
@@ -135,7 +160,12 @@ const RemoteJobs = () => {
               No se encontraron trabajos
             </p>
           ) : (
-            jobs.map((job) => <JobCard key={job.id} job={job} onApply={handleApply} />)
+            jobs.map((job) => 
+            <JobCard 
+              key={job.id} 
+              job={job} 
+              onApply={handleApply}
+              onCreateCV={() => handleCTA(job)} />)
           )}
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react";
-import axios from "axios";
 import ProfileInfoCard from "../components/Cards/ProfileInfoCard";
 import Logo from "../components/Logo";
 import { UserContext } from "../context/userContext";
