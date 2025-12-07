@@ -82,10 +82,18 @@ const ResumeSchema = new mongoose.Schema({
         }
     ],
     interests: [String],
-   jobId: {
+    jobId: {
         type:mongoose.Schema.Types.ObjectId,
         ref:"Job",
         required: false,//opcional
+    },
+
+
+    // 🔵 Trabajo remoto
+    remoteJobId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RemoteJob",
+        required: false,
     },
 
 },

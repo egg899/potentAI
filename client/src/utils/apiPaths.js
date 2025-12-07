@@ -23,6 +23,10 @@ export const API_PATHS = {
         GET_ONE: '/api/jobs',
         GET_EMPLOYER_JOBS: '/api/employer/jobs'
     },
+     REMOTE_JOBS: {
+        GET_BY_ID: "/api/remote-jobs/byRemoteId",
+        CREATE_OR_GET: "/api/remote-jobs/createOrGet"
+    },
     RESUME: {
         GET_ALL: '/api/resume',
         GET_USER_RESUMES: '/api/resume',

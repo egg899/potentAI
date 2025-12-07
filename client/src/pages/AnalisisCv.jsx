@@ -60,17 +60,38 @@ console.log('id', id);
 
   }//handleSubmitCV
 
-const laburo = localStorage.getItem("Laburo");
-const parsedLaburo = laburo ? JSON.parse(laburo) : null;
+// const laburo = localStorage.getItem("Laburo");
+// const parsedLaburo = laburo ? JSON.parse(laburo) : null;
 
 
-if(laburo){
-    // alert('Puesto desde los laburos: ESTE ITEM EXISTE!!!!');
-    console.log('Laburito: ', laburo);
-    // alert( `Laburito Descripción: ${laburo.description}`);
-    }else{
-      // alert('No existe');
-    }
+// if(laburo){
+//     // alert('Puesto desde los laburos: ESTE ITEM EXISTE!!!!');
+//   console.log("Laburo encontrado para mejora de CV:", parsedLaburo.title || parsedLaburo.titulo);
+//     // alert( `Laburito Descripción: ${laburo.description}`);
+//     }else{
+//       // alert('No existe');
+//     }
+
+
+
+
+// Obtener trabajo interno de la DB
+const localJob = localStorage.getItem("Laburo");
+const parsedLocalJob = localJob ? JSON.parse(localJob) : null;
+
+// Obtener trabajo remoto de Remotive
+const remoteJob = localStorage.getItem("selectedRemJob");
+const parsedRemoteJob = remoteJob ? JSON.parse(remoteJob) : null;
+
+// Elegir cuál usar: primero el interno, si no existe usar el remoto
+const parsedLaburo = parsedLocalJob || parsedRemoteJob;
+
+if(parsedLaburo){
+  console.log("Laburo seleccionado para mejorar el CV:", parsedLaburo.title || parsedLaburo.titulo);
+}else{
+  console.log("No hay laburo seleccionado en localStorage");
+}
+
   const handleMejoraCV = async() => {
     const textoExtraido = textoCV;
 

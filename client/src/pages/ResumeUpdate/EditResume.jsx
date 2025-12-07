@@ -487,11 +487,13 @@ interests: [""],
 
         if (response.data && response.data.profileInfo) {
           const resumeInfo = response.data;
+          console.log('resumeInfo: ', resumeInfo);
           // console.log('resumeInfo?.profileInfo',resumeInfo.profileInfo);
           setResumeData((prevState) => ({
             ...prevState,
             title: resumeInfo?.title || "Undefined",
             jobId:resumeInfo?.jobId || null,
+            remoteJobId:resumeInfo?.remoteJobId || null,
             template: resumeInfo?.template || prevState?.template,
             profileInfo: resumeInfo?.profileInfo || prevState?.profileInfo,
             contactInfo: resumeInfo?.contactInfo || prevState?.contactInfo,
@@ -637,6 +639,9 @@ interests: [""],
 //     fetchResumeDetailsById();
 //   }
 // }, [resumeId]);
+ const storedRemote = localStorage.getItem("selectedRemJob"); // 👈 usa el nombre correcto
+  const remoteJob = storedRemote ? JSON.parse(storedRemote) : null;
+
 
   return (
     <DashboardLayout>
@@ -687,7 +692,8 @@ interests: [""],
                   </button>
               </div> {/* Botones de  Descarga, borrado y vista previa*/}
               {console.log('Resumen Data de Edit Resume', resumeData)}
-              {resumeData?.jobId && (
+              
+              {/* {resumeData?.jobId && (
                 <div className="bg-yellow-100 border-yellow-300 text-yellow-800 p-4 rounded-md mb-4 text-sm">
                     Estás editando este CV para aplicar al empleo: 
                     {" "}
@@ -697,7 +703,25 @@ interests: [""],
                     </NavLink>
 
                 </div>
-              )}
+              )} */}
+                           {resumeData?.jobId ? (
+                          <div className="bg-yellow-100 ..., p-4">
+                            Estás editando este CV para aplicar al empleo:{" "}
+                            <NavLink to={`/job/${resumeData.jobId._id}`}>
+                              <strong>{resumeData.jobId.title}</strong>
+                            </NavLink>
+                          </div>
+                        ) : resumeData?.remoteJobId ? (
+                          <div className="bg-blue-100 ..., p-4">
+                            Estás mejorando este CV para aplicar al empleo remoto:{" "}
+                            <NavLink to={resumeData.remoteJobId.url} target="_blank" rel="noreferrer">
+                             <strong>  {resumeData.remoteJobId.title} en {resumeData.remoteJobId.company_name}</strong>
+                            </NavLink>
+                          </div>
+                        ) : null}
+
+           
+
            </div>
 
 

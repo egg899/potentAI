@@ -10,58 +10,135 @@ const CreateResumeForm = ({ estructuraCV = null, laburo, onSuccess }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleCreateResume = async (e) => {
-    e.preventDefault();
+//   const handleCreateResume = async (e) => {
+//     e.preventDefault();
 
-    if (!title) {
-      setError("Por favor, agregue el título");
-      return;
-    }
+//     if (!title) {
+//       setError("Por favor, agregue el título");
+//       return;
+//     }
 
-    setError("");
-    // if(laburo){
-    //   alert('El laburo esta AQUI!!!');
+//     setError("");
+//     // if(laburo){
+//     //   alert('El laburo esta AQUI!!!');
 
 
-    // }
-    console.log('laburo de createResume', laburo);
+//     // }
+//     console.log('laburo de createResume', laburo);
    
-    try {
-      const payload = { title };
+//     try {
+//       const payload = { title };
       
-      if (laburo && laburo._id){
+//       if (laburo && laburo._id){
+//       payload.jobId = laburo._id;
+//     }
+
+
+
+//     // Asignar remoteJobId si es remoto
+//    if (laburo && laburo._id && laburo.remoteId) {
+//     payload.remoteJobId = laburo._id; // el _id de tu colección RemoteJobs en Mongo
+// }
+
+
+
+
+
+//       // Solo incluir estructuraCV si está definida y no es null
+//       if (estructuraCV && Object.keys(estructuraCV).length > 0) {
+//          Object.assign(payload, estructuraCV);
+        
+//       }
+//       console.log('PAYLOAD',payload);
+//       const response = await axiosInstance.post(API_PATHS.RESUME.CREATE,  payload);
+
+//       if (response.data?._id) {
+
+
+//         if (localStorage.getItem("Laburo")) {
+//               localStorage.removeItem("Laburo");
+//             }
+
+//         if (onSuccess) onSuccess();
+//         navigate(`/resume/${response.data?._id}`, {
+          
+//         });
+//       }
+
+//     } catch (error) {
+//       console.error(error);
+//       if (error.response?.data?.message) {
+//         setError(error.response.data.message);
+//       } else {
+//         setError("Algo salió mal. Por favor, intentá nuevamente.");
+//       }
+//     }
+//   };
+
+const handleCreateResume = async (e) => {
+  e.preventDefault();
+
+  if (!title) {
+    setError("Por favor, agregue el título");
+    return;
+  }
+
+  setError("");
+
+  try {
+    const payload = { title };
+
+    // 🟡 Trabajo interno
+    if (laburo && laburo._id && !laburo.remoteId) {
       payload.jobId = laburo._id;
     }
-      // Solo incluir estructuraCV si está definida y no es null
-      if (estructuraCV && Object.keys(estructuraCV).length > 0) {
-         Object.assign(payload, estructuraCV);
-        
-      }
-      console.log('PAYLOAD',payload);
-      const response = await axiosInstance.post(API_PATHS.RESUME.CREATE,  payload);
 
-      if (response.data?._id) {
+    // 🔵 Trabajo remoto
+    // if (laburo && laburo.remoteId) {
+    //  console.log("🟡 TEST → RemoteID existente en laburo:", laburo.remoteId);
 
+      
+    // }
 
-        if (localStorage.getItem("Laburo")) {
-              localStorage.removeItem("Laburo");
-            }
-
-        if (onSuccess) onSuccess();
-        navigate(`/resume/${response.data?._id}`, {
-          
-        });
-      }
-
-    } catch (error) {
-      console.error(error);
-      if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Algo salió mal. Por favor, intentá nuevamente.");
-      }
+    console.log('El laburo en create Resume Remote: ', laburo, laburo.id);
+   console.log('El Laburito Id ',  laburo.id);
+  if(laburo && laburo.id) {
+    const mongoRemoteJobId= localStorage.getItem('selectedRemJobId');
+    console.log('Aca tenemos el de Mongo PAPPPPUUUU!!!', mongoRemoteJobId);
+    if (mongoRemoteJobId) {
+      payload.remoteJobId = mongoRemoteJobId;
     }
-  };
+  }
+
+  console.log("Payload de prueba CHABON!!!:", payload);
+  
+
+    // Solo incluir estructuraCV si está definida
+    if (estructuraCV && Object.keys(estructuraCV).length > 0) {
+      Object.assign(payload, estructuraCV);
+    }
+
+    console.log("Payload final para CV:", payload);
+
+    const response = await axiosInstance.post(API_PATHS.RESUME.CREATE, payload);
+
+    if (response.data?._id) {
+      if (localStorage.getItem("Laburo")) {
+        localStorage.removeItem("Laburo");
+      }
+      if (onSuccess) onSuccess();
+      navigate(`/resume/${response.data._id}`);
+    }
+  } catch (error) {
+    console.error(error);
+    if (error.response?.data?.message) {
+      setError(error.response.data.message);
+    } else {
+      setError("Algo salió mal. Por favor, intentá nuevamente.");
+    }
+  }
+};
+
 
   return (
     <div className="w-[90vw] md:w-[70vh] p-7 flex flex-col justify-center">

@@ -56,10 +56,22 @@ const JobCard = ({ job, onApply, onCreateCV }) => (
     </button>
 
 
-    <button  onClick={onCreateCV} className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold 
+    {/* <button  onClick={onCreateCV} className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold 
       cursor-pointer">
         Crear CV para esta Posición
-    </button>
+    </button> */}
+
+
+    <button
+  onClick={() => {
+    console.log("Botón clicked", job); // <--- log de debug
+    onCreateCV();
+  }}
+  className="mt-4 bg-[#00B8D9] text-white py-2 rounded-lg hover:bg-[#0093b3] transition-colors font-semibold cursor-pointer"
+>
+  Crear CV para esta Posición
+</button>
+
   </div>
 );
 
@@ -73,11 +85,35 @@ const RemoteJobs = () => {
   const navigate = useNavigate();
   
 
-  const handleCTA = (job) => {
-      if (!user) return navigate("/");
+const handleCTA = async (job) => {
+  console.log("Botón clicked", job); // 👈 log del job
+  if (!user) return navigate("/");
+
+  try {
+    console.log("Enviando al backend:", JSON.stringify(job));
+    const res = await fetch("http://localhost:3000/api/remote-jobs/createOrGet", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(job),
+    });
+
+    const data = await res.json();
+    console.log("Respuesta del fetch:", data);
+
+    if (data.success && data.jobId) {
+      console.log("✅ Guardando en localStorage y navegando");
       localStorage.setItem("selectedRemJob", JSON.stringify(job));
+      localStorage.setItem("selectedRemJobId", data.jobId);
       navigate(`/analisis/${user._id}`);
-}
+    } else {
+      console.warn("❌ Fetch completado pero no hay éxito:", data);
+    }
+  } catch (err) {
+    console.error("Error creado u obteniendo el trabajo:", err);
+  }
+};
+
+
 
 
 
@@ -162,10 +198,12 @@ const RemoteJobs = () => {
           ) : (
             jobs.map((job) => 
             <JobCard 
-              key={job.id} 
-              job={job} 
-              onApply={handleApply}
-              onCreateCV={() => handleCTA(job)} />)
+                key={job.id} 
+                job={job} 
+                onApply={handleApply}
+                onCreateCV={() => handleCTA(job)} 
+              />
+            )
           )}
         </div>
       </div>
