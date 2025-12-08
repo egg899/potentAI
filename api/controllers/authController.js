@@ -226,15 +226,31 @@ export const getUserProfile = async (req, res) => {
 // Actualizar perfil de usuario
 export const updateUserProfile = async (req, res) => {
     try {
-        const { _id, name, profileImageUrl } = req.body;
-        if (!_id) {
-            return res.status(400).json({ message: 'Falta el ID del usuario' });
+        const { name, profileImageUrl } = req.body;
+        
+        // Validar que el usuario está autenticado (viene del middleware)
+        if (!req.user || !req.user.id) {
+            console.error('Error: req.user no está definido en updateUserProfile');
+            return res.status(401).json({ message: 'Usuario no autenticado' });
+        }
+        
+        const userId = req.user.id; // Usar el ID del usuario autenticado del middleware
+
+        // Validar que el usuario existe
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
+        // Actualizar solo los campos proporcionados
+        const updateData = {};
+        if (name !== undefined) updateData.name = name;
+        if (profileImageUrl !== undefined) updateData.profileImageUrl = profileImageUrl;
+
         const updatedUser = await User.findByIdAndUpdate(
-            _id,
-            { name, profileImageUrl },
-            { new: true }
+            userId,
+            updateData,
+            { new: true, select: '-password' }
         );
 
         if (!updatedUser) {
@@ -243,6 +259,7 @@ export const updateUserProfile = async (req, res) => {
 
         res.json(updatedUser);
     } catch (err) {
+        console.error('Error al actualizar el perfil:', err);
         res.status(500).json({ message: 'Error al actualizar el perfil', error: err.message });
     }
 };

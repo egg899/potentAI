@@ -42,7 +42,10 @@ const UserProvider = ({ children }) => {
 
     const updateUser = (userData) => {
         setUser(userData);
-        localStorage.setItem("token", userData.token); // Guarda el Token
+        // Solo guardar el token si existe (no se envía en actualizaciones de perfil)
+        if (userData.token) {
+            localStorage.setItem("token", userData.token);
+        }
         setLoading(false);
     };
 

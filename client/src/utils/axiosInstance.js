@@ -38,29 +38,18 @@ axiosInstance.interceptors.response.use(
         // Solo redirigir en errores 401 si no estamos en el proceso de registro o login
         if (error.response) {
             if (error.response.status === 401) {
-                // const currentPath = window.location.pathname;
-                // if (!currentPath.includes('/signUp') && !currentPath.includes('/login')) {
-                //     console.log("Redirigiendo a login por error 401");
-                //     console.log('Current: ', API_PATHS.AUTH.LOGIN);
-                //     // if(API_PATHS.AUTH.LOGIN){
-                //     //     alert();
-                //     // }
-                //     // window.location.href = "/";
-                // }
-
-                 const requestUrl = error.config.url || "";
-                    if (!requestUrl.includes(API_PATHS.AUTH.LOGIN) &&
-                        !requestUrl.includes(API_PATHS.AUTH.SIGNUP)) {
-                        console.log("Redirigiendo a login por error 401");
-                        window.location.href = "/";
-                    }
-                            } 
-           
-                  
-               
-            
-            
-            else if (error.response.status === 500) {
+                const requestUrl = error.config?.url || "";
+                // No redirigir si es una ruta de autenticación o actualización de perfil
+                // para evitar cerrar la sesión durante actualizaciones
+                if (!requestUrl.includes(API_PATHS.AUTH.LOGIN) &&
+                    !requestUrl.includes(API_PATHS.AUTH.SIGNUP) &&
+                    !requestUrl.includes(API_PATHS.AUTH.UPDATE_PROFILE)) {
+                    console.log("Redirigiendo a login por error 401");
+                    // Limpiar el token antes de redirigir
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+            } else if (error.response.status === 500) {
                 console.error("Error del Servidor (500):", error.response.data);
             }
         } else if (error.code === "ECONNABORTED") {

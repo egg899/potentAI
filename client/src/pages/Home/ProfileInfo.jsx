@@ -114,19 +114,29 @@ const handleChangePassword = () => {
         profileImageUrl = imgUploadRes.imageUrl || profileImageUrl;
       }
 
+      // Solo enviar los campos que se pueden actualizar
       const updatedUserData = {
-        ...user,
         name: editedName,
         profileImageUrl,
       };
 
       const response = await axiosInstance.put(API_PATHS.AUTH.UPDATE_PROFILE, updatedUserData);
-      updateUser(response.data);
+      
+      // Actualizar el usuario en el contexto sin perder el token
+      updateUser({ ...user, ...response.data });
       setSuccess("Perfil actualizado exitosamente");
       setIsEditing(false);
       setIsEditingImage(false);
     } catch (error) {
-      setError(error.response?.data?.message || "Error al actualizar el perfil");
+      console.error("Error al actualizar el perfil:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Error al actualizar el perfil";
+      setError(errorMessage);
+      
+      // Si es un error 401, no redirigir automáticamente aquí, dejar que el interceptor lo maneje
+      // pero mostrar un mensaje más amigable
+      if (error.response?.status === 401) {
+        setError("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+      }
     }
   };
 
