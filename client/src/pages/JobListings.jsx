@@ -308,9 +308,9 @@ const JobListings = () => {
                     <div className="w-full max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl overflow-auto bg-white rounded-lg shadow-lg p-2 md:p-6">
                         {selectedResume && (
                             <RenderResume
-                                templateId={selectedResume.templateId || '01'}
+                                templateId={selectedResume.template?.theme || '01'}
                                 resumeData={selectedResume}
-                                colorPalette={['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
+                                colorPalette={selectedResume.template?.colorPalette || ['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
                                 containerWidth={Math.min(window.innerWidth - 40, 900)}
                             />
                         )}
@@ -332,9 +332,9 @@ const JobListings = () => {
         <div className="w-full  max-h-[90vh] overflow-auto bg-white rounded-lg shadow-lg p-2 md:p-6">
             {selectedResume && (
                 <RenderResume
-                    templateId={selectedResume.templateId || '01'}
+                    templateId={selectedResume.template?.theme || '01'}
                     resumeData={selectedResume}
-                    colorPalette={['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
+                    colorPalette={selectedResume.template?.colorPalette || ['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
                     containerWidth={Math.min(window.innerWidth * 0.6, 700)}
                 />
             )}

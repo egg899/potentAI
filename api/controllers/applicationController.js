@@ -32,7 +32,10 @@ export const getApplicationsByJob = async (req, res) => {
         const { jobId } = req.params;
         const applications = await Application.find({ job: jobId })
             .populate('applicant', 'name email')
-            .populate('resume');
+            .populate({
+                path: 'resume',
+                // populate trae todos los campos del resume, incluyendo template con theme y colorPalette
+            });
         res.json(applications);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener postulaciones', error: error.message });
