@@ -100,8 +100,8 @@ const handleCreateResume = async (e) => {
       
     // }
 
-    console.log('El laburo en create Resume Remote: ', laburo, laburo.id);
-   console.log('El Laburito Id ',  laburo.id);
+  //   console.log('El laburo en create Resume Remote: ', laburo, laburo.id);
+  //  console.log('El Laburito Id ',  laburo.id);
   if(laburo && laburo.id) {
     const mongoRemoteJobId= localStorage.getItem('selectedRemJobId');
     console.log('Aca tenemos el de Mongo PAPPPPUUUU!!!', mongoRemoteJobId);
