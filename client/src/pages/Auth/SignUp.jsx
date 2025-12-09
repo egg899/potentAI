@@ -18,6 +18,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
     profileImageUrl: ''
   });
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
 
@@ -66,8 +67,8 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
         return;
       }
 
-      if (formData.password.length < 6) {
-        setError('La contraseña debe tener al menos 6 caracteres');
+      if (formData.password.length < 8) {
+        setError('La contraseña debe tener al menos 8 caracteres');
         setIsLoading(false);
         return;
       }
@@ -87,9 +88,13 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
         updateUser(response.data);
         setOpenAuthModal(false);
         navigate('/');
-      } else {
-        setError('Error en el registro: No se recibió el token');
-      }
+      } else 
+        {
+          setMessage('Esperando por la confirmación');
+        }
+      // else {
+      //   setError('Error en el registro: No se recibió el token');
+      // }
     } catch (error) {
       console.error('Error completo:', error);
       if (error.response) {
@@ -161,6 +166,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
         </div>
 
         {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+        {message && <p className="text-green-500 text-xs pb-2.5">{message}</p>}
 
         <button
           type="submit"

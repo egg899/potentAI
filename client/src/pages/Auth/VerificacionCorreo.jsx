@@ -22,6 +22,16 @@ console.log(token);
     return (
         <div className="p-10 text-center text-xl">
             {mensaje}
+            {mensaje && (
+                <div className="mt-4">
+                        <a
+                        href="http://localhost:5173/"
+                        className="text-blue-600 underline hover:text-blue-800"
+                        >
+                        Ir a la página para iniciar sesión
+                        </a>
+                    </div>
+            )}
         </div>
     );
 
