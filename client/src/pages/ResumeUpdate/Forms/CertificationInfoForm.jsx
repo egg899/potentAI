@@ -52,7 +52,7 @@ const CertificationInfoForm = ({certifications,
 
               </div>
 
-                  {certifications.length > 1 && (
+                  {certifications.length > 0 && (
                     <button type="button"
                       className="absolute top-3 right-3 text-sm text-red-600 hover:underline cursor-pointer"
                       onClick={()=>removeArrayItem(index)}>

@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 
 const faq = [
-  { q: "¿Cómo me registro?", a: "Hacé clic en 'Crear cuenta' y completá tus datos." },
-  { q: "¿Cómo subo mi CV?", a: "Entrá a tu perfil y presioná 'Subir CV'." },
-  { q: "¿Dónde veo mi CV?", a: "En tu perfil vas a encontrar la sección 'Mi CV'." },
-  { q: "¿Cómo edito mi perfil?", a: "Dentro de tu perfil hacé clic en 'Editar'." },
-  { q: "¿Cómo descargar mi CV?", a: "En 'Mi CV' vas a ver el botón para descargarlo." },
-  { q: "Necesito ayuda", a: "Podés escribirnos a soporte@miapp.com." }
+  { q: "¿Cómo me registro?", a: "Hacé clic en 'Ingresar/Registrarse' y lugo haz click en 'Registrarse'." },
+  { q: "¿Cómo subo mi CV?", a: "¿Dónde veo mi CV?", a: "Luego de hacer click en Dashboard en tu men´, podrás ver todos los CV´s que has creado." },
+  { q: "¿Dónde veo mi CV?", a: "En el menú principal hz click en 'Analizar CV. Desde ahi presiona 'Seleccionar archivo'. Luego haz click 'Extraer CV' y desde allí 'Mejorar CV' ." },
+  { q: "¿Cómo edito mi perfil?", a: "Dentro de tu perfil hacé clic en 'Editar CV'." },
+  { q: "¿Cómo descargar mi CV?", a: "En 'Dashboard', elige uno de tus cv's y desde ahi, haz click en 'Vista Previa y Descarga'." },
+
 ];
 
 export default function ChatBot() {
@@ -26,7 +26,7 @@ export default function ChatBot() {
 
   const handleSelect = (item) => {
     setMessages((prev) => [
-      ...prev,
+      // ...prev,
       { from: "user", text: item.q },
       { from: "bot", text: item.a }
     ]);
@@ -44,7 +44,7 @@ export default function ChatBot() {
 
       {/* VENTANA DEL CHAT */}
       {open && (
-        <div className="fixed bottom-28 right-6 w-80 h-96 bg-white rounded-2xl shadow-2xl p-4 flex flex-col z-50">
+        <div className="fixed bottom-28 right-6 w-90 h-120 bg-white rounded-2xl shadow-2xl p-4 flex flex-col z-50">
                 
                 <button
               onClick={() => setOpen(!open)}

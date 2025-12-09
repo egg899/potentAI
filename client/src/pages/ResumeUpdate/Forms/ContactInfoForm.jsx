@@ -37,7 +37,7 @@ const ContactInfoForm = ({contactInfo, updateSection}) => {
                 />
             
                  <Input
-                    label="Liinkedin"
+                    label="Linkedin"
                     placeholder="https://linkedin.com/username"
                     type="text"
                     value={contactInfo.linkedin || ""}

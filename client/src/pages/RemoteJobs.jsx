@@ -5,7 +5,7 @@ import RemSearchBar from "../components/Inputs/RemSearchBar";
 import moment from "moment";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
-
+ import { API_PATHS, BASE_URL } from "../utils/apiPaths";
 
 // Componente para mostrar etiquetas de tipo de trabajo y salario
 const JobTags = ({ type, salary }) => (
@@ -82,6 +82,7 @@ const RemoteJobs = () => {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const { user } = useContext(UserContext);
+ 
   const navigate = useNavigate();
   
 
@@ -91,11 +92,18 @@ const handleCTA = async (job) => {
 
   try {
     console.log("Enviando al backend:", JSON.stringify(job));
-    const res = await fetch("http://localhost:3000/api/remote-jobs/createOrGet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(job),
-    });
+    // const res = await fetch("http://localhost:3000/api/remote-jobs/createOrGet", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(job),
+    // });
+
+    const res = await fetch(BASE_URL + API_PATHS.REMOTE_JOBS.CREATE_OR_GET, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(job),
+      });
+
 
     const data = await res.json();
     console.log("Respuesta del fetch:", data);

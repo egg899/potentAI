@@ -123,6 +123,12 @@ const handleCreateResume = async (e) => {
     const response = await axiosInstance.post(API_PATHS.RESUME.CREATE, payload);
 
     if (response.data?._id) {
+
+      localStorage.removeItem("selectedRemJob");
+      localStorage.removeItem("selectedRemJobId");
+
+
+
       if (localStorage.getItem("Laburo")) {
         localStorage.removeItem("Laburo");
       }

@@ -281,8 +281,38 @@ const TemplateOne = ({
                             ))}
                       
                       </div>
+                      
+
+
+                            {/* {resumeData.projects && resumeData.projects.length > 0 && (
+
+                            <div className="mt-4">
+                                                        {console.log('Projects',resumeData.projects)}
+                                                        
+                                                  <Title text="Proyectos" color={themeColors[1]}/>
+                                                        
+                                                    {resumeData.projects.map((project, index) =>(
+                                                      
+                                                      <ProjectInfo
+                                                    key={`projects_${index}`}
+                                                    title={project.title}
+                                                    description={project.description}
+                                                    liveDemoUrl={project.liveDemo}
+                                                    githubLink={project.github}
+
+                                                    bgColor={themeColors[2]}
+                                                  />
+                                                    ))}
+                                                  </div>
+
+                      )} */}
+
+
+
+
                       <div className="mt-4">
                             {console.log('Projects',resumeData.projects)}
+                            
                       <Title text="Proyectos" color={themeColors[1]}/>
                             
                         {resumeData.projects.map((project, index) =>(
