@@ -1,11 +1,5 @@
-import * as fs from 'fs';
-import path from 'path';
 import Resume from "../models/Resume.js";
-import { fileURLToPath } from 'url';
-
-// Estas 2 líneas reemplazan __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { deleteImageFromCloudinary } from "../config/cloudinary.js";
 //Crear un curriculum
 // export const createResume = async (req, res) => {
 //     try {
@@ -173,20 +167,15 @@ export const deleteResume = async (req, res) => {
 
       if(!resume) {
         return res.status(401).json({ message: "CV no encontrado o no autorizado" });
-
         }
-        //Borrar imagenes de thumbnailLink y profilePreviewUrl de la carpeta uploads
-        const uploadsFolder = path.join(__dirname, '..', 'uploads');
-        const baseUrl = `${req.protocoll}://${req.get("host")}`;
-        
+
+        // Eliminar imágenes de Cloudinary
         if(resume.thumbnailLink){
-            const oldThumbnail = path.join(uploadsFolder, path.basename(resume.thumbnailLink));
-            if(fs.existsSync(oldThumbnail)) fs.unlinkSync(oldThumbnail);
+            await deleteImageFromCloudinary(resume.thumbnailLink);
         }
 
         if(resume.profileInfo?.profilePreviewUrl){
-            const oldProfile = path.join(uploadsFolder, path.basename(resume.profileInfo.profilePreviewUrl));
-            if (fs.existsSync(oldProfile)) fs.unlinkSync(oldProfile);
+            await deleteImageFromCloudinary(resume.profileInfo.profilePreviewUrl);
         }
 
         const deleted = await Resume.findOneAndDelete({
