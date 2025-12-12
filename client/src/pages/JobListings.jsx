@@ -234,7 +234,6 @@ const JobListings = () => {
             );
             setApplications(updatedApplications);
             
-            alert(`Estado actualizado a: ${status === 'accepted' ? 'Aceptado' : status === 'rejected' ? 'Rechazado' : 'Pendiente'}`);
         } catch (error) {
             console.error('Error completo al actualizar el estado:', error);
             console.error('Detalles del error:', {
@@ -436,8 +435,8 @@ const JobListings = () => {
                             disabled={updatingStatus || selectedApplication.status === 'accepted'}
                             className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
                                 selectedApplication.status === 'accepted'
-                                    ? 'bg-green-500 text-white cursor-not-allowed opacity-50'
-                                    : 'bg-green-500 text-white hover:bg-green-600 cursor-pointer'
+                                    ? 'bg-[#32baa5] text-white cursor-not-allowed opacity-50'
+                                    : 'bg-[#32baa5] text-white hover:bg-[#32baa5]/90 cursor-pointer'
                             } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {updatingStatus ? 'Actualizando...' : 'Aceptar'}
@@ -447,8 +446,8 @@ const JobListings = () => {
                             disabled={updatingStatus || selectedApplication.status === 'rejected'}
                             className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
                                 selectedApplication.status === 'rejected'
-                                    ? 'bg-red-500 text-white cursor-not-allowed opacity-50'
-                                    : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer'
+                                    ? 'bg-[#4A5565] text-white cursor-not-allowed opacity-50'
+                                    : 'bg-[#4A5565] text-white hover:bg-[#4A5565]/90 cursor-pointer'
                             } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {updatingStatus ? 'Actualizando...' : 'Rechazar'}
