@@ -1,12 +1,18 @@
 
-import { OpenAI } from 'openai';
+// import { OpenAI } from 'openai';
 
-const openai = new OpenAI({
-    apiKey:process.env.OPENAI_API_KEY,
-    baseURL: 'https://api.groq.com/openai/v1'  
-});
+// const openai = new OpenAI({
+//     apiKey:process.env.OPENAI_API_KEY,
+//     baseURL: 'https://api.groq.com/openai/v1'  
+// });
 
 // console.log('openai: ',openai);
+import Groq from "groq-sdk";
+
+const openai = new Groq({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
 
 export const mejorarYParsearCV = async (req, res) => {
 
