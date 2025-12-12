@@ -27,7 +27,7 @@ const __dirname = dirname(__filename);
 // Middleware CORS y JSON
 
 const allowedOrigins = [
-    process.env.CLIENT_URL,
+    process.env.BASE_URL,
     "http://localhost:5173",
 ];
 
