@@ -1,6 +1,9 @@
 {
   "name": "potent-ia",
   "version": "1.0.0",
+  "engines": {
+  "node": "20.x"
+},
   "main": "server.js",
   "type": "module",
   "scripts": {
