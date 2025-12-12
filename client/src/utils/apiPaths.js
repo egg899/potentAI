@@ -41,5 +41,12 @@ export const API_PATHS = {
 
     IMAGE: {
         UPLOAD_IMAGE: "api/auth/upload-image",
+    },
+    APPLICATIONS: {
+        CREATE: '/api/applications',
+        GET_BY_JOB: (jobId) => `/api/applications/job/${jobId}`,
+        UPDATE_STATUS: (applicationId) => `/api/applications/${applicationId}/status`,
+        GET_MY_APPLICATIONS: '/api/applications/my-applications',
+        GET_BY_ID: (applicationId) => `/api/applications/${applicationId}`
     }
 }

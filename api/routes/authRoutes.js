@@ -17,8 +17,7 @@ router.post("/upload-image", protect, upload.single("image"), (req, res) => {
     if(!req.file) {
         return res.status(400).json({ message:'No hay ningun archivo subido' });
     }
-    // req.file.path contiene la URL de Cloudinary
-    const imageUrl = req.file.path;
+    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
     res.status(200).json({ imageUrl });
 });
 

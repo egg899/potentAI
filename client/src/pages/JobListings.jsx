@@ -126,6 +126,8 @@ const JobListings = () => {
     const [selectedResume, setSelectedResume] = useState(null);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [showApplicationModal, setShowApplicationModal] = useState(false);
+    const [updatingStatus, setUpdatingStatus] = useState(false);
+    const [currentJobId, setCurrentJobId] = useState(null);
 
 
     const fetchJobs = async () => {
@@ -188,6 +190,7 @@ const JobListings = () => {
     };
 
     const handleViewApplications = async (jobId) => {
+        setCurrentJobId(jobId);
         setShowApplicationsModal(true);
         setLoadingApplications(true);
         setErrorApplications('');
@@ -199,6 +202,56 @@ const JobListings = () => {
             setApplications([]);
         } finally {
             setLoadingApplications(false);
+        }
+    };
+
+    const handleUpdateApplicationStatus = async (status) => {
+        if (!selectedApplication) return;
+        
+        setUpdatingStatus(true);
+        try {
+            console.log('Actualizando estado:', {
+                applicationId: selectedApplication._id,
+                status,
+                url: API_PATHS.APPLICATIONS.UPDATE_STATUS(selectedApplication._id)
+            });
+
+            const res = await axiosInstance.patch(
+                API_PATHS.APPLICATIONS.UPDATE_STATUS(selectedApplication._id),
+                { status }
+            );
+            
+            console.log('Respuesta del servidor:', res.data);
+            
+            // Actualizar la aplicación seleccionada
+            setSelectedApplication(res.data.application);
+            
+            // Actualizar la lista de aplicaciones
+            const updatedApplications = applications.map(app => 
+                app._id === selectedApplication._id 
+                    ? { ...app, status: status }
+                    : app
+            );
+            setApplications(updatedApplications);
+            
+            alert(`Estado actualizado a: ${status === 'accepted' ? 'Aceptado' : status === 'rejected' ? 'Rechazado' : 'Pendiente'}`);
+        } catch (error) {
+            console.error('Error completo al actualizar el estado:', error);
+            console.error('Detalles del error:', {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status,
+                statusText: error.response?.statusText
+            });
+            
+            const errorMessage = error.response?.data?.message 
+                || error.response?.data?.error 
+                || error.message 
+                || 'Error del servidor';
+            
+            alert(`Error al actualizar el estado: ${errorMessage}`);
+        } finally {
+            setUpdatingStatus(false);
         }
     };
 
@@ -271,9 +324,26 @@ const JobListings = () => {
                     {!loadingApplications && applications.length === 0 && <p>No hay postulaciones para este trabajo.</p>}
                     {applications.map((app) => (
                         <div key={app._id} className="border p-3 rounded mb-5">
-                            <div className="font-semibold">{app.applicant?.name || app.applicant?.email || 'Usuario'}</div>
-                            <div className="text-xs text-gray-500 mb-2">Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}</div>
-                            <div className="font-medium">CV: {app.resume?.title || 'Sin título'}</div>
+                            <div className="flex justify-between items-start mb-2">
+                                <div className="flex-1">
+                                    <div className="font-semibold">{app.applicant?.name || app.applicant?.email || 'Usuario'}</div>
+                                    <div className="text-xs text-gray-500 mb-2">Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}</div>
+                                    <div className="font-medium">CV: {app.resume?.title || 'Sin título'}</div>
+                                </div>
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                    app.status === 'accepted' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : app.status === 'rejected'
+                                        ? 'bg-red-100 text-red-800'
+                                        : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                    {app.status === 'accepted' 
+                                        ? 'Aceptado' 
+                                        : app.status === 'rejected'
+                                        ? 'Rechazado'
+                                        : 'Pendiente'}
+                                </span>
+                            </div>
                             <button
                                 className="mt-2 px-3 py-1 bg-[#32baa5] text-white rounded hover:bg-[#32baa5]/90 cursor-pointer"
                                 onClick={() => { 
@@ -341,9 +411,49 @@ const JobListings = () => {
 
             {selectedApplication && (
                 <div className="mt-6 w-full border-t pt-4">
-                <p><strong>Estado:</strong> {selectedApplication.status}</p>
-                {/* <p><strong>Carta de presentación:</strong> {selectedApplication.coverLetter || "No enviada"}</p> */}
-                <p><strong>Fecha de postulación:</strong> {moment(selectedApplication.appliedAt).format('DD/MM/YYYY')}</p>
+                    <div className="mb-4">
+                        <p className="mb-2"><strong>Estado actual:</strong> 
+                            <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${
+                                selectedApplication.status === 'accepted' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : selectedApplication.status === 'rejected'
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                                {selectedApplication.status === 'accepted' 
+                                    ? 'Aceptado' 
+                                    : selectedApplication.status === 'rejected'
+                                    ? 'Rechazado'
+                                    : 'Pendiente'}
+                            </span>
+                        </p>
+                        <p className="text-sm text-gray-600"><strong>Fecha de postulación:</strong> {moment(selectedApplication.appliedAt).format('DD/MM/YYYY')}</p>
+                    </div>
+                    
+                    <div className="flex gap-3 mt-4">
+                        <button
+                            onClick={() => handleUpdateApplicationStatus('accepted')}
+                            disabled={updatingStatus || selectedApplication.status === 'accepted'}
+                            className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                selectedApplication.status === 'accepted'
+                                    ? 'bg-green-500 text-white cursor-not-allowed opacity-50'
+                                    : 'bg-green-500 text-white hover:bg-green-600 cursor-pointer'
+                            } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {updatingStatus ? 'Actualizando...' : 'Aceptar'}
+                        </button>
+                        <button
+                            onClick={() => handleUpdateApplicationStatus('rejected')}
+                            disabled={updatingStatus || selectedApplication.status === 'rejected'}
+                            className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                selectedApplication.status === 'rejected'
+                                    ? 'bg-red-500 text-white cursor-not-allowed opacity-50'
+                                    : 'bg-red-500 text-white hover:bg-red-600 cursor-pointer'
+                            } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {updatingStatus ? 'Actualizando...' : 'Rechazar'}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
