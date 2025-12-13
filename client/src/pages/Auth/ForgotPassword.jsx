@@ -25,7 +25,7 @@ const ForgotPassword = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white p-5">
+    <div className=" flex items-center justify-center bg-gradient-to-b from-blue-50 to-white p-5">
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 flex flex-col items-center">
          <Logo size={160} className="mr-2 w-32 mb-6" />
         <h3 className="text-2xl font-bold text-gray-900 mb-2">Recuperar contraseña</h3>
