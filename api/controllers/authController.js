@@ -16,126 +16,183 @@ const generateToken = (userId) =>{
 console.log('generar el token', generateToken());
 
 //Register user
-export const registerUser = async (req, res) => {
-    try {
-        const { name, email, password, profileImageUrl, userType } = req.body;
+// export const registerUser = async (req, res) => {
+//     try {
+//         const { name, email, password, profileImageUrl, userType } = req.body;
 
-        console.log("Datos recibidos en registro:", { 
-            name, 
-            email, 
-            userType,
-            hasPassword: !!password,
-            hasProfileImage: !!profileImageUrl
-        });
+//         console.log("Datos recibidos en registro:", { 
+//             name, 
+//             email, 
+//             userType,
+//             hasPassword: !!password,
+//             hasProfileImage: !!profileImageUrl
+//         });
 
-        // Validación de datos requeridos
-        if (!name || !email || !password) {
-            return res.status(400).json({ 
-                message: "Por favor, complete todos los campos requeridos" 
-            });
-        }
+//         // Validación de datos requeridos
+//         if (!name || !email || !password) {
+//             return res.status(400).json({ 
+//                 message: "Por favor, complete todos los campos requeridos" 
+//             });
+//         }
 
-        // Validación de email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ 
-                message: "Por favor, ingrese un email válido" 
-            });
-        }
+//         // Validación de email
+//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//         if (!emailRegex.test(email)) {
+//             return res.status(400).json({ 
+//                 message: "Por favor, ingrese un email válido" 
+//             });
+//         }
 
-        // Validación de contraseña
-        if (password.length < 8) {
-            return res.status(400).json({ 
-                message: "La contraseña debe tener al menos 8 caracteres" 
-            });
-        }
+//         // Validación de contraseña
+//         if (password.length < 8) {
+//             return res.status(400).json({ 
+//                 message: "La contraseña debe tener al menos 8 caracteres" 
+//             });
+//         }
 
-        // Validación de tipo de usuario
-        if (userType && !['job_seeker', 'employer'].includes(userType)) {
-            return res.status(400).json({ 
-                message: "Tipo de usuario inválido" 
-            });
-        }
+//         // Validación de tipo de usuario
+//         if (userType && !['job_seeker', 'employer'].includes(userType)) {
+//             return res.status(400).json({ 
+//                 message: "Tipo de usuario inválido" 
+//             });
+//         }
 
-        //Chequea si el usuario ya existe
-        const userExist = await User.findOne({ email });
-        if(userExist) {
-            return res.status(400).json({ 
-                message: "El email ya está registrado" 
-            });
-        }
+//         //Chequea si el usuario ya existe
+//         const userExist = await User.findOne({ email });
+//         if(userExist) {
+//             return res.status(400).json({ 
+//                 message: "El email ya está registrado" 
+//             });
+//         }
 
 
-        //Generamos el token de verificación
-        const verificationToken = crypto.randomBytes(32).toString('hex');
-        //El password Hasheado
-        try {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
+//         //Generamos el token de verificación
+//         const verificationToken = crypto.randomBytes(32).toString('hex');
+//         //El password Hasheado
+//         try {
+//             const salt = await bcrypt.genSalt(10);
+//             const hashedPassword = await bcrypt.hash(password, salt);
 
-            // Crear a un nuevo Usuario
-            const user = await User.create({
-                name,
-                email,
-                password: hashedPassword,
-                profileImageUrl,
-                userType: userType || 'job_seeker',
-                isVerified: false, ///// Esto es nuevo para la verficación
-                verificationToken
-            });
+//             // Crear a un nuevo Usuario
+//             const user = await User.create({
+//                 name,
+//                 email,
+//                 password: hashedPassword,
+//                 profileImageUrl,
+//                 userType: userType || 'job_seeker',
+//                 isVerified: false, ///// Esto es nuevo para la verficación
+//                 verificationToken
+//             });
 
-            // const verificationLink = `${process.env.BASE_URL}/auth/verify-email?user=${user._id}`;///Esto es el codigo de verificacion
-            const verificationLink = `${process.env.BASE_URL}/api/auth/verify/${verificationToken}`;
+//             // const verificationLink = `${process.env.BASE_URL}/auth/verify-email?user=${user._id}`;///Esto es el codigo de verificacion
+//             const verificationLink = `${process.env.BASE_URL}/api/auth/verify/${verificationToken}`;
     
 
-            //Armando el contenido del correo
-                    const html = `
-                        <h1>Hola ${name}</h1>
-                        <p>Gracias por registrarte. Por favor confirmá tu correo haciendo clic <a href="${verificationLink}">aquí</a>.</p>
-                        `;
+//             //Armando el contenido del correo
+//                     const html = `
+//                         <h1>Hola ${name}</h1>
+//                         <p>Gracias por registrarte. Por favor confirmá tu correo haciendo clic <a href="${verificationLink}">aquí</a>.</p>
+//                         `;
 
-            console.log("Enviando mail a:", email);
-            //Enviar correo usando la funcion de enviarCorreo
-            await enviarCorreo(email, 'Confirma tu correo', html);
+//             console.log("Enviando mail a:", email);
+//             //Enviar correo usando la funcion de enviarCorreo
+//             await enviarCorreo(email, 'Confirma tu correo', html);
 
-            console.log("Usuario creado exitosamente:", { 
-                id: user._id,
-                email: user.email,
-                userType: user.userType,
-                isVerified: user.isVerified, 
-            });
+//             console.log("Usuario creado exitosamente:", { 
+//                 id: user._id,
+//                 email: user.email,
+//                 userType: user.userType,
+//                 isVerified: user.isVerified, 
+//             });
 
-            return res.status(201).json({
-                message: "Registro exitoso. Te hemos enviado un correo para confirmar tu cuenta."
-                });
-            // Generar token
-            // const token = generateToken(user._id);
-            // if (!token) {
-            //     throw new Error("Error al generar el token");
-            // }
+//             return res.status(201).json({
+//                 message: "Registro exitoso. Te hemos enviado un correo para confirmar tu cuenta."
+//                 });
+//             // Generar token
+//             // const token = generateToken(user._id);
+//             // if (!token) {
+//             //     throw new Error("Error al generar el token");
+//             // }
 
-            // res.status(201).json({
-            //     _id: user._id,
-            //     name: user.name,
-            //     email: user.email,
-            //     profileImageUrl: user.profileImageUrl,
-            //     userType: user.userType,
-            //     token
-            // });
-        } catch (hashError) {
-            console.error("Error al procesar la contraseña:", hashError);
-            return res.status(500).json({ 
-                message: "Error al procesar la contraseña" 
-            });
-        }
-    } catch(error) {
-        console.error("Error en registro:", error);
-        res.status(500).json({ 
-            message: "Error en el servidor", 
-            error: error.message 
-        });
+//             // res.status(201).json({
+//             //     _id: user._id,
+//             //     name: user.name,
+//             //     email: user.email,
+//             //     profileImageUrl: user.profileImageUrl,
+//             //     userType: user.userType,
+//             //     token
+//             // });
+//         } catch (hashError) {
+//             console.error("Error al procesar la contraseña:", hashError);
+//             return res.status(500).json({ 
+//                 message: "Error al procesar la contraseña" 
+//             });
+//         }
+//     } catch(error) {
+//         console.error("Error en registro:", error);
+//         res.status(500).json({ 
+//             message: "Error en el servidor", 
+//             error: error.message 
+//         });
+//     }
+// }//register User End
+
+
+
+export const registerUser = async (req, res) => {
+  try {
+    const { name, email, password, profileImageUrl, userType } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Faltan datos obligatorios" });
     }
-}//register User End
+
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      return res.status(400).json({ message: "El email ya está registrado" });
+    }
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      profileImageUrl,
+      userType: userType || "job_seeker",
+      isVerified: false,
+      verificationToken
+    });
+
+    const verificationLink =
+      `${process.env.BASE_URL}/api/verify/${verificationToken}`;
+
+    const html = `
+      <h2>Hola ${name}</h2>
+      <p>Confirmá tu cuenta haciendo click en el siguiente enlace:</p>
+      <a href="${verificationLink}">${verificationLink}</a>
+    `;
+
+    // ⚠️ El mail NO rompe el registro si falla
+    try {
+      await enviarCorreo(email, "Confirmá tu correo", html);
+    } catch (mailError) {
+      console.error("Error enviando email:", mailError.message);
+    }
+
+    return res.status(201).json({
+      message: "Usuario creado. Revisá tu email para confirmar la cuenta."
+    });
+
+  } catch (error) {
+    console.error("Register error:", error);
+    return res.status(500).json({ message: "Error del servidor" });
+  }
+};
+
+
+
 
 //Login User
 export const loginUser = async (req, res) => {
