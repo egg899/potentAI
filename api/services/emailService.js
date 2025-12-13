@@ -43,7 +43,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const enviarCorreo = async (to, subject, html) => {
     try {
         const response = await resend.emails.send({
-            from: `PotentIA <onboarding@resend.dev>`,
+            from: `PotentIA <${process.env.EMAIL_FROM}>`,
             to,
             subject,
             html,
