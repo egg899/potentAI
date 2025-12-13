@@ -85,7 +85,7 @@ export const registerUser = async (req, res) => {
             });
 
             // const verificationLink = `${process.env.BASE_URL}/auth/verify-email?user=${user._id}`;///Esto es el codigo de verificacion
-            const verificationLink = `${process.env.BASE_URL}/auth/verify/${verificationToken}`;
+            const verificationLink = `${process.env.BASE_URL}/api/auth/verify/${verificationToken}`;
     
 
             //Armando el contenido del correo
@@ -94,7 +94,7 @@ export const registerUser = async (req, res) => {
                         <p>Gracias por registrarte. Por favor confirmá tu correo haciendo clic <a href="${verificationLink}">aquí</a>.</p>
                         `;
 
-
+            console.log("Enviando mail a:", email);
             //Enviar correo usando la funcion de enviarCorreo
             await enviarCorreo(email, 'Confirma tu correo', html);
 
