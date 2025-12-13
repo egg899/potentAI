@@ -68,7 +68,7 @@ const ResetPassword = () => {
           {message && <p className="text-green-600 text-sm mb-2">{message}</p>}
           <button
             type="submit"
-            className={`w-full py-2 rounded-md text-white font-semibold ${
+            className={`w-full py-2 rounded-md text-white font-semibold cursor-pointer ${
               loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
             } transition-colors`}
             disabled={loading}
