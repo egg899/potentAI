@@ -173,10 +173,27 @@ export const registerUser = async (req, res) => {
     const verificationLink = `${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
     const html = `
-      <h2>Hola ${name}</h2>
-      <p>Confirmá tu cuenta haciendo click en el siguiente enlace:</p>
-      <a href="${verificationLink}">Haz click aquí para verificar tu correo</a>
-    `;
+  <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
+    <h2 style="font-size: 24px; color: #1e3a8a; margin-bottom: 20px;">Hola ${name}</h2>
+
+    <p style="font-size: 16px; color: #374151; margin-bottom: 20px;">
+      Confirmá tu cuenta haciendo click en el siguiente botón:
+    </p>
+
+    <a href="${verificationLink}" 
+       style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 20px;">
+       Verificar mi correo
+    </a>
+
+    <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+      Si el botón no funciona, copiá y pegá este enlace en tu navegador:
+    </p>
+    <p style="font-size: 14px; color: #2563eb; word-break: break-all;">
+      ${verificationLink}
+    </p>
+  </div>
+`;
+
 
     // Enviar email (no rompe el registro si falla)
     try {
