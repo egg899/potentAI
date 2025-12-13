@@ -166,12 +166,13 @@ export const registerUser = async (req, res) => {
     });
 
     const verificationLink =
-      `${process.env.BASE_URL}/api/verify/${verificationToken}`;
+  `https://potentia-api-production.up.railway.app/api/auth/verify/${verificationToken}`;
+
 
     const html = `
       <h2>Hola ${name}</h2>
       <p>Confirmá tu cuenta haciendo click en el siguiente enlace:</p>
-      <a href="${verificationLink}">${verificationLink}</a>
+      <a href="${verificationLink}">Haz click aqui</a>
     `;
 
     // ⚠️ El mail NO rompe el registro si falla
