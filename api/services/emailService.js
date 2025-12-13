@@ -1,34 +1,55 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+// import nodemailer from 'nodemailer';
+// import dotenv from 'dotenv';
 
-dotenv.config();
+// dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false, // 👈 corregido (era SECURE)
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false // 👈 evita el error self-signed certificate
-    }
-});
+// const transporter = nodemailer.createTransport({
+//     host: process.env.EMAIL_HOST,
+//     port: process.env.EMAIL_PORT,
+//     secure: false, // 👈 corregido (era SECURE)
+//     auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS
+//     },
+//     tls: {
+//         rejectUnauthorized: false // 👈 evita el error self-signed certificate
+//     }
+// });
 
-// Función para enviar el correo
+// // Función para enviar el correo
+// export const enviarCorreo = async (to, subject, html) => {
+//     try {
+//         const info = await transporter.sendMail({
+//             from: `Tu App <${process.env.EMAIL_USER}>`,
+//             to,
+//             subject,
+//             html,
+//         });
+
+//         console.log("Correo enviado: %s", info.messageId);
+//     } catch (error) {
+//         console.error("Error al enviar correo:", error);
+//         throw error;
+//     }
+// };
+
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export const enviarCorreo = async (to, subject, html) => {
     try {
-        const info = await transporter.sendMail({
-            from: `Tu App <${process.env.EMAIL_USER}>`,
+        const response = await resend.emails.send({
+            from: `PotentIA <${process.env.EMAIL_FROM}>`,
             to,
             subject,
             html,
         });
 
-        console.log("Correo enviado: %s", info.messageId);
+        console.log("Correo enviado con Resend:", response.id);
+        return true;
     } catch (error) {
-        console.error("Error al enviar correo:", error);
+        console.error("Error al enviar correo con Resend:", error);
         throw error;
     }
 };
