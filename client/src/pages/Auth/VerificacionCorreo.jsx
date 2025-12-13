@@ -10,7 +10,7 @@ const VerificacionCorreo = () => {
   useEffect(() => {
     // Hacer la petición al backend para verificar el correo
     axios
-      .get(`https://potentia-api-production.up.railway.app/api/verify/${token}`)
+      .get(`https://potentia-api-production.up.railway.app/api/auth/verify/${token}`)
       .then(() => {
         setMensaje("✅ Tu correo fue verificado con éxito.");
       })
