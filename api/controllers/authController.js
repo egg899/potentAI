@@ -167,7 +167,8 @@ export const registerUser = async (req, res) => {
 
 //     const verificationLink =
 //   `https://potentia-api-production.up.railway.app/api/auth/verify/${verificationToken}`;
-const verificationLink = 'http://localhost:5173/Auth/VerificacionCorreo';
+    const verificationLink =
+        `${process.env.BASE_URL}/api/verify/${verificationToken}`;
 
     const html = `
       <h2>Hola ${name}</h2>
