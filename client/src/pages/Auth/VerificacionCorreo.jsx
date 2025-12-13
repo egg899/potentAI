@@ -2,7 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const VerificacionCorreo = () => {
   const { token } = useParams(); // Recuperar el token de la URL
   const [mensaje, setMensaje] = useState("Verificando...");
@@ -10,7 +12,7 @@ const VerificacionCorreo = () => {
   useEffect(() => {
     // Hacer la petición al backend para verificar el correo
     axios
-      .get(`https://potentia-api-production.up.railway.app/api/auth/verify/${token}`)
+      .get(`${process.env.BASEBACK_URL}/api/auth/verify/${token}`)
       .then(() => {
         setMensaje("✅ Tu correo fue verificado con éxito.");
       })
