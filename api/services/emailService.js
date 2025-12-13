@@ -44,7 +44,7 @@ export const enviarCorreo = async (to, subject, html) => {
     try {
         const response = await resend.emails.send({
             from: `PotentIA <onboarding@resend.dev>`,
-            to: ['germanverissimo5@hotmail.com'],
+            to,
             subject,
             html,
         });
