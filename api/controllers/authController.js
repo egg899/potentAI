@@ -143,18 +143,22 @@ export const registerUser = async (req, res) => {
   try {
     const { name, email, password, profileImageUrl, userType } = req.body;
 
+    // Validación de campos obligatorios
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Faltan datos obligatorios" });
     }
 
+    // Verificar si el usuario ya existe
     const userExist = await User.findOne({ email });
     if (userExist) {
       return res.status(400).json({ message: "El email ya está registrado" });
     }
 
+    // Crear token de verificación y password hasheado
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Crear usuario en DB
     const user = await User.create({
       name,
       email,
@@ -162,31 +166,29 @@ export const registerUser = async (req, res) => {
       profileImageUrl,
       userType: userType || "job_seeker",
       isVerified: false,
-      verificationToken
+      verificationToken,
     });
 
-//     const verificationLink =
-//   `https://potentia-api-production.up.railway.app/api/auth/verify/${verificationToken}`;
-    const verificationLink =
-        `${process.env.BASE_URL}/api/verify/${verificationToken}`;
+    // Link de verificación apunta al FRONTEND
+    const verificationLink = `${process.env.BASE_URL}/auth/verify/${verificationToken}`;
 
     const html = `
       <h2>Hola ${name}</h2>
       <p>Confirmá tu cuenta haciendo click en el siguiente enlace:</p>
-      <a href="${verificationLink}">Haz click aqui</a>
+      <a href="${verificationLink}">Haz click aquí para verificar tu correo</a>
     `;
 
-    // ⚠️ El mail NO rompe el registro si falla
+    // Enviar email (no rompe el registro si falla)
     try {
       await enviarCorreo(email, "Confirmá tu correo", html);
+      console.log(`Email de verificación enviado a ${email}`);
     } catch (mailError) {
       console.error("Error enviando email:", mailError.message);
     }
 
     return res.status(201).json({
-      message: "Usuario creado. Revisá tu email para confirmar la cuenta."
+      message: "Usuario creado. Revisá tu email para confirmar la cuenta.",
     });
-
   } catch (error) {
     console.error("Register error:", error);
     return res.status(500).json({ message: "Error del servidor" });
