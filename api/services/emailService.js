@@ -49,7 +49,7 @@ export const enviarCorreo = async (to, subject, html) => {
             html,
         });
 
-        console.log("Correo enviado con Resend:", response.id);
+        console.log("Correo enviado con Resend:", data.id);
         return true;
     } catch (error) {
         console.error("Error al enviar correo con Resend:", error);
