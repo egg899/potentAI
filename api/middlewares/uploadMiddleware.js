@@ -22,7 +22,9 @@ const storage = multer.diskStorage({
         // Generar un nombre de archivo único
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const ext = path.extname(file.originalname);
-        cb(null, `resume-${uniqueSuffix}${ext}`);
+        // Usar prefijo diferente según la ruta para distinguir imágenes de perfil de usuario
+        const prefix = req.path && req.path.includes('/upload-image') ? 'profile' : 'resume';
+        cb(null, `${prefix}-${uniqueSuffix}${ext}`);
     },
 });
 

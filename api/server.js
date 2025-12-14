@@ -63,11 +63,14 @@ app.get('/', (req, res) => {
 app.use(
     "/uploads",
     express.static(path.join(__dirname, "uploads"), {
-        setHeaders: (res, path) => {
+        setHeaders: (res, filePath) => {
             res.set("Access-Control-Allow-Origin", "*");
-            res.set("Cache-Control", "no-cache, no-store, must-revalidate");
-            res.set("Pragma", "no-cache");
-            res.set("Expires", "0");
+            // Cachear imágenes por 1 año para que persistan
+            if (filePath.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                res.set("Cache-Control", "public, max-age=31536000, immutable");
+            } else {
+                res.set("Cache-Control", "public, max-age=3600");
+            }
         }
     })
 );
