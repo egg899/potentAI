@@ -3,7 +3,8 @@ import React, {useState, useContext} from 'react';
 import { UserContext } from '../../context/userContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
-
+import profileImg from '../../assets/images/perfil-logo.png';
+import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 const ProfileInfoCard = () => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
@@ -54,9 +55,10 @@ const ProfileInfoCard = () => {
             <div className="flex items-center">
                 <div>
                 <img
-                    src={user.profileImageUrl}
+                    src={user.profileImageUrl }
                     alt="imagen de perfil"
                     className="w-11 h-11 bg-gray-300 rounded-full mr-3"
+                    
                 />
                 </div>
                 <div className="relative inline-block">
