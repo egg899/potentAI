@@ -27,18 +27,34 @@ const __dirname = dirname(__filename);
 // Middleware CORS y JSON
 
 const allowedOrigins = [
-    process.env.BASE_URL,
+    
     "http://localhost:5173",
+    "https://potentai-production.up.railway.app"
 ];
 
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin: function (origin, callback) {
+                    // Permitir requests sin origin (Postman, Railway healthcheck, etc.)
+                    if (!origin) return callback(null, true);
+
+                    if (allowedOrigins.includes(origin)) {
+                    return callback(null, true);
+                    }
+
+                    return callback(new Error("Not allowed by CORS"));
+                },
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true
     })
 );
+
+// 👇 ESTO ES CLAVE para el preflight
+app.options("*", cors());
+
+
+
 connectDB();
 app.use(express.json());
 
