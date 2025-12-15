@@ -30,7 +30,7 @@ const ResetPassword = () => {
       const res = await axiosInstance.post(`/api/auth/reset-password/${token}`, { password });
       setMessage(res.data.message || 'Contraseña actualizada correctamente.');
       setTimeout(() => {
-        window.location.href = 'http://localhost:5173/';
+        window.location.href = 'https://potentai-production.up.railway.app/';
       }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Error al actualizar la contraseña.');

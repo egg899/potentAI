@@ -55,9 +55,14 @@ const ProfileInfoCard = () => {
             <div className="flex items-center">
                 <div>
                 <img
-                    src={user.profileImageUrl }
+                    src={user.profileImageUrl || profileImg }
                     alt="imagen de perfil"
                     className="w-11 h-11 bg-gray-300 rounded-full mr-3"
+                    
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = profileImg;
+                    }}
                     
                 />
                 </div>

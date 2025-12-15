@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
-
+import profileImg from '../../assets/images/perfil-logo.png';
 const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
   const inputRef = useRef(null);
   const [localPreview, setLocalPreview] = useState(preview);
@@ -95,6 +95,10 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
             src={localPreview}
             alt="Foto de Perfil"
             className="w-20 h-20 rounded-full object-cover"
+             onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = profileImg;
+                                }}
           /></div>
           <button
             type="button"

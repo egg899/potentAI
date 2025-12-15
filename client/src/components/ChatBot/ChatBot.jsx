@@ -1,13 +1,28 @@
 import { useEffect, useState, useRef } from "react";
 
 const faq = [
-  { q: "¿Cómo me registro?", a: "Hacé clic en 'Ingresar/Registrarse' y lugo haz click en 'Registrarse'." },
-  { q: "¿Cómo subo mi CV?", a: "¿Dónde veo mi CV?", a: "Luego de hacer click en Dashboard en tu men´, podrás ver todos los CV´s que has creado." },
-  { q: "¿Dónde veo mi CV?", a: "En el menú principal hz click en 'Analizar CV. Desde ahi presiona 'Seleccionar archivo'. Luego haz click 'Extraer CV' y desde allí 'Mejorar CV' ." },
-  { q: "¿Cómo edito mi perfil?", a: "Dentro de tu perfil hacé clic en 'Editar CV'." },
-  { q: "¿Cómo descargar mi CV?", a: "En 'Dashboard', elige uno de tus cv's y desde ahi, haz click en 'Vista Previa y Descarga'." },
-
+  {
+    q: "¿Cómo me registro?",
+    a: "Hacé clic en «Ingresar / Registrarse» y, a continuación, seleccioná la opción «Registrarse» para crear tu cuenta."
+  },
+  {
+    q: "¿Cómo subo mi CV?",
+    a: "Desde el menú principal, ingresá a «Analizar CV». Luego seleccioná el archivo desde tu dispositivo, hacé clic en «Extraer CV» y finalizá el proceso con la opción «Mejorar CV»."
+  },
+  {
+    q: "¿Dónde puedo ver mis CV?",
+    a: "Accedé a «Dashboard» desde el menú principal para visualizar todos los CV que hayas creado."
+  },
+  {
+    q: "¿Cómo edito mi perfil?",
+    a: "Ingresá a tu perfil y seleccioná la opción «Editar CV» para actualizar tu información."
+  },
+  {
+    q: "¿Cómo descargo mi CV?",
+    a: "Dentro de «Dashboard», seleccioná el CV que desees y hacé clic en «Vista previa y descarga» para obtener el archivo."
+  }
 ];
+
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
