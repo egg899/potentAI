@@ -8,6 +8,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: process.env.PORT || 5173,
-    allowedHosts: ['potentai.onrender.com']
+    allowedHosts: ['potentai.onrender.com', 'potentai-production.up.railway.app']
   }
 })
