@@ -19,6 +19,14 @@ const Analisis = () => {
  const [isExtracting, setIsExtracting] = useState(false);
  const [openCreateModal, setOpenCreateModal] = useState(false);
 
+   // NUEVO: Estado para animación del div de subida de CV
+  const [showUpload, setShowUpload] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowUpload(true), 100); // pequeño delay para animación
+    return () => clearTimeout(timeout);
+  }, []);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if(file) {
@@ -198,7 +206,11 @@ if(parsedLaburo){
   return (
     <DashboardLayout>
       {isImprovingCV && <Loader />}
-     <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
+     <div className={`
+          p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10
+          transform transition-all duration-500 ease-out
+          ${showUpload ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}
+        `}>
  
         <div className="p-8 border border-purple-200 rounded-2xl bg-white shadow-lg max-w-4xl mx-auto mt-10">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Subí tu CV para análisis  </h2>
