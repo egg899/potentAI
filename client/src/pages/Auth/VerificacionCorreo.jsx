@@ -28,7 +28,7 @@ const VerificacionCorreo = () => {
       {mensaje && (
         <div className="mt-4">
           <a
-            href="http://localhost:5173/"
+            href="https://potentai-production.up.railway.app/"
             className="text-blue-600 underline hover:text-blue-800"
           >
             Ir a la página para iniciar sesión

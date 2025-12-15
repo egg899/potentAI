@@ -52,7 +52,11 @@ export const enviarCorreo = async(to, subject, html) => {
     try {
         const msg = {
             to,
-            from:process.env.EMAIL_FROM,
+           from: {
+              email: process.env.EMAIL_FROM,
+              name: "PotentIA"
+            },
+           
             subject,
             html,
         };
