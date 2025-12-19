@@ -120,9 +120,9 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50 p-6 overflow-y-auto">
 
-    <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
+    <div className="w-[90vw] md:w-[33vw] p-7 mx-auto">
       <h3 className="text-lg font-semibold text-black">Crea una cuenta</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-6">
         Únase hoy mismo ingresando sus datos a continuación
@@ -139,6 +139,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
             label="Nombre Completo"
             placeholder="John"
             type="text"
+            helperText="Ej: John Doe"
           />
 
           <Input
@@ -148,6 +149,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
             label="Dirección Electrónica"
             placeholder="john@example.com"
             type="email"
+            helperText="Ej: juan@ejemplo.com"
           />
 
           <Input
@@ -156,6 +158,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
             name="password"
             label="Contraseña"
             placeholder="Mínimo 8 caracteres, por favor"
+            helperText="Mínimo 8 caracteres"
             type="password"
           />
 

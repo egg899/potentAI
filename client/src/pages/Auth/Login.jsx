@@ -86,13 +86,14 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
       </p>
 
       <form onSubmit={handleLogin}>
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-2 mt-4">
           <Input
             value={email}
             onChange={({ target }) => setEmail(target.value)}
             label="Correo Electrónico"
             placeholder="john@example.com"
             type="email"
+            helperText="Ej: juan@ejemplo.com"
           />
 
           <Input
@@ -101,7 +102,9 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
             label="Contraseña"
             placeholder="Ingresar la contraseña"
             type="password"
+            helperText="Mínimo 8 caracteres"
           />
+
         </div>
 
         {/* Enlace para recuperar contraseña */}
