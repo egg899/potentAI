@@ -4,6 +4,7 @@ import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
 import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import Modal from '../components/Modal';
+import SecondaryModal from '../components/SecondaryModal';
 import { LuCirclePlus } from 'react-icons/lu';
 import CreateResumeForm from './Home/CreateResumeForm';
 import logoPotentia from '../assets/images/logo-potentia.png';
@@ -204,6 +205,7 @@ if(parsedLaburo){
   );
 
   return (
+    <>
     <DashboardLayout>
       {isImprovingCV && <Loader />}
      <div className={`
@@ -319,12 +321,12 @@ if(parsedLaburo){
                   
                   </div>
           )}
-        <Modal
+        {/* <SecondaryModal
           isOpen={openCreateModal}
           onClose={() => {
             setOpenCreateModal(false);
           }}
-          hideHeader
+          
           >
             <div className="">
               <CreateResumeForm 
@@ -335,7 +337,7 @@ if(parsedLaburo){
               }}/>
             </div>
 
-        </Modal>
+        </SecondaryModal> */}
        
 </div>
 
@@ -350,6 +352,31 @@ if(parsedLaburo){
         
     
     </DashboardLayout>
+
+
+
+
+ <SecondaryModal
+          isOpen={openCreateModal}
+          onClose={() => {
+            setOpenCreateModal(false);
+          }}
+          
+          >
+            <div className="">
+              <CreateResumeForm 
+              estructuraCV={estructuraCV}
+              laburo={parsedLaburo}
+              onSuccess={()=>{
+                setOpenCreateModal(false);
+              }}/>
+            </div>
+
+        </SecondaryModal>
+
+
+</>
+
   )
 }
 

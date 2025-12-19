@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
-import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo, ProcesarUrl, RemoteJobs, Confirmacion } from './pages'
+import { LandingPage, Login, SignUp, Dashboard, EditResume, ProfileInfo, Analisis, VerificacionCorreo, ProcesarUrl, RemoteJobs, Confirmacion, UserApplications } from './pages'
 import UserProvider from './context/userContext.jsx'
 import Footer from './components/Footer';
 import ProtectedEmployerRoute from './components/ProtectedEmployerRoute';
@@ -41,6 +41,7 @@ const App = () => {
               <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
               <Route path="/procesar-url" element={<ProcesarUrl/>} />
               <Route path="/confirmacion"  element={<Confirmacion />} />
+              <Route path="/my-applications" element={<UserApplications/>} />
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 

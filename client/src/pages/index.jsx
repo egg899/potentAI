@@ -9,3 +9,4 @@ export {Analisis} from "./AnalisisCv";
 export {ProcesarUrl} from "./ProcesarUrl";
 export {RemoteJobs} from "./RemoteJobs";
 export {Confirmacion} from "./Auth/Confirmacion";
+export {UserApplications} from "./UserApplications"
