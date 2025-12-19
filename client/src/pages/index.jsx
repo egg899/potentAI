@@ -8,3 +8,4 @@ export {EditResume} from "./ResumeUpdate/EditResume";
 export {Analisis} from "./AnalisisCv";
 export {ProcesarUrl} from "./ProcesarUrl";
 export {RemoteJobs} from "./RemoteJobs";
+export {Confirmacion} from "./Auth/Confirmacion";

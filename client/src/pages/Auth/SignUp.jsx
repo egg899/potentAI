@@ -91,6 +91,13 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
       } else 
         {
           setMessage('Esperando por la confirmación');
+          sessionStorage.setItem('showConfirmacion', 'true'); // <-- bandera temporal
+          // Redirigir después de 1 segundo
+         
+            navigate('/confirmacion'); // Ruta de confirmación
+          
+
+
         }
       // else {
       //   setError('Error en el registro: No se recibió el token');
@@ -113,6 +120,8 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
   };
 
   return (
+    <div>
+
     <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
       <h3 className="text-lg font-semibold text-black">Crea una cuenta</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-6">
@@ -187,6 +196,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
           </button>
         </p>
       </form>
+    </div>
     </div>
   );
 };
