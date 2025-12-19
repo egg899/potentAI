@@ -75,7 +75,7 @@ const ChangePasswordForm = () => {
                         className={`w-full px-4 py-2 rounded-lg text-white font-semibold transition-colors ${
                             loading 
                             ? "bg-purple-400 cursor-not-allowed"
-                            : "bg-purple-600 hover:bg-purple-700"
+                            : "bg-purple-600 hover:bg-purple-700 cursor-pointer"
                         }`}
                     >
                         {loading ? "Guardando..." : "Cambiar Contraseña"}

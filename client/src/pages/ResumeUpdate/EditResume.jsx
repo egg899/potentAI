@@ -29,6 +29,7 @@ import { fixTailWindColors, captureElementAsImage, dataUrltoFile } from '../../u
 // import { captureElementAsImage } from '../../utils/helper.js';
 // import { dataUrltoFile} from '../../utils/helper.js';
 import Modal from '../../components/Modal.jsx';
+import SecondaryModal from '../../components/SecondaryModal.jsx';
 import ThemeSelector from './ThemeSelector.jsx';
 const EditResume = () => {
   const { resumeId } = useParams();
@@ -802,7 +803,7 @@ interests: [""],
           </div>
         </div> 
         
-        <Modal 
+        {/* <Modal 
           isOpen={openThemeSelector}
           onClose={() => setOpenThemeSelector(false)}
           title="Cambiá el Tema">
@@ -822,9 +823,30 @@ interests: [""],
           
 
 
-        </Modal>
+        </Modal> */}
+        
+<SecondaryModal 
+          isOpen={openThemeSelector}
+          onClose={() => setOpenThemeSelector(false)}
+          title="Cambiá el Tema">
+            <div className="w-[90vw] h-[80vh]">
+              <ThemeSelector
+                selectedTheme={resumeData?.template}
+                setSelectedTheme={(value) =>{
+                  setResumeData((prevState) =>({
+                    ...prevState,
+                    template: value || prevState.template,
+                  }));
+                }}
+                resumeData={null}
+                onClose={() => setOpenThemeSelector(false)}
+              />
+            </div>
+          
 
-        <Modal
+
+        </SecondaryModal>
+        <SecondaryModal
           isOpen={openPreviewModal}
           onClose={() => setOpenPreviewModal(false)}
           title={resumeData.title}
@@ -841,7 +863,7 @@ interests: [""],
                   />
             </div>
             
-          </Modal>
+          </SecondaryModal>
 
 
 
