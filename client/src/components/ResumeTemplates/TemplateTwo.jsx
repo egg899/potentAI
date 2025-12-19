@@ -65,7 +65,15 @@ const TemplateTwo = ({
 
     useEffect(() => {
         const img = resumeData.profileInfo?.profileImg;
-        const previewUrl = resumeData.profileInfo?.profilePreviewUrl;
+        let previewUrl = resumeData.profileInfo?.profilePreviewUrl;
+        
+        // Corregir URL si empieza con "undefined"
+        if (previewUrl && typeof previewUrl === 'string' && previewUrl.startsWith('undefined')) {
+            const baseUrl = 'https://potentia-api-production.up.railway.app';
+            const path = previewUrl.replace(/^undefined/, '');
+            previewUrl = `${baseUrl}${path}`;
+            console.log('TemplateTwo - Corrigiendo URL:', resumeData.profileInfo.profilePreviewUrl, '->', previewUrl);
+        }
 
         if (!img && !previewUrl) {
             setImageUrl(null);
@@ -190,8 +198,8 @@ const TemplateTwo = ({
             <div className="w-[140px] h-[140px] max-w-[140px] max-h-[140px] rounded-2xl flex items-center justify-center"
                  style={{ backgroundColor: themeColors[1] }} 
             >
-              {resumeData.profileInfo.profilePreviewUrl ? (
-                <img src={resumeData.profileInfo.profilePreviewUrl}
+              {imageUrl ? (
+                <img src={imageUrl}
                      className="w-[140px] h-[140px] rounded-2xl" 
                 />
               ) : (

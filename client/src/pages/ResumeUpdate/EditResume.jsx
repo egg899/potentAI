@@ -489,6 +489,17 @@ interests: [""],
         if (response.data && response.data.profileInfo) {
           const resumeInfo = response.data;
           console.log('resumeInfo: ', resumeInfo);
+          
+          // Corregir URL si empieza con "undefined"
+          let profilePreviewUrl = resumeInfo?.profileInfo?.profilePreviewUrl || '';
+          if (profilePreviewUrl && typeof profilePreviewUrl === 'string' && profilePreviewUrl.startsWith('undefined')) {
+            // Reconstruir la URL con la URL base correcta del API
+            const baseUrl = 'https://potentia-api-production.up.railway.app';
+            const path = profilePreviewUrl.replace(/^undefined/, '');
+            profilePreviewUrl = `${baseUrl}${path}`;
+            console.log('Corrigiendo URL al cargar:', resumeInfo.profileInfo.profilePreviewUrl, '->', profilePreviewUrl);
+          }
+          
           // console.log('resumeInfo?.profileInfo',resumeInfo.profileInfo);
           setResumeData((prevState) => ({
             ...prevState,
@@ -496,7 +507,11 @@ interests: [""],
             jobId:resumeInfo?.jobId || null,
             remoteJobId:resumeInfo?.remoteJobId || null,
             template: resumeInfo?.template || prevState?.template,
-            profileInfo: resumeInfo?.profileInfo || prevState?.profileInfo,
+            profileInfo: {
+              ...(resumeInfo?.profileInfo || prevState?.profileInfo),
+              profileImg: null, // Siempre null al cargar desde BD (no se guardan Files)
+              profilePreviewUrl: profilePreviewUrl || "",
+            },
             contactInfo: resumeInfo?.contactInfo || prevState?.contactInfo,
             workExperience:
               resumeInfo?.workExperience || prevState?.workExperience,
@@ -553,6 +568,18 @@ interests: [""],
       );
       
       const { thumbnailLink, profilePreviewLink } = uploadResponse.data;
+
+      // Actualizar el estado local con la nueva URL de la imagen
+      if (profilePreviewLink) {
+        setResumeData((prev) => ({
+          ...prev,
+          profileInfo: {
+            ...prev.profileInfo,
+            profilePreviewUrl: profilePreviewLink,
+            profileImg: null, // Limpiar el archivo temporal ya que ahora tenemos la URL
+          },
+        }));
+      }
 
       // Actualizar los detalles del resume
       await updateResumeDetails(thumbnailLink, profilePreviewLink);

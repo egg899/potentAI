@@ -3,6 +3,10 @@ import ProfilePhotoSelector from "../../../components/Inputs/ProfilePhotoSelecto
 import Input from "../../../components/Inputs/Input"
 
 const ProfileInfoForm = ({profileData, updateSection}) => {
+  // Debug: ver qué datos llegan
+  console.log('ProfileInfoForm - profileData:', profileData);
+  console.log('ProfileInfoForm - profilePreviewUrl:', profileData?.profilePreviewUrl);
+  
   return (
     <div className="px-5 pt-5">
       <h2 className="text-lg font-semibold text-gray-900">
@@ -13,7 +17,7 @@ const ProfileInfoForm = ({profileData, updateSection}) => {
         <ProfilePhotoSelector
           image={profileData?.profileImg}
           setImage={(value) => updateSection("profileImg", value)}
-          preview={profileData?.profilePreviewUrl}
+          preview={profileData?.profilePreviewUrl || ''}
           setPreview={(value) => updateSection("profilePreviewUrl", value)}
         />
 

@@ -70,7 +70,16 @@ const TemplateOne = ({
       if (!profileInfo) return;
 
         const img = resumeData.profileInfo?.profileImg;
-        const previewUrl = resumeData.profileInfo?.profilePreviewUrl;
+        let previewUrl = resumeData.profileInfo?.profilePreviewUrl;
+        
+        // Corregir URL si empieza con "undefined"
+        if (previewUrl && typeof previewUrl === 'string' && previewUrl.startsWith('undefined')) {
+            const baseUrl = 'https://potentia-api-production.up.railway.app';
+            const path = previewUrl.replace(/^undefined/, '');
+            previewUrl = `${baseUrl}${path}`;
+            console.log('TemplateOne - Corrigiendo URL:', resumeData.profileInfo.profilePreviewUrl, '->', previewUrl);
+        }
+        
         {console.log('resumeData.profileInfo: ',resumeData.profileInfo === undefined)};
         if (!img && !previewUrl) {
             setImageUrl(null);

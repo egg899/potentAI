@@ -14,8 +14,7 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
     name: '',
     email: '',
     password: '',
-    userType: 'job_seeker',
-    profileImageUrl: ''
+    userType: 'job_seeker'
   });
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -32,13 +31,8 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
 
   const handleImageChange = (file) => {
     setProfileImage(file);
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setFormData(prev => ({
-        ...prev,
-        profileImageUrl: imageUrl
-      }));
-    }
+    // Ya no necesitamos guardar la URL blob en formData
+    // La imagen se enviará directamente como archivo
   };
 
   const handleSignUp = async (e) => {
@@ -73,13 +67,30 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
         return;
       }
 
+      // Crear FormData para enviar la imagen junto con los otros datos
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('email', formData.email);
+      submitData.append('password', formData.password);
+      submitData.append('userType', formData.userType);
+      
+      // Agregar la imagen si existe
+      if (profileImage) {
+        submitData.append('profileImage', profileImage);
+      }
+
       console.log('Enviando datos de registro:', {
-        ...formData,
-        password: '***' // No loguear la contraseña
+        name: formData.name,
+        email: formData.email,
+        userType: formData.userType,
+        hasImage: !!profileImage
       });
 
-      // const response = await axiosInstance.post('/api/auth/register', formData);
-      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, formData);
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, submitData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       console.log('Respuesta del servidor:', response.data);
 

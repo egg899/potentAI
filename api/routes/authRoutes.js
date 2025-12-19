@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 const router = express.Router();
 
 //Auth Routes
-router.post("/register", registerUser); //Registra a Usuarios
+router.post("/register", upload.single("profileImage"), registerUser); //Registra a Usuarios
 router.post("/login", loginUser); //Ingresa el Usuario
 router.get("/profile", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);

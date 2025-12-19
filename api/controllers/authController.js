@@ -141,7 +141,7 @@ console.log('generar el token', generateToken());
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, profileImageUrl, userType } = req.body;
+    const { name, email, password, userType } = req.body;
 
     // Validación de campos obligatorios
     if (!name || !email || !password) {
@@ -152,6 +152,16 @@ export const registerUser = async (req, res) => {
     const userExist = await User.findOne({ email });
     if (userExist) {
       return res.status(400).json({ message: "El email ya está registrado" });
+    }
+
+    // Manejar la imagen de perfil si se subió
+    let profileImageUrl = '';
+    if (req.file) {
+      // Construir la URL de la imagen subida
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? process.env.API_URL || `${req.protocol}://${req.get("host")}`
+        : `${req.protocol}://${req.get("host")}`;
+      profileImageUrl = `${baseUrl}/uploads/${req.file.filename}`;
     }
 
     // Crear token de verificación y password hasheado

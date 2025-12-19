@@ -3,23 +3,38 @@ import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 import profileImg from '../../assets/images/perfil-logo.png';
 const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
   const inputRef = useRef(null);
-  const [localPreview, setLocalPreview] = useState(preview);
+  // Inicializar con preview si existe
+  const isValidPreview = preview && typeof preview === 'string' && preview.trim() !== '';
+  const [localPreview, setLocalPreview] = useState(isValidPreview ? preview : null);
 
+  // Manejar cambios en preview e image
   useEffect(() => {
-    // Actualizar el preview local cuando cambie el preview prop
-    if (preview) {
-      setLocalPreview(preview);
-    }
-  }, [preview]);
-
-  useEffect(() => {
-    // Manejar la imagen cuando es un archivo
+    console.log('ProfilePhotoSelector - image:', image, 'preview:', preview, 'localPreview:', localPreview);
+    
+    // Si hay una imagen nueva (File), tiene prioridad
     if (image && image instanceof File) {
       const objectUrl = URL.createObjectURL(image);
       setLocalPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [image]);
+    // Si no hay imagen nueva pero hay preview válido, usar preview
+    else if (!image && preview && typeof preview === 'string' && preview.trim() !== '') {
+      // Corregir URLs que empiezan con "undefined"
+      let correctedPreview = preview;
+      if (preview.startsWith('undefined')) {
+        // Reconstruir la URL con la URL base correcta
+        const baseUrl = window.location.origin;
+        const path = preview.replace(/^undefined/, '');
+        correctedPreview = `${baseUrl}${path}`;
+        console.log('Corrigiendo URL:', preview, '->', correctedPreview);
+      }
+      setLocalPreview(correctedPreview);
+    }
+    // Si no hay imagen nueva y no hay preview válido, limpiar
+    else if (!image && (!preview || (typeof preview === 'string' && preview.trim() === ''))) {
+      setLocalPreview(null);
+    }
+  }, [image, preview]);
 
  const handleImageChange = (e) => {
   const file = e.target.files[0];

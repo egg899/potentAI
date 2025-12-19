@@ -29,9 +29,15 @@ export const uploadResumeImages = async (req, res) => {
             }
 
             // Construir la URL base correctamente
-            const baseUrl = process.env.NODE_ENV === 'production' 
-                ? process.env.API_URL 
-                : `${req.protocol}://${req.get("host")}`;
+            // En producción, usar API_URL si está definido, sino usar la URL del request
+            let baseUrl;
+            if (process.env.NODE_ENV === 'production') {
+                baseUrl = process.env.API_URL || `https://potentia-api-production.up.railway.app`;
+            } else {
+                baseUrl = `${req.protocol}://${req.get("host")}`;
+            }
+            
+            console.log('Base URL construida:', baseUrl);
 
             const newThumbnail = req.files.thumbnail?.[0];
             const newProfileImage = req.files.profileImage?.[0];
