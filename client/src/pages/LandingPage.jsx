@@ -9,6 +9,7 @@ import ProfileInfoCard from '../components/Cards/ProfileInfoCard';
 import Logo from '../components/Logo';
 import { capitalizeFirst } from '../utils/helper';
 import ForgotPassword from './Auth/ForgotPassword';
+import SecondaryModal from '../components/SecondaryModal';
 
 const LandingPage = () => {
   const {user} = useContext(UserContext);
@@ -163,7 +164,7 @@ const LandingPage = () => {
         </div>
         </section>
 
-        <Modal
+        {/* <SecondaryModal
           isOpen={openAuthModal}
           onClose={handleCloseModal}
           hideHeader
@@ -177,7 +178,45 @@ const LandingPage = () => {
               <ForgotPassword setCurrentPage={setCurrentPage} />
             )}
           </div>
-        </Modal>
+        </SecondaryModal> */}
+
+
+                {currentPage === "login" && (
+          <SecondaryModal
+            isOpen={openAuthModal}
+            onClose={handleCloseModal}
+            hideHeader
+          >
+            <Login
+              setCurrentPage={setCurrentPage}
+              setOpenAuthModal={setOpenAuthModal}
+            />
+          </SecondaryModal>
+        )}
+
+        {currentPage === "signUp" && (
+          <Modal
+            isOpen={openAuthModal}
+            onClose={handleCloseModal}
+            hideHeader
+          >
+            <SignUp
+              setCurrentPage={setCurrentPage}
+              setOpenAuthModal={setOpenAuthModal}
+            />
+          </Modal>
+        )}
+
+        {currentPage === "forgotPassword" && (
+          <SecondaryModal
+            isOpen={openAuthModal}
+            onClose={handleCloseModal}
+            hideHeader
+          >
+            <ForgotPassword setCurrentPage={setCurrentPage} />
+          </SecondaryModal>
+        )}
+
       </div>
     </div>
   );

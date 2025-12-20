@@ -12,6 +12,7 @@ import Modal from '../../components/Modal.jsx';
 import toast from 'react-hot-toast';
 import RenderResume from '../../components/ResumeTemplates/RenderResume';
 import { useProfile } from '../../context/ProfileContext';
+import SecondaryModal from '../../components/SecondaryModal.jsx';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -133,7 +134,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <Modal
+      {/* <Modal
         isOpen={openCreateModal}
         onClose={() => setOpenCreateModal(false)}
         hideHeader
@@ -144,7 +145,19 @@ const Dashboard = () => {
             fetchAllResumes();
           }}
         />
-      </Modal>
+      </Modal> */}
+      <SecondaryModal
+        isOpen={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        hideHeader
+      >
+        <CreateResumeForm
+          onSuccess={() => {
+            setOpenCreateModal(false);
+            fetchAllResumes();
+          }}
+        />
+      </SecondaryModal>
     </DashboardLayout>
   );
 };

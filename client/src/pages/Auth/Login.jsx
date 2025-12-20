@@ -79,7 +79,8 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
+    <div className=" bg-gray-50 p-6 ">
+    <div className="w-[90vw] md:w-[33vw] p-7 justify-center">
       <h3 className="text-lg font-semibold text-black">Bienvenido</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-6">
         Por favor, ingrese sus detalles para entrar a su cuenta
@@ -141,6 +142,7 @@ const Login = ({setCurrentPage, setOpenAuthModal}) => {
           </button>
         </p>
       </form>
+    </div>
     </div>
   );
 };
