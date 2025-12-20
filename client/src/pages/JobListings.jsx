@@ -317,24 +317,35 @@ const JobListings = () => {
                 </div>
             </div>
             <Modal isOpen={showApplicationsModal} onClose={() => setShowApplicationsModal(false)} title="Postulaciones recibidas">
-                <div className="w-[90vw] md:w-[70vh] p-7 flex flex-col justify-center">
-                    {loadingApplications && <p>Cargando postulaciones...</p>}
-                    {errorApplications && <p className="text-red-500">{errorApplications}</p>}
-                    {!loadingApplications && applications.length === 0 && <p>No hay postulaciones para este trabajo.</p>}
-                    {applications.map((app) => (
-                        <div key={app._id} className="border p-3 rounded mb-5">
-                            <div className="flex justify-between items-start mb-2">
-                                <div className="flex-1">
-                                    <div className="font-semibold">{app.applicant?.name || app.applicant?.email || 'Usuario'}</div>
-                                    <div className="text-xs text-gray-500 mb-2">Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}</div>
-                                    <div className="font-medium">CV: {app.resume?.title || 'Sin título'}</div>
-                                </div>
-                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                <div className="w-full">
+                    {loadingApplications && (
+                        <div className="flex justify-center items-center py-12">
+                            <p className="text-gray-600">Cargando postulaciones...</p>
+                        </div>
+                    )}
+                    {errorApplications && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                            {errorApplications}
+                        </div>
+                    )}
+                    {!loadingApplications && applications.length === 0 && (
+                        <div className="text-center py-12 text-gray-500">
+                            <p>No hay postulaciones para este trabajo.</p>
+                        </div>
+                    )}
+                    <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
+                        {applications.map((app) => (
+                            <div 
+                                key={app._id} 
+                                className="relative bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
+                            >
+                                {/* Badge de estado en la esquina superior derecha */}
+                                <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold ${
                                     app.status === 'accepted' 
-                                        ? 'bg-green-100 text-green-800' 
+                                        ? 'bg-green-50 text-green-700 border border-green-200' 
                                         : app.status === 'rejected'
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-yellow-100 text-yellow-800'
+                                        ? 'bg-red-50 text-red-700 border border-red-200'
+                                        : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                                 }`}>
                                     {app.status === 'accepted' 
                                         ? 'Aceptado' 
@@ -342,24 +353,36 @@ const JobListings = () => {
                                         ? 'Rechazado'
                                         : 'Pendiente'}
                                 </span>
+
+                                {/* Información del postulante */}
+                                <div className="pr-24">
+                                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                                        {app.applicant?.name || app.applicant?.email || 'Usuario'}
+                                    </h3>
+                                    <p className="text-sm text-gray-500 mb-2">
+                                        Postulado el {moment(app.appliedAt).format('DD/MM/YYYY')}
+                                    </p>
+                                    <p className="text-sm font-medium text-gray-700">
+                                        CV: <span className="text-gray-900">{app.resume?.title || 'Sin título'}</span>
+                                    </p>
+                                </div>
+
+                                {/* Botón de acción */}
+                                <div className="mt-4">
+                                    <button
+                                        className="w-full px-4 py-2.5 bg-[#32baa5] text-white rounded-lg font-medium hover:bg-[#2aa894] transition-colors cursor-pointer shadow-sm hover:shadow-md"
+                                        onClick={() => { 
+                                            setSelectedResume(app.resume); 
+                                            setSelectedApplication(app);
+                                            setShowResumeModal(true); 
+                                        }}
+                                    >
+                                        Ver CV y Postulación
+                                    </button>
+                                </div>
                             </div>
-                            <button
-                                className="mt-2 px-3 py-1 bg-[#32baa5] text-white rounded hover:bg-[#32baa5]/90 cursor-pointer"
-                                onClick={() => { 
-                                    setSelectedResume(app.resume); 
-                                    setSelectedApplication(app);
-                                    setShowResumeModal(true); 
-                                    
-                                }}
-                            >
-                                Ver CV y Postulación
-                            </button>
-
-                      
-                      
-
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </Modal>
             
@@ -387,77 +410,79 @@ const JobListings = () => {
                 </div>
             </Modal> */}
             <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
-    <div className="relative w-full flex flex-col items-center justify-center">
-        <button
-            className="absolute top-4 right-4 z-50 bg-white border border-gray-300 rounded-full p-2 shadow hover:bg-gray-100 transition-colors cursor-pointer"
-            onClick={() => setShowResumeModal(false)}
-            aria-label="Cerrar CV"
-        >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-
-        <div className="w-full  max-h-[90vh] overflow-auto bg-white rounded-lg shadow-lg p-2 md:p-6">
-            {selectedResume && (
-                <RenderResume
-                    templateId={selectedResume.template?.theme || '01'}
-                    resumeData={selectedResume}
-                    colorPalette={selectedResume.template?.colorPalette || ['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
-                    containerWidth={Math.min(window.innerWidth * 0.6, 700)}
-                />
-            )}
-
-            {selectedApplication && (
-                <div className="mt-6 w-full border-t pt-4">
-                    <div className="mb-4">
-                        <p className="mb-2"><strong>Estado actual:</strong> 
-                            <span className={`ml-2 px-3 py-1 rounded-full text-sm font-semibold ${
-                                selectedApplication.status === 'accepted' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : selectedApplication.status === 'rejected'
-                                    ? 'bg-red-100 text-red-800'
-                                    : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                                {selectedApplication.status === 'accepted' 
-                                    ? 'Aceptado' 
-                                    : selectedApplication.status === 'rejected'
-                                    ? 'Rechazado'
-                                    : 'Pendiente'}
-                            </span>
-                        </p>
-                        <p className="text-sm text-gray-600"><strong>Fecha de postulación:</strong> {moment(selectedApplication.appliedAt).format('DD/MM/YYYY')}</p>
+                <div className="relative w-full bg-white" style={{ overflowX: 'hidden' }}>
+                    {/* Área del CV sin scroll propio - el scroll está en el Modal */}
+                    <div className="flex justify-center w-full py-4" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+                        {selectedResume && (
+                            <div style={{ width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>
+                                <RenderResume
+                                    templateId={selectedResume.template?.theme || '01'}
+                                    resumeData={selectedResume}
+                                    colorPalette={selectedResume.template?.colorPalette || ['#EBFDFF', '#A1F4F0', '#CEFAFE', '#0288C8', '#4A5565']}
+                                    containerWidth={Math.min(window.innerWidth - 160, 900)}
+                                />
+                            </div>
+                        )}
                     </div>
-                    
-                    <div className="flex gap-3 mt-4">
-                        <button
-                            onClick={() => handleUpdateApplicationStatus('accepted')}
-                            disabled={updatingStatus || selectedApplication.status === 'accepted'}
-                            className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
-                                selectedApplication.status === 'accepted'
-                                    ? 'bg-[#32baa5] text-white cursor-not-allowed opacity-50'
-                                    : 'bg-[#32baa5] text-white hover:bg-[#32baa5]/90 cursor-pointer'
-                            } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {updatingStatus ? 'Actualizando...' : 'Aceptar'}
-                        </button>
-                        <button
-                            onClick={() => handleUpdateApplicationStatus('rejected')}
-                            disabled={updatingStatus || selectedApplication.status === 'rejected'}
-                            className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-colors ${
-                                selectedApplication.status === 'rejected'
-                                    ? 'bg-[#4A5565] text-white cursor-not-allowed opacity-50'
-                                    : 'bg-[#4A5565] text-white hover:bg-[#4A5565]/90 cursor-pointer'
-                            } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {updatingStatus ? 'Actualizando...' : 'Rechazar'}
-                        </button>
-                    </div>
+
+                    {/* Sección de información de la postulación */}
+                    {selectedApplication && (
+                        <div className="border-t border-gray-200 bg-white px-6 py-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-6">
+                                    <div>
+                                        <p className="text-xs text-gray-500 mb-1">Estado actual</p>
+                                        <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${
+                                            selectedApplication.status === 'accepted' 
+                                                ? 'bg-green-50 text-green-700' 
+                                                : selectedApplication.status === 'rejected'
+                                                ? 'bg-red-50 text-red-700'
+                                                : 'bg-yellow-50 text-yellow-700'
+                                        }`}>
+                                            {selectedApplication.status === 'accepted' 
+                                                ? 'Aceptado' 
+                                                : selectedApplication.status === 'rejected'
+                                                ? 'Rechazado'
+                                                : 'Pendiente'}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 mb-1">Fecha de postulación</p>
+                                        <p className="text-sm font-medium text-gray-900">
+                                            {moment(selectedApplication.appliedAt).format('DD/MM/YYYY')}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => handleUpdateApplicationStatus('accepted')}
+                                    disabled={updatingStatus || selectedApplication.status === 'accepted'}
+                                    className={`flex-1 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                        selectedApplication.status === 'accepted'
+                                            ? 'bg-[#32baa5] text-white cursor-not-allowed opacity-50'
+                                            : 'bg-[#32baa5] text-white hover:bg-[#2aa894] cursor-pointer'
+                                    } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    {updatingStatus ? 'Actualizando...' : 'Aceptar'}
+                                </button>
+                                <button
+                                    onClick={() => handleUpdateApplicationStatus('rejected')}
+                                    disabled={updatingStatus || selectedApplication.status === 'rejected'}
+                                    className={`flex-1 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                                        selectedApplication.status === 'rejected'
+                                            ? 'bg-gray-600 text-white cursor-not-allowed opacity-50'
+                                            : 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer'
+                                    } ${updatingStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    {updatingStatus ? 'Actualizando...' : 'Rechazar'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
-    </div>
-</Modal>
+            </Modal>
 
         </DashboardLayout>
     );
