@@ -12,12 +12,13 @@ const Navbar = () => {
 
   const {user} = useContext(UserContext);
 
-
+// console.log(user)
 
   const navigation = [
   { name: 'Inicio', href: '/' },
   ...(user ? [{ name: 'Análisis de CV', href: `/analisis/${user._id}` }] : []),
   { name: 'Dashboard', href: '/dashboard' },
+  
 ];
 // console.log('user desde el Nav', user);
   return (
@@ -97,6 +98,33 @@ const Navbar = () => {
           >
             Buscar Trabajos
           </NavLink>
+
+
+             {/* {user.userType === 'job_seeker' &&  (
+            <NavLink
+            to="/mis-aplicaciones"
+            className={({ isActive }) =>
+              isActive
+                ? "px-4 py-2 rounded-lg bg-[#32baa5] text-white hover:bg-[#32baa5]/90 transition-colors"
+                : "text-gray-600 hover:text-[#32baa5] transition-colors"
+            }
+          >
+            Mis Aplicaciones
+          </NavLink>
+
+          )} */}
+
+           <NavLink
+            to="/mis-aplicaciones"
+            className={({ isActive }) =>
+              isActive
+                ? "px-4 py-2 rounded-lg bg-[#32baa5] text-white hover:bg-[#32baa5]/90 transition-colors"
+                : "text-gray-600 hover:text-[#32baa5] transition-colors"
+            }
+          >
+            Mis Aplicaciones
+          </NavLink>
+
         </div>
 
         {/* Perfil (siempre visible) */}

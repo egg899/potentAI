@@ -27,6 +27,9 @@ const ProfileInfoCard = () => {
         navigate(`/analisis/${user._id}`);
     };
 
+    const handleAplicaciones = () => {
+        navigate(`/mis-aplicaciones`)
+    }    
     const handleDashboard = (buscando = false) => {
         
         if(buscando) {
@@ -139,6 +142,17 @@ const ProfileInfoCard = () => {
                                 }}
                             >
                                 Buscar Trabajos
+                            </button>
+                            )}
+                        {user.userType === 'job_seeker' && !isJobsPage && (
+                            <button
+                                className="text-left text-[#32baa5] text-sm font-semibold hover:underline cursor-pointer"
+                                onClick={() => {
+                                setIsOpen(false);
+                                handleAplicaciones();
+                                }}
+                            >
+                                Aplicaciones
                             </button>
                             )}
 

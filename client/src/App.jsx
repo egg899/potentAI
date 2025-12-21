@@ -41,7 +41,7 @@ const App = () => {
               <Route path="/auth/reset-password/:token" element={<ResetPassword/>}/>
               <Route path="/procesar-url" element={<ProcesarUrl/>} />
               <Route path="/confirmacion"  element={<Confirmacion />} />
-              <Route path="/my-applications" element={<UserApplications/>} />
+              <Route path="/mis-aplicaciones" element={<UserApplications/>} />
               {/* Rutas protegidas para empleadores */}
               <Route 
                 path="/employer/dashboard" 
