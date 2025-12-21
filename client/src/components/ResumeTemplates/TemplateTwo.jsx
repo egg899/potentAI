@@ -195,12 +195,12 @@ const TemplateTwo = ({
             </div> */}
       <div className="px-10 pt-10 pb-5">
           <div className="flex items-start gap-5 mb-5">
-            <div className="w-[140px] h-[140px] max-w-[140px] max-h-[140px] rounded-2xl flex items-center justify-center"
+            <div className=" max-w-[140px] max-h-[140px] rounded-2xl flex items-center justify-center"
                  style={{ backgroundColor: themeColors[1] }} 
             >
               {imageUrl ? (
                 <img src={imageUrl}
-                     className="w-[140px] h-[140px] rounded-2xl" 
+                     className=" rounded-2xl" 
                 />
               ) : (
               

@@ -113,6 +113,18 @@ const ProfilePhotoSelector = ({ image, setImage, preview, setPreview }) => {
              onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = profileImg;
+
+
+
+                  // Limpia el preview roto 👇
+                  setLocalPreview(profileImg);
+
+                  // Si llega desde el padre
+                  if (setPreview) {
+                    setPreview(profileImg);
+                  }
+
+
                                 }}
           /></div>
           <button
