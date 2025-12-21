@@ -36,6 +36,19 @@ const UserApplications = () => {
         }
     };
 
+    const statusLabel = (status) => {
+        switch (status) {
+            case "pending":
+                return "pendiente";
+            case "accepted":
+                return "Aceptada";
+            case "rejected":
+                return "Rechazada";
+                default:
+                    return "Sin estado";        
+        }
+    }
+
     if (loading) return <DashboardLayout><p>Cargando...</p></DashboardLayout>;
 
     return (
@@ -66,7 +79,7 @@ const UserApplications = () => {
 
                             {/* Status */}
                             <span className={`inline-block px-3 py-1 mt-2 text-sm rounded-full ${statusColor(app.status)}`}>
-                                {app.status ?? "sin estado"}
+                                {statusLabel(app.status) ?? "sin estado"}
                             </span>
 
                             {/* Date */}

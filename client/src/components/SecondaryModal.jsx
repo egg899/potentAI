@@ -42,7 +42,7 @@ const SecondaryModal = ({
          {/* Close Button */}
         <button 
         type="button" 
-        className="flex text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 justify-center items-center absolute top-3.5 right-3.5 cursor-pointer"
+        className="flex text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 justify-center items-center absolute top-3.5 right-3.5 z-150 cursor-pointer"
         onClick={onClose}
         >
             <svg

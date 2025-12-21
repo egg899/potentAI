@@ -7,6 +7,8 @@ import { FiSearch } from 'react-icons/fi';
 import moment from 'moment';
 import Modal from '../components/Modal';
 import RenderResume from '../components/ResumeTemplates/RenderResume';
+import SecondaryModal from '../components/SecondaryModal';
+import CVModal from '../components/CVModal';
 
 // Componente para la barra de búsqueda y filtros
 const SearchAndFilters = ({ searchTerm, setSearchTerm, filters, setFilters }) => (
@@ -317,7 +319,7 @@ const JobListings = () => {
                 </div>
             </div>
             <Modal isOpen={showApplicationsModal} onClose={() => setShowApplicationsModal(false)} title="Postulaciones recibidas">
-                <div className="w-full">
+                <div className="w-full mt-10">
                     {loadingApplications && (
                         <div className="flex justify-center items-center py-12">
                             <p className="text-gray-600">Cargando postulaciones...</p>
@@ -355,7 +357,7 @@ const JobListings = () => {
                                 </span>
 
                                 {/* Información del postulante */}
-                                <div className="pr-24">
+                                <div className="pr-24 ">
                                     <h3 className="text-lg font-bold text-gray-800 mb-2">
                                         {app.applicant?.name || app.applicant?.email || 'Usuario'}
                                     </h3>
@@ -409,7 +411,7 @@ const JobListings = () => {
                     </div>
                 </div>
             </Modal> */}
-            <Modal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
+            <CVModal isOpen={showResumeModal} onClose={() => setShowResumeModal(false)} title={selectedResume?.title || 'CV'} hideHeader={true}>
                 <div className="relative w-full bg-white" style={{ overflowX: 'hidden' }}>
                     {/* Área del CV sin scroll propio - el scroll está en el Modal */}
                     <div className="flex justify-center w-full py-4" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
@@ -482,7 +484,7 @@ const JobListings = () => {
                         </div>
                     )}
                 </div>
-            </Modal>
+            </CVModal>
 
         </DashboardLayout>
     );
