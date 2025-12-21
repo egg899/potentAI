@@ -131,9 +131,9 @@ const SignUp = ({ setCurrentPage, setOpenAuthModal }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 overflow-y-auto">
+    <div className="  p-6 m-2 overflow-y-auto rounded-lg">
 
-    <div className="w-[90vw] md:w-[33vw] p-7 mx-auto">
+    <div className="p-4 sm:p-6 md:p-7 mx-auto space-y-3">
       <h3 className="text-lg font-semibold text-black">Crea una cuenta</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-6">
         Únase hoy mismo ingresando sus datos a continuación

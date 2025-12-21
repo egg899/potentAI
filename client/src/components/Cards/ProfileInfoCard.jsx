@@ -97,18 +97,17 @@ const ProfileInfoCard = () => {
 
                 {isOpen && (
                     <div className="
-absolute right-0 mt-3 bg-white shadow-xl rounded-lg z-50 
-min-w-[160px] flex flex-col space-y-2 px-3 py-4
+                                    absolute right-0 mt-3 bg-white shadow-xl rounded-lg z-50 
+                                    min-w-[160px] flex flex-col space-y-2 px-3 py-4
 
-transition-all duration-200 ease-out
+                                    transition-all duration-200 ease-out
 
-origin-top-right transform
-scale-95 opacity-0
-animate-[menu-open_0.15s_ease-out_forwards]
+                                    origin-top-right transform
+                                    scale-95 opacity-0  
+                                    animate-[menu-open_0.15s_ease-out_forwards]
 
-backdrop-blur-sm
-">
-
+                                    backdrop-blur-sm
+                                    ">
                             
                              {isProfilePage && (
                             <button
