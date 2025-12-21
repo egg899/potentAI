@@ -44,7 +44,7 @@ const TemplateOne = ({
     
     const resumeRef = useRef(null);
     const  [baseWidth, setBaseWidth] = useState(800);
-    const [scale, setScale] = useState(1);
+    const [scale, setScale] = useState(0.75);
     const [imageUrl, setImageUrl] = useState(null);
 
     useEffect(() => {

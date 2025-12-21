@@ -416,7 +416,7 @@ const JobListings = () => {
                     {/* Área del CV sin scroll propio - el scroll está en el Modal */}
                     <div className="flex justify-center w-full py-4" style={{ overflowX: 'hidden', maxWidth: '100%' }}>
                         {selectedResume && (
-                            <div style={{ width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>
+                            <div style={{ width: '100%', maxWidth: '100%', overflow:'scroll' }}>
                                 <RenderResume
                                     templateId={selectedResume.template?.theme || '01'}
                                     resumeData={selectedResume}
